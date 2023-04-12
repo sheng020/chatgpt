@@ -11,12 +11,13 @@ import 'package:flutter_chatgpt_clone/injection_container.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'api/instance/openai.dart';
+import 'env.dart';
 import 'generated/l10n.dart';
 import 'injection_container.dart' as di;
 
 const API_KEY = "api_key";
-const DEFAULT_KEY = "";
-const DEFAULT_SERVER = "";
+const DEFAULT_KEY = Env.DEFAULT_KEY;
+const DEFAULT_SERVER = Env.DEFAULT_SERVER;
 
 void main() async {
   ///这里如果有自己搭建服务器的可以自己设置服务器域名，格式如下：
@@ -31,6 +32,7 @@ void main() async {
   if (apiKey == null || apiKey.isEmpty) {
     apiKey = DEFAULT_KEY;
   }
+  OpenAI.baseUrl = DEFAULT_SERVER;
   OpenAI.apiKey = apiKey;
   runApp(MyApp());
 }
