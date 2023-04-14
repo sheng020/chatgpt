@@ -274,6 +274,7 @@ class _ConversationPageState extends State<ConversationPage> {
                               );
                             } else {
                               return ListView.builder(
+                                padding: EdgeInsets.symmetric(vertical: 16),
                                 itemCount: _calculateListItemLength(
                                     chatMessages.length),
                                 controller: _scrollController,
