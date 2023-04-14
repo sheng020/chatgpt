@@ -160,6 +160,13 @@ class _$MessageDao extends MessageDao {
   }
 
   @override
+  Future<int?> deleteMessage(int id) async {
+    return _queryAdapter.query('DELETE FROM message WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [id]);
+  }
+
+  @override
   Future<int> insertMessage(ChatMessageEntity messageEntity) {
     return _chatMessageEntityInsertionAdapter.insertAndReturnId(
         messageEntity, OnConflictStrategy.replace);
@@ -197,6 +204,14 @@ class _$ConversationDao extends ConversationDao {
     return _queryAdapter.queryList('SELECT * FROM conversation',
         mapper: (Map<String, Object?> row) =>
             ConversationEntity(conversationId: row['conversationId'] as int?));
+  }
+
+  @override
+  Future<int?> deleteConversation(int conversationId) async {
+    return _queryAdapter.query(
+        'DELETE FROM conversation WHERE conversationId = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [conversationId]);
   }
 
   @override

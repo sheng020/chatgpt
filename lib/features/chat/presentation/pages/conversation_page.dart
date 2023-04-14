@@ -176,9 +176,15 @@ class _ConversationPageState extends State<ConversationPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      LeftNavButtonWidget(
-                          iconData: Icons.delete_outline_outlined,
-                          textData: "Clear Conversation"),
+                      InkWell(
+                        onTap: () {
+                          BlocProvider.of<ChatConversationCubit>(context)
+                              .deleteAllConversation();
+                        },
+                        child: LeftNavButtonWidget(
+                            iconData: Icons.delete_outline_outlined,
+                            textData: "Clear Conversation"),
+                      ),
                       SizedBox(
                         height: 10,
                       ),

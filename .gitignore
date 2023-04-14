@@ -5,4 +5,3 @@
 /.flutter-plugins-dependencies
 .env
 /lib/env.g.dart
-/lib/env.dart

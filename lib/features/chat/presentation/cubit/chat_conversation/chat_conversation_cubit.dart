@@ -61,7 +61,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       );
     }
   }
-  
+
   Future<void> newConversation() async {
     var newConversation = ConversationEntity();
     var database = DatabaseManager.getInstance();
@@ -75,7 +75,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       ),
     );
   }
-  
+
   Future<void> selectConversation(int conversationId) async {
     emit(ChatConversationLoaded(
       showConversationId: conversationId,
@@ -185,5 +185,33 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       emit(ChatConversationLoaded(
         chatMessages: _chatMessages,
       ));*/
+  }
+
+  Future<void> deleteAllConversation() async {
+    _conversations.forEach((key, value) async {
+      await deleteConversation(key);
+      value.forEach((element) async {
+        await deleteChatMessage(element.id);
+      });
+    });
+    _conversations.clear();
+    emit(
+      ChatConversationLoaded(
+        showConversationId: INVALID_CONVERSATION_ID,
+        chatMessages: _conversations,
+      ),
+    );
+  }
+
+  Future<int?> deleteConversation(int conversationId) async {
+    var database = DatabaseManager.getInstance();
+    return database.deleteConversation(conversationId);
+  }
+
+  Future<int?> deleteChatMessage(int? chatId) async {
+    if (chatId == null) return -1;
+    var database = DatabaseManager.getInstance();
+
+    return database.deleteMessage(chatId);
   }
 }

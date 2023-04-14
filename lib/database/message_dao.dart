@@ -1,11 +1,9 @@
-
 import 'package:floor/floor.dart';
 
 import '../features/chat/domain/entities/chat_message_entity.dart';
 
 @dao
 abstract class MessageDao {
-
   @Query('SELECT * FROM message ORDER BY date')
   Future<List<ChatMessageEntity>?> allMessage();
 
@@ -14,4 +12,7 @@ abstract class MessageDao {
 
   @update
   Future<int> updateMessage(ChatMessageEntity messageEntity);
+
+  @Query("DELETE FROM message WHERE id = :id")
+  Future<int?> deleteMessage(int id);
 }

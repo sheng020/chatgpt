@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:floor/floor.dart';
@@ -16,11 +15,9 @@ part 'database.g.dart';
 abstract class AppDatabase extends FloorDatabase {
   MessageDao get messageDao;
   ConversationDao get conversationDao;
-
 }
 
 class DatabaseManager {
-
   static DatabaseManager? _instance;
   late AppDatabase _database;
   late MessageDao _messageDao;
@@ -53,14 +50,19 @@ class DatabaseManager {
     return _messageDao.updateMessage(messageEntity);
   }
 
+  Future<int?> deleteMessage(int id) {
+    return _messageDao.deleteMessage(id);
+  }
+
+  Future<int?> deleteConversation(int conversationId) {
+    return _conversationDao.deleteConversation(conversationId);
+  }
+
   Future<AppDatabase> initialize() async {
-    _database = await $FloorAppDatabase
-        .databaseBuilder('chat_gpt.db')
-        .build();
+    _database = await $FloorAppDatabase.databaseBuilder('chat_gpt.db').build();
     _messageDao = _database.messageDao;
     _conversationDao = _database.conversationDao;
     return _database;
     //_insertPersonalTask();
   }
-
 }
