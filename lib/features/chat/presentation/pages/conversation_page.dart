@@ -86,31 +86,34 @@ class _ConversationPageState extends State<ConversationPage> {
                                     return Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 5),
-                                      child: InkWell(
-                                        onTap: () {
-                                          if (chatConversationState
-                                                  .showConversationId !=
-                                              INVALID_CONVERSATION_ID) {
-                                            BlocProvider.of<
-                                                        ChatConversationCubit>(
-                                                    context)
-                                                .newConversation();
-                                          }
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 10),
-                                          child: Text(
-                                            S.of(context).new_chat,
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                      child: Material(
+                                        type: MaterialType.transparency,
+                                        child: InkWell(
+                                          onTap: () {
+                                            if (chatConversationState
+                                                    .showConversationId !=
+                                                INVALID_CONVERSATION_ID) {
+                                              BlocProvider.of<
+                                                          ChatConversationCubit>(
+                                                      context)
+                                                  .newConversation();
+                                            }
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 10),
+                                            child: Text(
+                                              S.of(context).new_chat,
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -129,31 +132,34 @@ class _ConversationPageState extends State<ConversationPage> {
                                     return Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 5),
-                                      child: InkWell(
-                                        onTap: () {
-                                          BlocProvider.of<
-                                                      ChatConversationCubit>(
-                                                  context)
-                                              .selectConversation(
-                                                  chatConversationState
-                                                      .chatMessages.keys
-                                                      .elementAt(realIndex));
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 1),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 10),
-                                          child: Text(
-                                            title,
-                                            maxLines: 2,
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                      child: Material(
+                                        type: MaterialType.transparency,
+                                        child: InkWell(
+                                          onTap: () {
+                                            BlocProvider.of<
+                                                        ChatConversationCubit>(
+                                                    context)
+                                                .selectConversation(
+                                                    chatConversationState
+                                                        .chatMessages.keys
+                                                        .elementAt(realIndex));
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15, vertical: 10),
+                                            child: Text(
+                                              title,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -176,14 +182,17 @@ class _ConversationPageState extends State<ConversationPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      InkWell(
-                        onTap: () {
-                          BlocProvider.of<ChatConversationCubit>(context)
-                              .deleteAllConversation();
-                        },
-                        child: LeftNavButtonWidget(
-                            iconData: Icons.delete_outline_outlined,
-                            textData: "Clear Conversation"),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: () {
+                            BlocProvider.of<ChatConversationCubit>(context)
+                                .deleteAllConversation();
+                          },
+                          child: LeftNavButtonWidget(
+                              iconData: Icons.delete_outline_outlined,
+                              textData: "Clear Conversation"),
+                        ),
                       ),
                       SizedBox(
                         height: 10,
@@ -194,39 +203,45 @@ class _ConversationPageState extends State<ConversationPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      InkWell(
-                        onTap: () async {
-                          var apiKey = await _showTextInputDialog(
-                              context, "Set api key", "input your key");
-                          if (apiKey != null && apiKey.isNotEmpty) {
-                            box.write(API_KEY, apiKey);
-                            OpenAI.apiKey = apiKey;
-                          }
-                        },
-                        child: LeftNavButtonWidget(
-                            iconData: Icons.ios_share_sharp,
-                            textData: "Set api key"),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: () async {
+                            var apiKey = await _showTextInputDialog(
+                                context, "Set api key", "input your key");
+                            if (apiKey != null && apiKey.isNotEmpty) {
+                              box.write(API_KEY, apiKey);
+                              OpenAI.apiKey = apiKey;
+                            }
+                          },
+                          child: LeftNavButtonWidget(
+                              iconData: Icons.ios_share_sharp,
+                              textData: "Set api key"),
+                        ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      InkWell(
-                        onTap: () async {
-                          var name = await _showTextInputDialog(context,
-                              S.of(context).change_name, "input your name");
-                          if (name == null) {
-                            return;
-                          }
-                          if (name.isEmpty) {
-                            name = DEFAULT_NAME;
-                          } else {
-                            BlocProvider.of<ChatUserNameCubit>(context)
-                                .changeUserName(name!);
-                          }
-                        },
-                        child: LeftNavButtonWidget(
-                            iconData: Icons.exit_to_app,
-                            textData: S.of(context).change_name),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: () async {
+                            var name = await _showTextInputDialog(context,
+                                S.of(context).change_name, "input your name");
+                            if (name == null) {
+                              return;
+                            }
+                            if (name.isEmpty) {
+                              name = DEFAULT_NAME;
+                            } else {
+                              BlocProvider.of<ChatUserNameCubit>(context)
+                                  .changeUserName(name!);
+                            }
+                          },
+                          child: LeftNavButtonWidget(
+                              iconData: Icons.exit_to_app,
+                              textData: S.of(context).change_name),
+                        ),
                       ),
                       SizedBox(
                         height: 10,

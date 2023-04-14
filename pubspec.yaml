@@ -37,7 +37,8 @@ dependencies:
   http: ^0.13.5
   get_it: ^7.2.0
   flutter_animate: 3.0.0
-  flutter_markdown: ^0.6.14
+  markdown_widget: ^2.1.0
+  flutter_highlight: ^0.7.0
   share_plus: ^6.3.0
   #flutter_icons: ^1.1.0
   font_awesome_flutter: ^10.4.0

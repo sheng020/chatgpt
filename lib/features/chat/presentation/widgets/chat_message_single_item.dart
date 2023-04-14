@@ -3,10 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/syntax_highlighter.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown_widget/markdown_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../cubit/chat_conversation/chat_conversation_cubit.dart';
@@ -52,13 +51,14 @@ class ChatMessageSingleItem extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(bottom: 10, top: 10),
-                    child: MarkdownBody(
-                      selectable: true,
-                      data: chatMessage.promptResponse!,
-                      syntaxHighlighter: Highlighter(),
-                    )
-                  ),
+                      margin: EdgeInsets.only(bottom: 10, top: 10),
+                      child: MarkdownWidget(
+                          shrinkWrap: true,
+                          selectable: true,
+                          data: chatMessage.promptResponse!,
+                          config: MarkdownConfig.darkConfig
+                          //syntaxHighlighter: Highlighter(),
+                          )),
                 ),
               ],
             ),
@@ -106,23 +106,21 @@ class ChatMessageSingleItem extends StatelessWidget {
                   color: Colors.blueGrey,
                   borderRadius: BorderRadius.circular(8)),
               child: Center(
-                child: BlocBuilder<ChatUserNameCubit,
-                    ChatConversationState>(builder: (context, conversationUser) {
-                      if (conversationUser is ConversationUser) {
-                        return Text(
-                          conversationUser.userName,
-                          style: TextStyle(color: Colors.white),
-                        );
-                      } else {
-                        return Text(
-                          "CJS",
-                          style: TextStyle(color: Colors.white),
-                        );
-                      }
-
-                },)
-
-                ,
+                child: BlocBuilder<ChatUserNameCubit, ChatConversationState>(
+                  builder: (context, conversationUser) {
+                    if (conversationUser is ConversationUser) {
+                      return Text(
+                        conversationUser.userName,
+                        style: TextStyle(color: Colors.white),
+                      );
+                    } else {
+                      return Text(
+                        "CJS",
+                        style: TextStyle(color: Colors.white),
+                      );
+                    }
+                  },
+                ),
               ),
             ),
             SizedBox(
@@ -131,8 +129,9 @@ class ChatMessageSingleItem extends StatelessWidget {
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(bottom: 10, top: 10),
-                child: MarkdownBody(
+                child: MarkdownWidget(
                   selectable: true,
+                  shrinkWrap: true,
                   data: chatMessage.queryPrompt!,
                 ),
               ),
