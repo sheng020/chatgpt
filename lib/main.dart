@@ -16,6 +16,7 @@ import 'generated/l10n.dart';
 import 'injection_container.dart' as di;
 
 const API_KEY = "api_key";
+const SERVER_ADDRESS = "server_address";
 const DEFAULT_KEY = Env.DEFAULT_KEY;
 const DEFAULT_SERVER = Env.DEFAULT_SERVER;
 
@@ -32,7 +33,11 @@ void main() async {
   if (apiKey == null || apiKey.isEmpty) {
     apiKey = DEFAULT_KEY;
   }
-  OpenAI.baseUrl = DEFAULT_SERVER;
+  String? serverAddress = box.read(SERVER_ADDRESS);
+  if (serverAddress == null || serverAddress.isEmpty) {
+    serverAddress = DEFAULT_SERVER;
+  }
+  OpenAI.baseUrl = serverAddress;
   OpenAI.apiKey = apiKey;
   runApp(MyApp());
 }

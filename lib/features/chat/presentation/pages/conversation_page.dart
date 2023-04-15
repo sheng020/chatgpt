@@ -194,12 +194,12 @@ class _ConversationPageState extends State<ConversationPage> {
                               textData: "Clear Conversation"),
                         ),
                       ),
-                      SizedBox(
+                      /* SizedBox(
                         height: 10,
                       ),
                       LeftNavButtonWidget(
                           iconData: Icons.nightlight_outlined,
-                          textData: "Dark Mode"),
+                          textData: "Dark Mode"), */
                       SizedBox(
                         height: 10,
                       ),
@@ -207,16 +207,25 @@ class _ConversationPageState extends State<ConversationPage> {
                         type: MaterialType.transparency,
                         child: InkWell(
                           onTap: () async {
-                            var apiKey = await _showTextInputDialog(
-                                context, "Set api key", "input your key");
-                            if (apiKey != null && apiKey.isNotEmpty) {
-                              box.write(API_KEY, apiKey);
-                              OpenAI.apiKey = apiKey;
+                            var settingsParams =
+                                await _showSettingsDialog(context);
+                            if (settingsParams != null) {
+                              var serverAdress = settingsParams[0];
+                              if (serverAdress.isNotEmpty) {
+                                box.write(SERVER_ADDRESS, serverAdress);
+                                OpenAI.baseUrl = serverAdress;
+                              }
+
+                              var apiKey = settingsParams[1];
+                              if (apiKey.isNotEmpty) {
+                                box.write(API_KEY, apiKey);
+                                OpenAI.apiKey = apiKey;
+                              }
                             }
                           },
                           child: LeftNavButtonWidget(
                               iconData: Icons.ios_share_sharp,
-                              textData: "Set api key"),
+                              textData: "Settings"),
                         ),
                       ),
                       SizedBox(
@@ -346,6 +355,78 @@ class _ConversationPageState extends State<ConversationPage> {
   }
 
   final _textFieldController = TextEditingController();
+
+  Widget _getTips(BuildContext context, bool showToast) {
+    if (showToast) {
+      return Text(
+        "Delete last slash in the url",
+        style: TextStyle(color: Colors.red),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+
+  Future<List<String>?> _showSettingsDialog(BuildContext context) {
+    var serverTextController = TextEditingController();
+    var apiKeyTextController = TextEditingController();
+    var showToast = false;
+    return showDialog(
+      barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, stateSetter) {
+            return AlertDialog(
+              title: Text("Settings"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _getTips(context, showToast),
+                  TextField(
+                    controller: serverTextController,
+                    decoration: InputDecoration(hintText: "input your server"),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextField(
+                    controller: apiKeyTextController,
+                    decoration: InputDecoration(hintText: "input your key"),
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: Text(S.of(context).cancel),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                ElevatedButton(
+                  child: Text(S.of(context).ok),
+                  onPressed: () {
+                    var serverAddress = serverTextController.text;
+                    if (serverAddress.endsWith("/")) {
+                      stateSetter.call(() {
+                        showToast = true;
+                      });
+                    } else {
+                      Navigator.pop(
+                          context,
+                          List.generate(2, (index) {
+                            if (index == 0) {
+                              return serverTextController.text;
+                            } else {
+                              return apiKeyTextController.text;
+                            }
+                          }));
+                    }
+                    
+                  },
+                ),
+              ],
+            );
+          });
+        });
+  }
 
   Future<String?> _showTextInputDialog(
       BuildContext context, String title, String hint) async {
