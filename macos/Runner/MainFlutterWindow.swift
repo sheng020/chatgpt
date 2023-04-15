@@ -1,6 +1,8 @@
 import Cocoa
 import FlutterMacOS
 
+let MAIN_WINDOW_NAME = "ChatGPT_MAIN_WINDOW"
+
 class MainFlutterWindow: NSWindow {
     var didInitialResize = false
     
@@ -25,7 +27,7 @@ class MainFlutterWindow: NSWindow {
         let windowFrame = self.frame
         self.contentViewController = flutterViewController
         self.setFrame(windowFrame, display: true)
-        
+        setFrameAutosaveName(MAIN_WINDOW_NAME)
         RegisterGeneratedPlugins(registry: flutterViewController)
         
         super.awakeFromNib()
