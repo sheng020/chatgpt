@@ -13,6 +13,7 @@ import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
 import 'package:flutter_chatgpt_clone/injection_container.dart';
 import 'package:flutter_chatgpt_clone/main.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../api/instance/openai.dart';
 import '../../../../generated/l10n.dart';
@@ -50,19 +51,20 @@ class _ConversationPageState extends State<ConversationPage> {
   }
 
   Size? lastItemSize;
+  Map<String, GlobalKey> keyMaps = {};
+  
+  GlobalKey getCachedKey(String key) {
+    if (keyMaps.containsKey(key)) {
+      return keyMaps[key]!;
+    } else {
+      GlobalKey value = GlobalKey();
+      keyMaps[key] = value;
+      return value;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (_scrollController.hasClients) {
-      Timer(
-        Duration(milliseconds: 100),
-        () => _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 500),
-            curve: Curves.decelerate),
-      );
-    }
-
     return Scaffold(
       body: Column(
         children: [
@@ -295,27 +297,32 @@ class _ConversationPageState extends State<ConversationPage> {
                                     return _responsePreparingWidget();
                                   } else {
                                     var chatMessage = chatMessages[index];
-
-                                    return MeasureSize(
-                                        onChange: (size) {
-                                          if (_isRequestProcessing &&
-                                              index ==
-                                                  chatMessages.length - 1) {
-                                            if (lastItemSize?.height !=
-                                                size.height) {
-                                              _scrollController.animateTo(
-                                                  _scrollController
-                                                      .position.maxScrollExtent,
-                                                  duration: Duration(
-                                                      milliseconds: 500),
-                                                  curve: Curves.ease);
-                                              lastItemSize = size;
+                                    //var itemKey = GlobalKey();
+                                    return VisibilityDetector(
+                                      key: ValueKey("index_${index}"),
+                                      onVisibilityChanged: (VisibilityInfo visibilityInfo) {
+                                        var visiblePercentage = visibilityInfo.visibleFraction * 100;
+                                        var key = visibilityInfo.key as ValueKey;
+                                        if (_isRequestProcessing && key.value == "index_${chatMessages.length - 1}") {
+                                          var widgetKey = getCachedKey("index_${chatMessage.messageId}_${index}");
+                                          //if last widget height has changed.
+                                          var currentSize = widgetKey.currentContext?.size;
+                                          if (lastItemSize != currentSize) {
+                                            if (visiblePercentage < 100 && visiblePercentage > 0) {
+                                              _scrollController.position
+                                                  .ensureVisible(widgetKey.currentContext!.findRenderObject()!,
+                                                  duration: Duration(milliseconds: 300), curve: Curves.ease, alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd);
                                             }
+                                            lastItemSize = currentSize;
                                           }
-                                        },
-                                        child: ChatMessageSingleItem(
-                                          chatMessage: chatMessage,
-                                        ));
+
+                                        }
+                                      },
+                                      child: ChatMessageSingleItem(
+                                        key: getCachedKey("index_${chatMessage.messageId}_${index}"),
+                                        chatMessage: chatMessage,
+                                      ),
+                                    );
                                   }
                                 },
                               );
@@ -511,8 +518,8 @@ class _ConversationPageState extends State<ConversationPage> {
           Duration(milliseconds: 100),
           () => _scrollController.animateTo(
               _scrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.decelerate),
+              duration: Duration(milliseconds: 150),
+              curve: Curves.ease),
         );
       }
     });
