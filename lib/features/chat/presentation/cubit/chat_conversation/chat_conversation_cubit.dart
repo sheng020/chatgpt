@@ -24,7 +24,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
   //List<ChatMessageEntity> _chatMessages = [];
   //List<ConversationEntity> _conversations = [];
 
-  void initMessageList() async {
+  Future<void> initMessageList() async {
     var database = DatabaseManager.getInstance();
     emit(ChatConversationLoading());
     var conversations = await database.queryConversationList();

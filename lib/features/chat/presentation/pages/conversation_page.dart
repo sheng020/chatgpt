@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_message_single_item.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/left_nav_button_widget.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/widget_size_listener.dart';
 import 'package:flutter_chatgpt_clone/features/global/common/common.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
@@ -37,11 +37,33 @@ class _ConversationPageState extends State<ConversationPage> {
     _messageController.addListener(() {
       setState(() {});
     });
-    Future.microtask(() {
-      BlocProvider.of<ChatConversationCubit>(context).initMessageList();
+    Future.microtask(() async {
+      await BlocProvider.of<ChatConversationCubit>(context).initMessageList();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        _scrollController.position.jumpTo(_scrollController.position.maxScrollExtent);
+      });
     });
+    _scrollController.addListener(() {
+      if ((_scrollController.position.pixels -
+                  _scrollController.position.maxScrollExtent)
+              .abs() >
+          200) {
+        if (!_isVisible) {
+          _isVisible = true;
+          setState(() {});
+        }
+      } else {
+        if (_isVisible) {
+          _isVisible = false;
+          setState(() {});
+        }
+      }
+    });
+
     super.initState();
   }
+
+  var _isVisible = false;
 
   @override
   void dispose() {
@@ -52,7 +74,7 @@ class _ConversationPageState extends State<ConversationPage> {
 
   Size? lastItemSize;
   Map<String, GlobalKey> keyMaps = {};
-  
+
   GlobalKey getCachedKey(String key) {
     if (keyMaps.containsKey(key)) {
       return keyMaps[key]!;
@@ -300,26 +322,42 @@ class _ConversationPageState extends State<ConversationPage> {
                                     //var itemKey = GlobalKey();
                                     return VisibilityDetector(
                                       key: ValueKey("index_${index}"),
-                                      onVisibilityChanged: (VisibilityInfo visibilityInfo) {
-                                        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-                                        var key = visibilityInfo.key as ValueKey;
-                                        if (_isRequestProcessing && key.value == "index_${chatMessages.length - 1}") {
-                                          var widgetKey = getCachedKey("index_${chatMessage.messageId}_${index}");
+                                      onVisibilityChanged:
+                                          (VisibilityInfo visibilityInfo) {
+                                        var visiblePercentage =
+                                            visibilityInfo.visibleFraction *
+                                                100;
+                                        var key =
+                                            visibilityInfo.key as ValueKey;
+                                        if (_isRequestProcessing &&
+                                            key.value ==
+                                                "index_${chatMessages.length - 1}") {
+                                          var widgetKey = getCachedKey(
+                                              "index_${chatMessage.messageId}_${index}");
                                           //if last widget height has changed.
-                                          var currentSize = widgetKey.currentContext?.size;
+                                          var currentSize =
+                                              widgetKey.currentContext?.size;
                                           if (lastItemSize != currentSize) {
-                                            if (visiblePercentage < 100 && visiblePercentage > 0) {
+                                            if (visiblePercentage < 100 &&
+                                                visiblePercentage > 0) {
                                               _scrollController.position
-                                                  .ensureVisible(widgetKey.currentContext!.findRenderObject()!,
-                                                  duration: Duration(milliseconds: 300), curve: Curves.ease, alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd);
+                                                  .ensureVisible(
+                                                      widgetKey.currentContext!
+                                                          .findRenderObject()!,
+                                                      duration: Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.ease,
+                                                      alignmentPolicy:
+                                                          ScrollPositionAlignmentPolicy
+                                                              .keepVisibleAtEnd);
                                             }
                                             lastItemSize = currentSize;
                                           }
-
                                         }
                                       },
                                       child: ChatMessageSingleItem(
-                                        key: getCachedKey("index_${chatMessage.messageId}_${index}"),
+                                        key: getCachedKey(
+                                            "index_${chatMessage.messageId}_${index}"),
                                         chatMessage: chatMessage,
                                       ),
                                     );
@@ -372,6 +410,26 @@ class _ConversationPageState extends State<ConversationPage> {
           )
         ],
       ),
+      floatingActionButton: Visibility(
+        visible: _isVisible,
+        child: FloatingActionButton(
+          backgroundColor: Colors.blueGrey,
+          onPressed: () {
+            if (_scrollController.position.pixels !=
+                _scrollController.position.maxScrollExtent) {
+              _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease);
+            }
+          },
+          child: Icon(Icons.file_download_rounded),
+        ),
+      ),
+      floatingActionButtonLocation: CustomStandardFabLocation(
+          location: FloatingActionButtonLocation.endDocked,
+          offsetX: -32,
+          offsetY: -128),
     );
   }
 
