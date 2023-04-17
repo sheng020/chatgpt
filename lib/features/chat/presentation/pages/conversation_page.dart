@@ -34,13 +34,11 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   void initState() {
-    _messageController.addListener(() {
-      setState(() {});
-    });
     Future.microtask(() async {
       await BlocProvider.of<ChatConversationCubit>(context).initMessageList();
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        _scrollController.position.jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollController.position
+            .jumpTo(_scrollController.position.maxScrollExtent);
       });
     });
     _scrollController.addListener(() {
@@ -49,13 +47,15 @@ class _ConversationPageState extends State<ConversationPage> {
               .abs() >
           200) {
         if (!_isVisible) {
+          BlocProvider.of<ChatConversationCubit>(context)
+              .setFloatingActionButtonShow(true);
           _isVisible = true;
-          setState(() {});
         }
       } else {
         if (_isVisible) {
+          BlocProvider.of<ChatConversationCubit>(context)
+              .setFloatingActionButtonShow(false);
           _isVisible = false;
-          setState(() {});
         }
       }
     });
@@ -100,8 +100,11 @@ class _ConversationPageState extends State<ConversationPage> {
                       boxShadow: glowBoxShadow, color: Colors.black87),
                   child: Column(
                     children: [
-                      Expanded(child: BlocBuilder<ChatConversationCubit,
-                          ChatConversationState>(
+                      Expanded(
+                          child: BlocBuilder<ChatConversationCubit,
+                              ChatConversationState>(
+                        buildWhen: (previous, current) =>
+                            current is ChatConversationLoaded,
                         builder: (context, chatConversationState) {
                           if (chatConversationState is ChatConversationLoaded) {
                             return ListView.builder(
@@ -294,54 +297,62 @@ class _ConversationPageState extends State<ConversationPage> {
                       Expanded(
                         child: BlocBuilder<ChatConversationCubit,
                                 ChatConversationState>(
+                            buildWhen: (previous, current) =>
+                                current is ChatConversationLoaded ||
+                                current is ChatConversationInitial ||
+                                current is ChatConversationLoading,
                             builder: (context, chatConversationState) {
-                          if (chatConversationState is ChatConversationLoaded) {
-                            final chatMessages =
-                                chatConversationState.getShowMessageList();
+                              if (chatConversationState
+                                  is ChatConversationLoaded) {
+                                final chatMessages =
+                                    chatConversationState.getShowMessageList();
 
-                            if (chatMessages == null || chatMessages.isEmpty) {
-                              return ExampleWidget(
-                                onMessageController: (message) {
-                                  setState(() {
-                                    _messageController.value =
-                                        TextEditingValue(text: message);
-                                  });
-                                },
-                              );
-                            } else {
-                              return ListView.builder(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                itemCount: _calculateListItemLength(
-                                    chatMessages.length),
-                                controller: _scrollController,
-                                itemBuilder: (context, index) {
-                                  if (index >= chatMessages.length) {
-                                    return _responsePreparingWidget();
-                                  } else {
-                                    var chatMessage = chatMessages[index];
-                                    //var itemKey = GlobalKey();
-                                    return VisibilityDetector(
-                                      key: ValueKey("index_${index}"),
-                                      onVisibilityChanged:
-                                          (VisibilityInfo visibilityInfo) {
-                                        var visiblePercentage =
-                                            visibilityInfo.visibleFraction *
-                                                100;
-                                        var key =
-                                            visibilityInfo.key as ValueKey;
-                                        if (_isRequestProcessing &&
-                                            key.value ==
-                                                "index_${chatMessages.length - 1}") {
-                                          var widgetKey = getCachedKey(
-                                              "index_${chatMessage.messageId}_${index}");
-                                          //if last widget height has changed.
-                                          var currentSize =
-                                              widgetKey.currentContext?.size;
-                                          if (lastItemSize != currentSize) {
-                                            if (visiblePercentage < 100 &&
-                                                visiblePercentage > 0) {
-                                              _scrollController.position
-                                                  .ensureVisible(
+                                if (chatMessages == null ||
+                                    chatMessages.isEmpty) {
+                                  return ExampleWidget(
+                                    onMessageController: (message) {
+                                      BlocProvider.of<ChatConversationCubit>(
+                                              context)
+                                          .sendChatMessage(message);
+                                      /* setState(() {
+                                        _messageController.value =
+                                            TextEditingValue(text: message);
+                                      }); */
+                                    },
+                                  );
+                                } else {
+                                  return ListView.builder(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    itemCount: _calculateListItemLength(
+                                        chatMessages.length),
+                                    controller: _scrollController,
+                                    itemBuilder: (context, index) {
+                                      if (index >= chatMessages.length) {
+                                        return _responsePreparingWidget();
+                                      } else {
+                                        var chatMessage = chatMessages[index];
+                                        //var itemKey = GlobalKey();
+                                        return VisibilityDetector(
+                                          key: ValueKey("index_${index}"),
+                                          onVisibilityChanged:
+                                              (VisibilityInfo visibilityInfo) {
+                                            var visiblePercentage =
+                                                visibilityInfo.visibleFraction *
+                                                    100;
+                                            var key =
+                                                visibilityInfo.key as ValueKey;
+                                            if (_isRequestProcessing &&
+                                                key.value ==
+                                                    "index_${chatMessages.length - 1}") {
+                                              var widgetKey = getCachedKey(
+                                                  "index_${chatMessage.messageId}_${index}");
+                                              //if last widget height has changed.
+                                              var currentSize = widgetKey
+                                                  .currentContext?.size;
+                                              if (lastItemSize != currentSize) {
+                                                if (visiblePercentage < 100 &&
+                                                    visiblePercentage > 0) {
+                                                  _scrollController.position.ensureVisible(
                                                       widgetKey.currentContext!
                                                           .findRenderObject()!,
                                                       duration: Duration(
@@ -350,41 +361,48 @@ class _ConversationPageState extends State<ConversationPage> {
                                                       alignmentPolicy:
                                                           ScrollPositionAlignmentPolicy
                                                               .keepVisibleAtEnd);
+                                                }
+                                                lastItemSize = currentSize;
+                                              }
                                             }
-                                            lastItemSize = currentSize;
-                                          }
-                                        }
-                                      },
-                                      child: ChatMessageSingleItem(
-                                        key: getCachedKey(
-                                            "index_${chatMessage.messageId}_${index}"),
-                                        chatMessage: chatMessage,
-                                      ),
-                                    );
-                                  }
+                                          },
+                                          child: ChatMessageSingleItem(
+                                            key: getCachedKey(
+                                                "index_${chatMessage.messageId}_${index}"),
+                                            chatMessage: chatMessage,
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  );
+                                }
+                              }
+                              return ExampleWidget(
+                                onMessageController: (message) {
+                                  BlocProvider.of<ChatConversationCubit>(
+                                          context)
+                                      .sendChatMessage(message);
+                                  /* setState(() {
+                                    _messageController.value =
+                                        TextEditingValue(text: message);
+                                  }); */
                                 },
                               );
-                            }
-                          }
-                          return ExampleWidget(
-                            onMessageController: (message) {
-                              setState(() {
-                                _messageController.value =
-                                    TextEditingValue(text: message);
-                              });
-                            },
-                          );
-                        }),
+                            }),
                       ),
                       BlocBuilder<ChatConversationCubit, ChatConversationState>(
+                        buildWhen: (previous, current) =>
+                            current is NotifyTextFieldState,
                         builder: (context, chatConversationState) {
-                          if (chatConversationState is ChatConversationLoaded) {
+                          if (chatConversationState is NotifyTextFieldState) {
+                            _messageController.value = TextEditingValue(
+                                text: chatConversationState.message);
                             return CustomTextField(
                               isRequestProcessing: _isRequestProcessing,
                               textEditingController: _messageController,
                               onTap: () async {
-                                _promptTrigger(
-                                    chatConversationState.showConversationId);
+                                _promptTrigger(chatConversationState
+                                    .selectedConversationId);
                               },
                             );
                           } else {
@@ -410,21 +428,31 @@ class _ConversationPageState extends State<ConversationPage> {
           )
         ],
       ),
-      floatingActionButton: Visibility(
-        visible: _isVisible,
-        child: FloatingActionButton(
-          backgroundColor: Colors.blueGrey,
-          onPressed: () {
-            if (_scrollController.position.pixels !=
-                _scrollController.position.maxScrollExtent) {
-              _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.ease);
-            }
-          },
-          child: Icon(Icons.file_download_rounded),
-        ),
+      floatingActionButton:
+          BlocBuilder<ChatConversationCubit, ChatConversationState>(
+        buildWhen: (previous, current) => current is FloatingActionState,
+        builder: (context, state) {
+          if (state is FloatingActionState) {
+            return Visibility(
+              visible: state.showFloatingActionButton,
+              child: FloatingActionButton(
+                backgroundColor: Colors.blueGrey,
+                onPressed: () {
+                  if (_scrollController.position.pixels !=
+                      _scrollController.position.maxScrollExtent) {
+                    _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease);
+                  }
+                },
+                child: Icon(Icons.file_download_rounded),
+              ),
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        },
       ),
       floatingActionButtonLocation: CustomStandardFabLocation(
           location: FloatingActionButtonLocation.endDocked,
@@ -568,9 +596,10 @@ class _ConversationPageState extends State<ConversationPage> {
               });
             })
         .then((value) {
-      setState(() {
+      BlocProvider.of<ChatConversationCubit>(context).sendChatMessage("");
+      /* setState(() {
         _messageController.clear();
-      });
+      }); */
       if (_scrollController.hasClients) {
         Timer(
           Duration(milliseconds: 100),

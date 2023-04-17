@@ -21,6 +21,17 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
   Map<int, List<ChatMessageEntity>> _conversations = {};
 
+  void setFloatingActionButtonShow(bool show) {
+    emit(FloatingActionState(showFloatingActionButton: show));
+  }
+
+  void sendChatMessage(String message) {
+    emit(NotifyTextFieldState(
+        selectedConversationId: selectedConversationId, message: message));
+  }
+
+  var selectedConversationId = INVALID_CONVERSATION_ID;
+
   //List<ChatMessageEntity> _chatMessages = [];
   //List<ConversationEntity> _conversations = [];
 
@@ -53,6 +64,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           _conversations[conversation.conversationId!] = chatMessages;
         }
       });
+      selectedConversationId = _conversations.entries.last.key;
       emit(
         ChatConversationLoaded(
           showConversationId: _conversations.entries.last.key,
@@ -60,6 +72,8 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         ),
       );
     }
+    emit(NotifyTextFieldState(
+        selectedConversationId: selectedConversationId, message: ""));
   }
 
   Future<void> newConversation() async {
@@ -68,6 +82,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     int id = await database.insertConversation(newConversation);
     newConversation.conversationId = id;
     _conversations[id] = [];
+    selectedConversationId = _conversations.entries.last.key;
     emit(
       ChatConversationLoaded(
         showConversationId: _conversations.entries.last.key,
@@ -81,6 +96,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       showConversationId: conversationId,
       chatMessages: _conversations,
     ));
+    selectedConversationId = conversationId;
   }
 
   Future<void> chatConversation({
@@ -111,6 +127,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         conversationId: showConversationId);
     chatMessages.add(realChatMessage);
 
+    selectedConversationId = showConversationId;
     emit(
       ChatConversationLoaded(
         showConversationId: showConversationId,
@@ -195,6 +212,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       });
     });
     _conversations.clear();
+    selectedConversationId = INVALID_CONVERSATION_ID;
     emit(
       ChatConversationLoaded(
         showConversationId: INVALID_CONVERSATION_ID,

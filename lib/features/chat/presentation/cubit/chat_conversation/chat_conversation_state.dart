@@ -19,7 +19,8 @@ class ChatConversationLoaded extends ChatConversationState {
   final int showConversationId;
   final DateTime dateTime = DateTime.now();
 
-  ChatConversationLoaded({required this.chatMessages, required this.showConversationId});
+  ChatConversationLoaded(
+      {required this.chatMessages, required this.showConversationId});
   @override
   List<Object> get props => [chatMessages, showConversationId, dateTime];
 
@@ -29,16 +30,30 @@ class ChatConversationLoaded extends ChatConversationState {
 }
 
 class ConversationUser extends ChatConversationState {
-
   final String userName;
 
   ConversationUser({required this.userName});
 
   @override
   List<Object?> get props => [userName];
-
 }
 
+class FloatingActionState extends ChatConversationState {
+  final bool showFloatingActionButton;
 
+  FloatingActionState({required this.showFloatingActionButton});
 
+  @override
+  List<Object?> get props => [showFloatingActionButton];
+}
 
+class NotifyTextFieldState extends ChatConversationState {
+  final String message;
+  final int selectedConversationId;
+
+  NotifyTextFieldState(
+      {required this.selectedConversationId, required this.message});
+
+  @override
+  List<Object?> get props => [selectedConversationId, message];
+}
