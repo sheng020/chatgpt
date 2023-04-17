@@ -7,6 +7,7 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conv
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_message_single_item.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/left_nav_button_widget.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/widget_size_listener.dart';
 import 'package:flutter_chatgpt_clone/features/global/common/common.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
@@ -47,6 +48,8 @@ class _ConversationPageState extends State<ConversationPage> {
     _scrollController.dispose();
     super.dispose();
   }
+
+  Size? lastItemSize;
 
   @override
   Widget build(BuildContext context) {
@@ -291,9 +294,28 @@ class _ConversationPageState extends State<ConversationPage> {
                                   if (index >= chatMessages.length) {
                                     return _responsePreparingWidget();
                                   } else {
-                                    return ChatMessageSingleItem(
-                                      chatMessage: chatMessages[index],
-                                    );
+                                    var chatMessage = chatMessages[index];
+
+                                    return MeasureSize(
+                                        onChange: (size) {
+                                          if (_isRequestProcessing &&
+                                              index ==
+                                                  chatMessages.length - 1) {
+                                            if (lastItemSize?.height !=
+                                                size.height) {
+                                              _scrollController.animateTo(
+                                                  _scrollController
+                                                      .position.maxScrollExtent,
+                                                  duration: Duration(
+                                                      milliseconds: 500),
+                                                  curve: Curves.ease);
+                                              lastItemSize = size;
+                                            }
+                                          }
+                                        },
+                                        child: ChatMessageSingleItem(
+                                          chatMessage: chatMessage,
+                                        ));
                                   }
                                 },
                               );
@@ -372,7 +394,7 @@ class _ConversationPageState extends State<ConversationPage> {
     var apiKeyTextController = TextEditingController();
     var showToast = false;
     return showDialog(
-      barrierDismissible: false,
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, stateSetter) {
@@ -419,7 +441,6 @@ class _ConversationPageState extends State<ConversationPage> {
                             }
                           }));
                     }
-                    
                   },
                 ),
               ],
