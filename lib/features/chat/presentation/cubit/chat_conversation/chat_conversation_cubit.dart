@@ -25,9 +25,11 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     emit(FloatingActionState(showFloatingActionButton: show));
   }
 
-  void sendChatMessage(String message) {
+  void sendChatMessage(String message, {bool isRequestProcessing = false}) {
     emit(NotifyTextFieldState(
-        selectedConversationId: selectedConversationId, message: message));
+        selectedConversationId: selectedConversationId,
+        message: message,
+        isRequestProcessing: isRequestProcessing));
   }
 
   var selectedConversationId = INVALID_CONVERSATION_ID;
@@ -42,9 +44,9 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     if (conversations == null || conversations.isEmpty) {
       emit(
         ChatConversationLoaded(
-          showConversationId: INVALID_CONVERSATION_ID,
-          chatMessages: _conversations,
-        ),
+            showConversationId: INVALID_CONVERSATION_ID,
+            chatMessages: _conversations,
+            isRequestProcessing: false),
       );
       //_conversations.add(conversation);
     } else {
@@ -67,13 +69,15 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       selectedConversationId = _conversations.entries.last.key;
       emit(
         ChatConversationLoaded(
-          showConversationId: _conversations.entries.last.key,
-          chatMessages: _conversations,
-        ),
+            showConversationId: _conversations.entries.last.key,
+            chatMessages: _conversations,
+            isRequestProcessing: false),
       );
     }
     emit(NotifyTextFieldState(
-        selectedConversationId: selectedConversationId, message: ""));
+        selectedConversationId: selectedConversationId,
+        message: "",
+        isRequestProcessing: false));
   }
 
   Future<void> newConversation() async {
@@ -85,17 +89,17 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     selectedConversationId = _conversations.entries.last.key;
     emit(
       ChatConversationLoaded(
-        showConversationId: _conversations.entries.last.key,
-        chatMessages: _conversations,
-      ),
+          showConversationId: _conversations.entries.last.key,
+          chatMessages: _conversations,
+          isRequestProcessing: false),
     );
   }
 
   Future<void> selectConversation(int conversationId) async {
     emit(ChatConversationLoaded(
-      showConversationId: conversationId,
-      chatMessages: _conversations,
-    ));
+        showConversationId: conversationId,
+        chatMessages: _conversations,
+        isRequestProcessing: false));
     selectedConversationId = conversationId;
   }
 
@@ -128,11 +132,12 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     chatMessages.add(realChatMessage);
 
     selectedConversationId = showConversationId;
+    sendChatMessage("", isRequestProcessing: true);
     emit(
       ChatConversationLoaded(
-        showConversationId: showConversationId,
-        chatMessages: _conversations,
-      ),
+          showConversationId: showConversationId,
+          chatMessages: _conversations,
+          isRequestProcessing: true),
     );
 
     database.insertMessage(realChatMessage);
@@ -164,9 +169,9 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           chatMessages?.add(chatMessageNewResponse);
           lastMessage = chatMessageNewResponse;
           emit(ChatConversationLoaded(
-            showConversationId: showConversationId,
-            chatMessages: _conversations,
-          ));
+              showConversationId: showConversationId,
+              chatMessages: _conversations,
+              isRequestProcessing: true));
         }
       },
       onError: (error) {
@@ -178,14 +183,19 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         chatMessages?.add(chatMessageErrorResponse);
 
         emit(ChatConversationLoaded(
-          showConversationId: showConversationId,
-          chatMessages: _conversations,
-        ));
+            showConversationId: showConversationId,
+            chatMessages: _conversations,
+            isRequestProcessing: false));
       },
       cancelOnError: false,
       onDone: () {
         print("Done");
+        sendChatMessage("", isRequestProcessing: false);
         onCompleteReqProcessing(false);
+        emit(ChatConversationLoaded(
+            chatMessages: _conversations,
+            showConversationId: showConversationId,
+            isRequestProcessing: false));
         ChatMessageEntity? chatLastMessage = lastMessage;
         if (chatLastMessage != null) {
           DatabaseManager.getInstance().insertMessage(chatLastMessage);
@@ -215,9 +225,9 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     selectedConversationId = INVALID_CONVERSATION_ID;
     emit(
       ChatConversationLoaded(
-        showConversationId: INVALID_CONVERSATION_ID,
-        chatMessages: _conversations,
-      ),
+          showConversationId: INVALID_CONVERSATION_ID,
+          chatMessages: _conversations,
+          isRequestProcessing: false),
     );
   }
 

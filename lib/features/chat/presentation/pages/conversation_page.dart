@@ -28,7 +28,7 @@ class ConversationPage extends StatefulWidget {
 
 class _ConversationPageState extends State<ConversationPage> {
   TextEditingController _messageController = TextEditingController();
-  bool _isRequestProcessing = false;
+  //bool _isRequestProcessing = false;
 
   ScrollController _scrollController = ScrollController();
 
@@ -324,7 +324,9 @@ class _ConversationPageState extends State<ConversationPage> {
                                   return ListView.builder(
                                     padding: EdgeInsets.symmetric(vertical: 16),
                                     itemCount: _calculateListItemLength(
-                                        chatMessages.length),
+                                        chatMessages.length,
+                                        chatConversationState
+                                            .isRequestProcessing),
                                     controller: _scrollController,
                                     itemBuilder: (context, index) {
                                       if (index >= chatMessages.length) {
@@ -341,7 +343,8 @@ class _ConversationPageState extends State<ConversationPage> {
                                                     100;
                                             var key =
                                                 visibilityInfo.key as ValueKey;
-                                            if (_isRequestProcessing &&
+                                            if (chatConversationState
+                                                    .isRequestProcessing &&
                                                 key.value ==
                                                     "index_${chatMessages.length - 1}") {
                                               var widgetKey = getCachedKey(
@@ -398,7 +401,8 @@ class _ConversationPageState extends State<ConversationPage> {
                             _messageController.value = TextEditingValue(
                                 text: chatConversationState.message);
                             return CustomTextField(
-                              isRequestProcessing: _isRequestProcessing,
+                              isRequestProcessing:
+                                  chatConversationState.isRequestProcessing,
                               textEditingController: _messageController,
                               onTap: () async {
                                 _promptTrigger(chatConversationState
@@ -461,8 +465,8 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 
-  int _calculateListItemLength(int length) {
-    if (!_isRequestProcessing) {
+  int _calculateListItemLength(int length, bool isRequestProcessing) {
+    if (!isRequestProcessing) {
       return length;
     } else {
       return length + 1;
@@ -591,12 +595,12 @@ class _ConversationPageState extends State<ConversationPage> {
             conversationId: conversationId,
             chatMessage: humanChatMessage,
             onCompleteReqProcessing: (isRequestProcessing) {
-              setState(() {
+              /* setState(() {
                 _isRequestProcessing = isRequestProcessing;
-              });
+              }); */
             })
         .then((value) {
-      BlocProvider.of<ChatConversationCubit>(context).sendChatMessage("");
+      //BlocProvider.of<ChatConversationCubit>(context).sendChatMessage("");
       /* setState(() {
         _messageController.clear();
       }); */
