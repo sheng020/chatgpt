@@ -102,7 +102,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         chatMessages: _conversations,
         isRequestProcessing: false));
     selectedConversationId = conversationId;
-    setFloatingActionButtonShow(false);
+    //setFloatingActionButtonShow(false);
   }
 
   Future<void> chatConversation({
