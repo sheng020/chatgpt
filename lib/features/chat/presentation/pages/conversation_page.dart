@@ -42,6 +42,8 @@ class _ConversationPageState extends State<ConversationPage> {
       });
     });
     _scrollController.addListener(() {
+      print(
+          "pixels:${_scrollController.position.pixels} ${_scrollController.position.maxScrollExtent}");
       if ((_scrollController.position.pixels -
                   _scrollController.position.maxScrollExtent)
               .abs() >
@@ -127,6 +129,7 @@ class _ConversationPageState extends State<ConversationPage> {
                                                           ChatConversationCubit>(
                                                       context)
                                                   .newConversation();
+                                              _isVisible = false;
                                             }
                                           },
                                           child: Container(
@@ -173,6 +176,7 @@ class _ConversationPageState extends State<ConversationPage> {
                                                     chatConversationState
                                                         .chatMessages.keys
                                                         .elementAt(realIndex));
+                                            _isVisible = false;
                                           },
                                           child: Container(
                                             width: double.infinity,
