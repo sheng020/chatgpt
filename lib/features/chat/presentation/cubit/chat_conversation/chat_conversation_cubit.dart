@@ -93,6 +93,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           chatMessages: _conversations,
           isRequestProcessing: false),
     );
+    setFloatingActionButtonShow(false);
   }
 
   Future<void> selectConversation(int conversationId) async {
@@ -101,6 +102,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         chatMessages: _conversations,
         isRequestProcessing: false));
     selectedConversationId = conversationId;
+    setFloatingActionButtonShow(false);
   }
 
   Future<void> chatConversation({
