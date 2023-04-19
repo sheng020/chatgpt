@@ -31,15 +31,16 @@ class _ConversationPageState extends State<ConversationPage> {
   //bool _isRequestProcessing = false;
 
   ScrollController _scrollController = ScrollController();
+  var _isScrollViewFirstLoad = true;
 
   @override
   void initState() {
     Future.microtask(() async {
       await BlocProvider.of<ChatConversationCubit>(context).initMessageList();
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      /* Future.delayed(Duration(milliseconds: 500), () {
         _scrollController.position
             .jumpTo(_scrollController.position.maxScrollExtent);
-      });
+      }); */
     });
     _scrollController.addListener(() {
       if ((_scrollController.position.pixels -
@@ -83,6 +84,10 @@ class _ConversationPageState extends State<ConversationPage> {
       keyMaps[key] = value;
       return value;
     }
+  }
+
+  String getKeyAtIndex(String messageId, int index) {
+    return "index_${messageId}_${index}";
   }
 
   @override
@@ -326,8 +331,8 @@ class _ConversationPageState extends State<ConversationPage> {
                                   List<Widget> children = [];
                                   var index = 0;
                                   for (var chatMessage in chatMessages) {
-                                    var widgetKey = getCachedKey(
-                                        "index_${chatMessage.messageId}_${index}");
+                                    var widgetKey = getCachedKey(getKeyAtIndex(
+                                        chatMessage.messageId ?? "", index));
                                     var widget = VisibilityDetector(
                                       key: widgetKey,
                                       onVisibilityChanged:
@@ -348,7 +353,9 @@ class _ConversationPageState extends State<ConversationPage> {
                                         if (chatConversationState
                                                 .isRequestProcessing &&
                                             mapKey ==
-                                                "index_${chatMessage.messageId}_${chatMessages.length - 1}") {
+                                                getKeyAtIndex(
+                                                    chatMessage.messageId ?? "",
+                                                    chatMessages.length - 1)) {
                                           //if last widget height has changed.
                                           var currentSize =
                                               widgetKey.currentContext?.size;
@@ -380,6 +387,16 @@ class _ConversationPageState extends State<ConversationPage> {
                                   if (chatConversationState
                                       .isRequestProcessing) {
                                     children.add(_responsePreparingWidget());
+                                  }
+
+                                  if (_isScrollViewFirstLoad) {
+                                    _isScrollViewFirstLoad = false;
+                                    Future.delayed(Duration(milliseconds: 500),
+                                        () {
+                                      _scrollController.position.jumpTo(
+                                          _scrollController
+                                              .position.maxScrollExtent);
+                                    });
                                   }
 
                                   return SingleChildScrollView(
