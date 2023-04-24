@@ -1,5 +1,4 @@
-
-
+import 'dart:async';
 
 import 'package:flutter_chatgpt_clone/features/chat/data/remote_data_source/chat_remote_data_source.dart';
 import 'package:http/http.dart' as http;
@@ -8,14 +7,14 @@ import '../../../../api/core/models/chat/stream/chat.dart';
 import '../../../../api/core/models/chat/sub_models/choices/sub_models/message.dart';
 import '../../../../api/instance/openai.dart';
 
-class ChatRemoteDataSourceImpl implements ChatRemoteDataSource{
+class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   final http.Client httpClient;
 
   ChatRemoteDataSourceImpl({required this.httpClient});
 
   @override
-  Stream<OpenAIStreamChatCompletionModel> chatConversation(String prompt) {
-
+  StreamController<OpenAIStreamChatCompletionModel> chatConversation(
+      String prompt) {
     final queryPrompt = prompt;
 
     // Creates A Stream Of Chat Completions.
@@ -31,6 +30,4 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource{
 
     return chatStream;
   }
-
-
 }

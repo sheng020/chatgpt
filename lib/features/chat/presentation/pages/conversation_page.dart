@@ -87,7 +87,7 @@ class _ConversationPageState extends State<ConversationPage> {
   }
 
   String getKeyAtIndex(String messageId, int index) {
-    return "index_${messageId}_${index}";
+    return "index_${messageId}_$index";
   }
 
   @override
@@ -285,7 +285,7 @@ class _ConversationPageState extends State<ConversationPage> {
                               name = DEFAULT_NAME;
                             } else {
                               BlocProvider.of<ChatUserNameCubit>(context)
-                                  .changeUserName(name!);
+                                  .changeUserName(name);
                             }
                           },
                           child: LeftNavButtonWidget(
@@ -399,15 +399,58 @@ class _ConversationPageState extends State<ConversationPage> {
                                     });
                                   }
 
-                                  return SingleChildScrollView(
-                                    controller: _scrollController,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 16),
-                                      child: Column(
-                                        children: children,
+                                  Widget stopGenerating;
+                                  if (chatConversationState
+                                      .isRequestProcessing) {
+                                    stopGenerating = Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(bottom: 16),
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                              backgroundColor: Colors.black45,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              24)))),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 12),
+                                            child: Text(
+                                              "Stop generating.",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            BlocProvider.of<
+                                                        ChatConversationCubit>(
+                                                    context)
+                                                .stopGeneration();
+                                          },
+                                        ),
                                       ),
-                                    ),
+                                    );
+                                  } else {
+                                    stopGenerating = SizedBox.shrink();
+                                  }
+
+                                  return Stack(
+                                    children: [
+                                      SingleChildScrollView(
+                                        controller: _scrollController,
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 32),
+                                          child: Column(
+                                            children: children,
+                                          ),
+                                        ),
+                                      ),
+                                      stopGenerating
+                                    ],
                                   );
                                 }
                               }
@@ -496,13 +539,13 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 
-  int _calculateListItemLength(int length, bool isRequestProcessing) {
+  /* int _calculateListItemLength(int length, bool isRequestProcessing) {
     if (!isRequestProcessing) {
       return length;
     } else {
       return length + 1;
     }
-  }
+  } */
 
   final _textFieldController = TextEditingController();
 

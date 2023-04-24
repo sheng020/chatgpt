@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import '../../core/base/chat/chat.dart';
 import '../../core/builder/base_api_url.dart';
@@ -135,7 +136,7 @@ class OpenAIChat implements OpenAIChatBase {
   /// ```
 
   @override
-  Stream<OpenAIStreamChatCompletionModel> createStream({
+  StreamController<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
     double? temperature,

@@ -167,7 +167,7 @@ class OpenAINetworkingClient {
   //   }
   // }
 
-  static Stream<T> postStream<T>({
+  static StreamController<T> postStream<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     required Map<String, dynamic> body,
@@ -183,8 +183,8 @@ class OpenAINetworkingClient {
     request.body = jsonEncode(body);
 
     void close() {
-      client.close();
       controller.close();
+      client.close();
     }
 
     OpenAILogger.log("starting request to $to");
@@ -198,6 +198,11 @@ class OpenAINetworkingClient {
         stream.listen(
           (value) {
             final String data = value;
+            if (controller.isClosed) {
+              print("shut down with data: ${data}");
+              close();
+              return;
+            }
 
             print("response:" + data);
 
@@ -212,7 +217,7 @@ class OpenAINetworkingClient {
                 final String data = line.substring(6);
                 if (data.contains("[DONE]")) {
                   OpenAILogger.log("stream response is done");
-
+                  close();
                   return;
                 }
 
@@ -235,13 +240,15 @@ class OpenAINetworkingClient {
             close();
           },
           onError: (error, stackTrace) {
-            controller.addError(error, stackTrace);
+            if (!controller.isClosed) {
+              controller.addError(error, stackTrace);
+            }
           },
         );
       },
     );
 
-    return controller.stream;
+    return controller;
   }
 
   static Future imageEditForm<T>({

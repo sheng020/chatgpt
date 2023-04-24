@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import '../../core/base/completion.dart';
@@ -203,7 +205,7 @@ class OpenAICompletion implements OpenAICompletionBase {
   /// ```
 
   @override
-  Stream<OpenAIStreamCompletionModel> createStream({
+  StreamController<OpenAIStreamCompletionModel> createStream({
     required String model,
     prompt,
     String? suffix,
@@ -333,7 +335,8 @@ class OpenAICompletion implements OpenAICompletionBase {
     Map<String, dynamic>? logitBias,
     String? user,
   }) {
-    Stream<OpenAIStreamCompletionModel> stream = createStream(
+    StreamController<OpenAIStreamCompletionModel> streamController =
+        createStream(
       model: model,
       prompt: prompt,
       suffix: suffix,
@@ -351,7 +354,7 @@ class OpenAICompletion implements OpenAICompletionBase {
       user: user,
     );
 
-    return stream.map((event) => event.choices.first.text);
+    return streamController.stream.map((event) => event.choices.first.text);
   }
 
   OpenAICompletion() {

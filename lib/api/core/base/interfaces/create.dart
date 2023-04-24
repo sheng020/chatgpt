@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../models/completion/completion.dart';
 
 abstract class CreateInterface {
@@ -19,7 +21,7 @@ abstract class CreateInterface {
     String? user,
   });
 
-  Stream<OpenAIStreamCompletionModel> createStream({
+  StreamController<OpenAIStreamCompletionModel> createStream({
     required String model,
     prompt,
     String? suffix,

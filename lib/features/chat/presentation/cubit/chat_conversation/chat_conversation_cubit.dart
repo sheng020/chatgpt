@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
@@ -105,6 +107,13 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     //setFloatingActionButtonShow(false);
   }
 
+  StreamController? _streamController;
+
+  void closeStream() {
+    _streamController?.close();
+    _streamController = null;
+  }
+
   Future<void> chatConversation({
     required int conversationId,
     required ChatMessageEntity chatMessage,
@@ -153,7 +162,9 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
     ChatMessageEntity? lastMessage;
 
-    conversationData.listen(
+    _streamController = conversationData;
+
+    conversationData.stream.listen(
       (streamChatCompletion) {
         final content = streamChatCompletion.choices.first.delta.content;
         //print(content);
@@ -178,6 +189,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       },
       onError: (error) {
         print(error);
+        closeStream();
         onCompleteReqProcessing(false);
         final chatMessageErrorResponse = ChatMessageEntity(
             messageId: ChatGptConst.AIBot, promptResponse: error.message);
@@ -192,6 +204,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       cancelOnError: false,
       onDone: () {
         print("Done");
+        closeStream();
         sendChatMessage("", isRequestProcessing: false);
         onCompleteReqProcessing(false);
         emit(ChatConversationLoaded(
@@ -214,6 +227,10 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       emit(ChatConversationLoaded(
         chatMessages: _chatMessages,
       ));*/
+  }
+
+  void stopGeneration() {
+    closeStream();
   }
 
   Future<void> deleteAllConversation() async {

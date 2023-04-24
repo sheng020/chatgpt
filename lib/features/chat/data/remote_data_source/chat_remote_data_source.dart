@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import '../../../../api/core/models/chat/stream/chat.dart';
 
 abstract class ChatRemoteDataSource {
-  Stream<OpenAIStreamChatCompletionModel> chatConversation(
+  StreamController<OpenAIStreamChatCompletionModel> chatConversation(
     String prompt,
   );
 }

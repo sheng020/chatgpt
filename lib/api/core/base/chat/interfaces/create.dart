@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../../models/chat/chat.dart';
 
 abstract class CreateInterface {
@@ -15,7 +17,7 @@ abstract class CreateInterface {
     String? user,
   });
 
-  Stream<OpenAIStreamChatCompletionModel> createStream({
+  StreamController<OpenAIStreamChatCompletionModel> createStream({
     required String model,
     required List<OpenAIChatCompletionChoiceMessageModel> messages,
     double? temperature,
