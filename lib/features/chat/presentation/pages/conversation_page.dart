@@ -43,10 +43,7 @@ class _ConversationPageState extends State<ConversationPage> {
       }); */
     });
     _scrollController.addListener(() {
-      if ((_scrollController.position.pixels -
-                  _scrollController.position.maxScrollExtent)
-              .abs() >
-          200) {
+      if ((_scrollController.position.pixels).abs() > 200) {
         if (!_isVisible) {
           BlocProvider.of<ChatConversationCubit>(context)
               .setFloatingActionButtonShow(true);
@@ -328,77 +325,6 @@ class _ConversationPageState extends State<ConversationPage> {
                                     },
                                   );
                                 } else {
-                                  List<Widget> children = [];
-                                  var index = 0;
-                                  for (var chatMessage in chatMessages) {
-                                    var widgetKey = getCachedKey(getKeyAtIndex(
-                                        chatMessage.messageId ?? "", index));
-                                    var widget = VisibilityDetector(
-                                      key: widgetKey,
-                                      onVisibilityChanged:
-                                          (VisibilityInfo visibilityInfo) {
-                                        var visiblePercentage =
-                                            visibilityInfo.visibleFraction *
-                                                100;
-                                        var key =
-                                            visibilityInfo.key as GlobalKey;
-                                        String? mapKey;
-                                        for (var entry in keyMaps.entries) {
-                                          if (entry.value == key) {
-                                            mapKey = entry.key;
-                                            break;
-                                          }
-                                        }
-
-                                        if (chatConversationState
-                                                .isRequestProcessing &&
-                                            mapKey ==
-                                                getKeyAtIndex(
-                                                    chatMessage.messageId ?? "",
-                                                    chatMessages.length - 1)) {
-                                          //if last widget height has changed.
-                                          var currentSize =
-                                              widgetKey.currentContext?.size;
-                                          if (lastItemSize != currentSize) {
-                                            if (visiblePercentage < 100 &&
-                                                visiblePercentage > 0) {
-                                              Scrollable.ensureVisible(
-                                                  widgetKey.currentContext!,
-                                                  duration: Duration(
-                                                      milliseconds: 150),
-                                                  curve: Curves.decelerate,
-                                                  alignmentPolicy:
-                                                      ScrollPositionAlignmentPolicy
-                                                          .keepVisibleAtEnd);
-                                            }
-                                            lastItemSize = currentSize;
-                                          }
-                                        }
-                                      },
-                                      child: ChatMessageSingleItem(
-                                        /* key: getCachedKey(
-                                            "index_${chatMessage.messageId}_${index}"), */
-                                        chatMessage: chatMessage,
-                                      ),
-                                    );
-                                    children.add(widget);
-                                    index++;
-                                  }
-                                  if (chatConversationState
-                                      .isRequestProcessing) {
-                                    children.add(_responsePreparingWidget());
-                                  }
-
-                                  if (_isScrollViewFirstLoad) {
-                                    _isScrollViewFirstLoad = false;
-                                    Future.delayed(Duration(milliseconds: 500),
-                                        () {
-                                      _scrollController.position.jumpTo(
-                                          _scrollController
-                                              .position.maxScrollExtent);
-                                    });
-                                  }
-
                                   Widget stopGenerating;
                                   if (chatConversationState
                                       .isRequestProcessing) {
@@ -437,17 +363,82 @@ class _ConversationPageState extends State<ConversationPage> {
                                     stopGenerating = SizedBox.shrink();
                                   }
 
+                                  var chatMessagesReversed =
+                                      chatMessages.reversed.toList();
                                   return Stack(
                                     children: [
-                                      SingleChildScrollView(
+                                      ListView.builder(
+                                        reverse: true,
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 16),
+                                        itemCount: _calculateListItemLength(
+                                            chatMessages.length,
+                                            chatConversationState
+                                                .isRequestProcessing),
                                         controller: _scrollController,
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 32),
-                                          child: Column(
-                                            children: children,
-                                          ),
-                                        ),
+                                        itemBuilder: (context, index) {
+                                          if (chatConversationState
+                                                  .isRequestProcessing &&
+                                              index == 0) {
+                                            return _responsePreparingWidget();
+                                          } else {
+                                            var realIndex =
+                                                chatConversationState
+                                                        .isRequestProcessing
+                                                    ? (index - 1)
+                                                    : index;
+                                            var chatMessage =
+                                                chatMessagesReversed[realIndex];
+                                            //var itemKey = GlobalKey();
+
+                                            return VisibilityDetector(
+                                              key: ValueKey("index_$realIndex"),
+                                              onVisibilityChanged:
+                                                  (VisibilityInfo
+                                                      visibilityInfo) {
+                                                var visiblePercentage =
+                                                    visibilityInfo
+                                                            .visibleFraction *
+                                                        100;
+                                                var key = visibilityInfo.key
+                                                    as ValueKey;
+                                                if (chatConversationState
+                                                        .isRequestProcessing &&
+                                                    key.value == "index_0") {
+                                                  var widgetKey = getCachedKey(
+                                                      "index_${chatMessage.messageId}_0");
+                                                  //if last widget height has changed.
+                                                  var currentSize = widgetKey
+                                                      .currentContext?.size;
+                                                  if (lastItemSize !=
+                                                      currentSize) {
+                                                    if (visiblePercentage <
+                                                            100 &&
+                                                        visiblePercentage > 0) {
+                                                      _scrollController.position.ensureVisible(
+                                                          widgetKey
+                                                              .currentContext!
+                                                              .findRenderObject()!,
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  300),
+                                                          curve: Curves.ease,
+                                                          alignmentPolicy:
+                                                              ScrollPositionAlignmentPolicy
+                                                                  .keepVisibleAtStart);
+                                                    }
+                                                    lastItemSize = currentSize;
+                                                  }
+                                                }
+                                              },
+                                              child: ChatMessageSingleItem(
+                                                key: getCachedKey(
+                                                    "index_${chatMessage.messageId}_$realIndex"),
+                                                chatMessage: chatMessage,
+                                              ),
+                                            );
+                                          }
+                                        },
                                       ),
                                       stopGenerating
                                     ],
@@ -516,10 +507,8 @@ class _ConversationPageState extends State<ConversationPage> {
               child: FloatingActionButton(
                 backgroundColor: Colors.blueGrey,
                 onPressed: () {
-                  if (_scrollController.position.pixels !=
-                      _scrollController.position.maxScrollExtent) {
-                    _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent,
+                  if (_scrollController.position.pixels != 0) {
+                    _scrollController.animateTo(0,
                         duration: Duration(milliseconds: 500),
                         curve: Curves.ease);
                   }
@@ -539,13 +528,13 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 
-  /* int _calculateListItemLength(int length, bool isRequestProcessing) {
+  int _calculateListItemLength(int length, bool isRequestProcessing) {
     if (!isRequestProcessing) {
       return length;
     } else {
       return length + 1;
     }
-  } */
+  }
 
   final _textFieldController = TextEditingController();
 
@@ -681,10 +670,8 @@ class _ConversationPageState extends State<ConversationPage> {
       if (_scrollController.hasClients) {
         Timer(
           Duration(milliseconds: 100),
-          () => _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 150),
-              curve: Curves.ease),
+          () => _scrollController.animateTo(0,
+              duration: Duration(milliseconds: 150), curve: Curves.ease),
         );
       }
     });
