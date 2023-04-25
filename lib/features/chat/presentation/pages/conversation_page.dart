@@ -668,11 +668,13 @@ class _ConversationPageState extends State<ConversationPage> {
         _messageController.clear();
       }); */
       if (_scrollController.hasClients) {
-        Timer(
-          Duration(milliseconds: 100),
-          () => _scrollController.animateTo(0,
-              duration: Duration(milliseconds: 150), curve: Curves.ease),
-        );
+        if (_scrollController.position.pixels > 200) {
+          Timer(
+            Duration(milliseconds: 100),
+            () => _scrollController.animateTo(0,
+                duration: Duration(milliseconds: 500), curve: Curves.ease),
+          );
+        }
       }
     });
   }
