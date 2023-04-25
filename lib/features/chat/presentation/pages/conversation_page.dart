@@ -368,6 +368,7 @@ class _ConversationPageState extends State<ConversationPage> {
                                   return Stack(
                                     children: [
                                       ListView.builder(
+                                        cacheExtent: 1000,
                                         reverse: true,
                                         padding:
                                             EdgeInsets.symmetric(vertical: 16),
