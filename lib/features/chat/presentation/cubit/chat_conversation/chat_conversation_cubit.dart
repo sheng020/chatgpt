@@ -65,7 +65,8 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               chatMessages.add(element);
             }
           });
-          _conversations[conversation.conversationId!] = chatMessages;
+          _conversations[conversation.conversationId!] =
+              chatMessages.reversed.toList();
         }
       });
       selectedConversationId = _conversations.entries.last.key;
@@ -134,13 +135,18 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       showConversationId = id;
       _conversations[id] = chatMessages;
     }
+
     realChatMessage = ChatMessageEntity(
         id: chatMessage.id,
         messageId: chatMessage.messageId,
         queryPrompt: chatMessage.queryPrompt,
         promptResponse: chatMessage.promptResponse,
+        date: DateTime.now().millisecondsSinceEpoch,
         conversationId: showConversationId);
-    chatMessages.add(realChatMessage);
+
+    var id = await database.insertMessage(realChatMessage);
+    realChatMessage.id = id;
+    chatMessages.insert(0, realChatMessage);
 
     selectedConversationId = showConversationId;
     sendChatMessage("", isRequestProcessing: true);
@@ -150,8 +156,6 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           chatMessages: _conversations,
           isRequestProcessing: true),
     );
-
-    database.insertMessage(realChatMessage);
 
     onCompleteReqProcessing(true);
 
@@ -178,8 +182,9 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           final chatMessageNewResponse = ChatMessageEntity(
               conversationId: showConversationId,
               messageId: ChatGptConst.AIBot,
+              date: DateTime.now().millisecondsSinceEpoch,
               promptResponse: sb.toString());
-          chatMessages?.add(chatMessageNewResponse);
+          chatMessages?.insert(0, chatMessageNewResponse);
           lastMessage = chatMessageNewResponse;
           emit(ChatConversationLoaded(
               showConversationId: showConversationId,
@@ -192,9 +197,11 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         closeStream();
         onCompleteReqProcessing(false);
         final chatMessageErrorResponse = ChatMessageEntity(
-            messageId: ChatGptConst.AIBot, promptResponse: error.message);
+            date: DateTime.now().millisecondsSinceEpoch,
+            messageId: ChatGptConst.AIBot,
+            promptResponse: error.message);
 
-        chatMessages?.add(chatMessageErrorResponse);
+        chatMessages?.insert(0, chatMessageErrorResponse);
 
         emit(ChatConversationLoaded(
             showConversationId: showConversationId,

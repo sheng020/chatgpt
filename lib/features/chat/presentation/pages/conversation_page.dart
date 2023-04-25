@@ -7,6 +7,7 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conv
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_message_single_item.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/keep_alive_wrapper.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/left_nav_button_widget.dart';
 import 'package:flutter_chatgpt_clone/features/global/common/common.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
@@ -363,83 +364,128 @@ class _ConversationPageState extends State<ConversationPage> {
                                     stopGenerating = SizedBox.shrink();
                                   }
 
-                                  var chatMessagesReversed =
-                                      chatMessages.reversed.toList();
+                                  /* var chatMessagesReversed =
+                                      chatMessages.reversed.toList(); */
                                   return Stack(
                                     children: [
-                                      ListView.builder(
-                                        cacheExtent: 1000,
+                                      ListView.custom(
+                                        childrenDelegate:
+                                            SliverChildBuilderDelegate(
+                                                (BuildContext context,
+                                                    int index) {
+                                                  if (index == 0) {
+                                                    if (chatConversationState
+                                                        .isRequestProcessing) {
+                                                      return _responsePreparingWidget();
+                                                    } else {
+                                                      return SizedBox.shrink();
+                                                    }
+                                                  } else {
+                                                    var realIndex = index - 1;
+                                                    var chatMessage =
+                                                        chatMessages[realIndex];
+                                                    //var itemKey = GlobalKey();
+
+                                                    /* print(
+                                                        "itemkey:${chatMessage.date}    ${index}"); */
+                                                    print(
+                                                        "index:iiii:${index} ${chatMessage.promptResponse}");
+                                                    return KeepAliveWrapper(
+                                                        index: index,
+                                                        key: ValueKey(
+                                                            "index_${chatMessage.date}"),
+                                                        child:
+                                                            VisibilityDetector(
+                                                          key: ValueKey(
+                                                              "index_${realIndex}_${chatMessage.messageId}"),
+                                                          onVisibilityChanged:
+                                                              (VisibilityInfo
+                                                                  visibilityInfo) {
+                                                            var visiblePercentage =
+                                                                visibilityInfo
+                                                                        .visibleFraction *
+                                                                    100;
+                                                            var key =
+                                                                visibilityInfo
+                                                                        .key
+                                                                    as ValueKey;
+                                                            if (chatConversationState
+                                                                    .isRequestProcessing &&
+                                                                key.value ==
+                                                                    "index_0_${ChatGptConst.AIBot}") {
+                                                              var widgetKey =
+                                                                  getCachedKey(
+                                                                      "index_${chatMessage.messageId}_0");
+                                                              //if last widget height has changed.
+                                                              var currentSize =
+                                                                  widgetKey
+                                                                      .currentContext
+                                                                      ?.size;
+                                                              if (lastItemSize !=
+                                                                  currentSize) {
+                                                                if (visiblePercentage <
+                                                                        100 &&
+                                                                    visiblePercentage >
+                                                                        0) {
+                                                                  if (_scrollController
+                                                                      .hasClients) {
+                                                                    _scrollController.position.ensureVisible(
+                                                                        widgetKey
+                                                                            .currentContext!
+                                                                            .findRenderObject()!,
+                                                                        duration: Duration(
+                                                                            milliseconds:
+                                                                                300),
+                                                                        curve: Curves
+                                                                            .ease,
+                                                                        alignmentPolicy:
+                                                                            ScrollPositionAlignmentPolicy.keepVisibleAtStart);
+                                                                  }
+                                                                }
+                                                                lastItemSize =
+                                                                    currentSize;
+                                                              }
+                                                            }
+                                                          },
+                                                          child:
+                                                              ChatMessageSingleItem(
+                                                            key: getCachedKey(
+                                                                "index_${chatMessage.messageId}_$realIndex"),
+                                                            chatMessage:
+                                                                chatMessage,
+                                                          ),
+                                                        ));
+                                                  }
+                                                },
+                                                childCount:
+                                                    chatMessages.length + 1,
+                                                findChildIndexCallback: (key) {
+                                                  int getDate(String forMatch) {
+                                                    RegExp regExp =
+                                                        RegExp(r'index_(\d+)$');
+                                                    Match match = regExp
+                                                        .firstMatch(forMatch)!;
+                                                    String num =
+                                                        match.group(1)!;
+                                                    return int.parse(num);
+                                                  }
+
+                                                  final valueKey =
+                                                      key as ValueKey;
+                                                  /* print(
+                                                      "value:${valueKey.value}"); */
+                                                  int index = chatMessages
+                                                      .indexWhere((item) =>
+                                                          item.date ==
+                                                          getDate(
+                                                              valueKey.value));
+                                                  return index + 1;
+                                                }),
+                                        cacheExtent: 3000,
                                         reverse: true,
                                         padding:
                                             EdgeInsets.symmetric(vertical: 16),
-                                        itemCount: _calculateListItemLength(
-                                            chatMessages.length,
-                                            chatConversationState
-                                                .isRequestProcessing),
                                         controller: _scrollController,
-                                        itemBuilder: (context, index) {
-                                          if (chatConversationState
-                                                  .isRequestProcessing &&
-                                              index == 0) {
-                                            return _responsePreparingWidget();
-                                          } else {
-                                            var realIndex =
-                                                chatConversationState
-                                                        .isRequestProcessing
-                                                    ? (index - 1)
-                                                    : index;
-                                            var chatMessage =
-                                                chatMessagesReversed[realIndex];
-                                            //var itemKey = GlobalKey();
-
-                                            return VisibilityDetector(
-                                              key: ValueKey("index_$realIndex"),
-                                              onVisibilityChanged:
-                                                  (VisibilityInfo
-                                                      visibilityInfo) {
-                                                var visiblePercentage =
-                                                    visibilityInfo
-                                                            .visibleFraction *
-                                                        100;
-                                                var key = visibilityInfo.key
-                                                    as ValueKey;
-                                                if (chatConversationState
-                                                        .isRequestProcessing &&
-                                                    key.value == "index_0") {
-                                                  var widgetKey = getCachedKey(
-                                                      "index_${chatMessage.messageId}_0");
-                                                  //if last widget height has changed.
-                                                  var currentSize = widgetKey
-                                                      .currentContext?.size;
-                                                  if (lastItemSize !=
-                                                      currentSize) {
-                                                    if (visiblePercentage <
-                                                            100 &&
-                                                        visiblePercentage > 0) {
-                                                      _scrollController.position.ensureVisible(
-                                                          widgetKey
-                                                              .currentContext!
-                                                              .findRenderObject()!,
-                                                          duration: Duration(
-                                                              milliseconds:
-                                                                  300),
-                                                          curve: Curves.ease,
-                                                          alignmentPolicy:
-                                                              ScrollPositionAlignmentPolicy
-                                                                  .keepVisibleAtStart);
-                                                    }
-                                                    lastItemSize = currentSize;
-                                                  }
-                                                }
-                                              },
-                                              child: ChatMessageSingleItem(
-                                                key: getCachedKey(
-                                                    "index_${chatMessage.messageId}_$realIndex"),
-                                                chatMessage: chatMessage,
-                                              ),
-                                            );
-                                          }
-                                        },
                                       ),
                                       stopGenerating
                                     ],
@@ -636,6 +682,11 @@ class _ConversationPageState extends State<ConversationPage> {
         });
   }
 
+  static String loadingValue = "loading";
+
+  ValueKey loadingKey = ValueKey(loadingValue);
+  ValueKey loadingKey1 = ValueKey("loading1");
+
   Widget _responsePreparingWidget() {
     return Container(
       height: 60,
@@ -649,10 +700,10 @@ class _ConversationPageState extends State<ConversationPage> {
     }
 
     final humanChatMessage = ChatMessageEntity(
-      conversationId: conversationId,
-      messageId: ChatGptConst.Human,
-      queryPrompt: _messageController.text,
-    );
+        conversationId: conversationId,
+        messageId: ChatGptConst.Human,
+        queryPrompt: _messageController.text,
+        date: DateTime.now().millisecondsSinceEpoch);
 
     BlocProvider.of<ChatConversationCubit>(context)
         .chatConversation(

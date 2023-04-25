@@ -87,7 +87,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `message` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `messageId` TEXT, `queryPrompt` TEXT, `promptResponse` TEXT, `date` INTEGER NOT NULL, `conversationId` INTEGER)');
+            'CREATE TABLE IF NOT EXISTS `message` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `messageId` TEXT, `queryPrompt` TEXT, `promptResponse` TEXT, `date` INTEGER, `conversationId` INTEGER)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `conversation` (`conversationId` INTEGER PRIMARY KEY AUTOINCREMENT)');
 
@@ -156,7 +156,8 @@ class _$MessageDao extends MessageDao {
             messageId: row['messageId'] as String?,
             queryPrompt: row['queryPrompt'] as String?,
             promptResponse: row['promptResponse'] as String?,
-            conversationId: row['conversationId'] as int?));
+            conversationId: row['conversationId'] as int?,
+            date: row['date'] as int?));
   }
 
   @override
