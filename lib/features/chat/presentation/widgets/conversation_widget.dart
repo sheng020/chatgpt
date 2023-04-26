@@ -55,8 +55,8 @@ class ConversationWidget extends StatelessWidget {
                       .elementAt(realIndex);
                   var title = S.of(context).new_conversation;
                   if (entry.isNotEmpty &&
-                      (entry.first.queryPrompt?.isNotEmpty ?? false)) {
-                    title = entry.first.queryPrompt!;
+                      (entry.last.queryPrompt?.isNotEmpty ?? false)) {
+                    title = entry.last.queryPrompt!;
                   }
                   return Padding(
                     padding: EdgeInsets.symmetric(vertical: 5),

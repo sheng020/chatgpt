@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
@@ -19,12 +18,7 @@ class ChatMessageSingleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Animate(
-      effects: [
-        SlideEffect(begin: Offset(0, 1), duration: Duration(milliseconds: 300))
-      ],
-      child: _chatMessageItem(context),
-    );
+    return _chatMessageItem(context);
   }
 
   Widget _chatMessageItem(BuildContext context) {
@@ -51,7 +45,7 @@ class ChatMessageSingleItem extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                      margin: EdgeInsets.only(bottom: 10, top: 10),
+                      margin: EdgeInsets.only(bottom: 4, top: 4),
                       child: MarkdownWidget(
                           shrinkWrap: true,
                           selectable: true,

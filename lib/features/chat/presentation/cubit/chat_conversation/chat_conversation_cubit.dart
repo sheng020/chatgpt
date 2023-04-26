@@ -69,13 +69,14 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               chatMessages.add(element);
             }
           });
-          _conversations[conversation.conversationId!] = chatMessages;
+          _conversations[conversation.conversationId!] =
+              chatMessages.reversed.toList();
         }
       });
       selectedConversationId = _conversations.entries.last.key;
       emit(
         ChatConversationLoaded(
-            showConversationId: _conversations.entries.last.key,
+            showConversationId: selectedConversationId,
             chatMessages: _conversations,
             isRequestProcessing: false),
       );
@@ -95,7 +96,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     selectedConversationId = _conversations.entries.last.key;
     emit(
       ChatConversationLoaded(
-          showConversationId: _conversations.entries.last.key,
+          showConversationId: selectedConversationId,
           chatMessages: _conversations,
           isRequestProcessing: false),
     );
@@ -149,7 +150,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
     var id = await database.insertMessage(realChatMessage);
     realChatMessage.id = id;
-    chatMessages.add(realChatMessage);
+    chatMessages.insert(0, realChatMessage);
 
     selectedConversationId = showConversationId;
     sendChatMessage("", isRequestProcessing: true);
@@ -187,7 +188,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               messageId: ChatGptConst.AIBot,
               date: DateTime.now().millisecondsSinceEpoch,
               promptResponse: sb.toString());
-          chatMessages?.add(chatMessageNewResponse);
+          chatMessages?.insert(0, chatMessageNewResponse);
           lastMessage = chatMessageNewResponse;
           emit(ChatConversationLoaded(
               showConversationId: showConversationId,
@@ -204,7 +205,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
             messageId: ChatGptConst.AIBot,
             promptResponse: error.message);
 
-        chatMessages?.add(chatMessageErrorResponse);
+        chatMessages?.insert(0, chatMessageErrorResponse);
 
         emit(ChatConversationLoaded(
             showConversationId: showConversationId,
