@@ -27,6 +27,10 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     emit(FloatingActionState(showFloatingActionButton: show));
   }
 
+  int getCurrentConversationLength() {
+    return _conversations[selectedConversationId]?.length ?? -1;
+  }
+
   void sendChatMessage(String message, {bool isRequestProcessing = false}) {
     emit(NotifyTextFieldState(
         selectedConversationId: selectedConversationId,
@@ -65,8 +69,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               chatMessages.add(element);
             }
           });
-          _conversations[conversation.conversationId!] =
-              chatMessages.reversed.toList();
+          _conversations[conversation.conversationId!] = chatMessages;
         }
       });
       selectedConversationId = _conversations.entries.last.key;
@@ -146,7 +149,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
     var id = await database.insertMessage(realChatMessage);
     realChatMessage.id = id;
-    chatMessages.insert(0, realChatMessage);
+    chatMessages.add(realChatMessage);
 
     selectedConversationId = showConversationId;
     sendChatMessage("", isRequestProcessing: true);
@@ -184,7 +187,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               messageId: ChatGptConst.AIBot,
               date: DateTime.now().millisecondsSinceEpoch,
               promptResponse: sb.toString());
-          chatMessages?.insert(0, chatMessageNewResponse);
+          chatMessages?.add(chatMessageNewResponse);
           lastMessage = chatMessageNewResponse;
           emit(ChatConversationLoaded(
               showConversationId: showConversationId,
@@ -201,7 +204,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
             messageId: ChatGptConst.AIBot,
             promptResponse: error.message);
 
-        chatMessages?.insert(0, chatMessageErrorResponse);
+        chatMessages?.add(chatMessageErrorResponse);
 
         emit(ChatConversationLoaded(
             showConversationId: showConversationId,

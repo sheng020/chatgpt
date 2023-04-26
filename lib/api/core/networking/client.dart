@@ -230,7 +230,7 @@ class OpenAINetworkingClient {
               final error = jsonDecode(data)['error'];
               if (error != null) {
                 controller.addError(RequestFailedException(
-                  error["message"],
+                  error,
                   respond.statusCode,
                 ));
               }
