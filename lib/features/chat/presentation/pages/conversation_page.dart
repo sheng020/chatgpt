@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_message_single_item.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_messages_list_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
