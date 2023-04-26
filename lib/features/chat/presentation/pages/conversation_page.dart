@@ -5,9 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_message_single_item.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_messages_list_widget.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/left_nav_button_widget.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/stop_generate_widget.dart';
 import 'package:flutter_chatgpt_clone/features/global/common/common.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
@@ -48,7 +51,10 @@ class _ConversationPageState extends State<ConversationPage> {
       }); */
     });
     _scrollController.addListener(() {
-      if ((_scrollController.position.pixels).abs() > 200) {
+      if ((_scrollController.position.pixels -
+                  _scrollController.position.maxScrollExtent)
+              .abs() >
+          200) {
         BlocProvider.of<ChatConversationCubit>(context)
             .setFloatingActionButtonShow(true);
       } else {
@@ -101,113 +107,15 @@ class _ConversationPageState extends State<ConversationPage> {
                       boxShadow: glowBoxShadow, color: Colors.black87),
                   child: Column(
                     children: [
-                      Expanded(
-                          child: BlocBuilder<ChatConversationCubit,
-                              ChatConversationState>(
-                        buildWhen: (previous, current) =>
-                            current is ChatConversationLoaded,
-                        builder: (context, chatConversationState) {
-                          if (chatConversationState is ChatConversationLoaded) {
-                            return ListView.builder(
-                                itemCount:
-                                    chatConversationState.chatMessages.length +
-                                        1,
-                                itemBuilder: (context, index) {
-                                  if (index == 0) {
-                                    return Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 5),
-                                      child: Material(
-                                        type: MaterialType.transparency,
-                                        child: InkWell(
-                                          onTap: () {
-                                            if (chatConversationState
-                                                    .showConversationId !=
-                                                INVALID_CONVERSATION_ID) {
-                                              BlocProvider.of<
-                                                          ChatConversationCubit>(
-                                                      context)
-                                                  .newConversation();
-                                              //_isVisible = false;
-                                            }
-                                          },
-                                          child: Container(
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 1),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 10),
-                                            child: Text(
-                                              S.of(context).new_chat,
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    var realIndex = index - 1;
-                                    var entry = chatConversationState
-                                        .chatMessages.values
-                                        .elementAt(realIndex);
-                                    var title = S.of(context).new_conversation;
-                                    if (entry.isNotEmpty &&
-                                        (entry.first.queryPrompt?.isNotEmpty ??
-                                            false)) {
-                                      title = entry.first.queryPrompt!;
-                                    }
-                                    return Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 5),
-                                      child: Material(
-                                        type: MaterialType.transparency,
-                                        child: InkWell(
-                                          onTap: () {
-                                            BlocProvider.of<
-                                                        ChatConversationCubit>(
-                                                    context)
-                                                .selectConversation(
-                                                    chatConversationState
-                                                        .chatMessages.keys
-                                                        .elementAt(realIndex));
-                                            if (_scrollController.hasClients) {
-                                              _scrollController.jumpTo(
-                                                  _scrollController
-                                                      .position.pixels);
-                                            }
-                                          },
-                                          child: Container(
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 1),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 10),
-                                            child: Text(
-                                              title,
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                });
-                          } else {
-                            return Container();
-                          }
-                        },
-                      )),
+                      Expanded(child: ConversationWidget(
+                          onConversationTap: (conversationId) {
+                        BlocProvider.of<ChatConversationCubit>(context)
+                            .selectConversation(conversationId);
+                        if (_scrollController.hasClients) {
+                          _scrollController
+                              .jumpTo(_scrollController.position.pixels);
+                        }
+                      })),
                       SizedBox(
                         height: 10,
                       ),
@@ -324,44 +232,6 @@ class _ConversationPageState extends State<ConversationPage> {
                                     },
                                   );
                                 } else {
-                                  Widget stopGenerating;
-                                  if (chatConversationState
-                                      .isRequestProcessing) {
-                                    stopGenerating = Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 16),
-                                        child: TextButton(
-                                          style: TextButton.styleFrom(
-                                              backgroundColor: Colors.black45,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              24)))),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 12),
-                                            child: Text(
-                                              "Stop generating.",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16),
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            BlocProvider.of<
-                                                        ChatConversationCubit>(
-                                                    context)
-                                                .stopGeneration();
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    stopGenerating = SizedBox.shrink();
-                                  }
-
                                   /* var chatMessagesReversed =
                                       chatMessages.reversed.toList(); */
                                   return Stack(
@@ -445,25 +315,20 @@ class _ConversationPageState extends State<ConversationPage> {
                                                               .currentContext
                                                               ?.size;
                                                       if (lastItemSize !=
-                                                          currentSize) {
-                                                        if (/* visiblePercentage <
-                                                                100 &&
-                                                            visiblePercentage >
-                                                                0 */
-                                                            true) {
-                                                          _scrollController.position.ensureVisible(
-                                                              widgetKey
-                                                                  .currentContext!
-                                                                  .findRenderObject()!,
-                                                              duration: Duration(
-                                                                  milliseconds:
-                                                                      300),
-                                                              curve:
-                                                                  Curves.ease,
-                                                              alignmentPolicy:
-                                                                  ScrollPositionAlignmentPolicy
-                                                                      .keepVisibleAtEnd);
-                                                        }
+                                                              currentSize &&
+                                                          !_scrollController
+                                                              .isAutoScrolling) {
+                                                        _scrollController.position.ensureVisible(
+                                                            widgetKey
+                                                                .currentContext!
+                                                                .findRenderObject()!,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    300),
+                                                            curve: Curves.ease,
+                                                            alignmentPolicy:
+                                                                ScrollPositionAlignmentPolicy
+                                                                    .keepVisibleAtEnd);
                                                         lastItemSize =
                                                             currentSize;
                                                       }
@@ -480,7 +345,10 @@ class _ConversationPageState extends State<ConversationPage> {
                                           },
                                         ),
                                       ),
-                                      stopGenerating
+                                      StopGenerateWidget(
+                                          isRequestProcessing:
+                                              chatConversationState
+                                                  .isRequestProcessing)
                                     ],
                                   );
                                 }
@@ -547,16 +415,14 @@ class _ConversationPageState extends State<ConversationPage> {
               child: FloatingActionButton(
                 backgroundColor: Colors.blueGrey,
                 onPressed: () {
-                  if (_scrollController.position.pixels != 0) {
-                    var chatConversationCubit =
-                        BlocProvider.of<ChatConversationCubit>(context);
-                    var length =
-                        chatConversationCubit.getCurrentConversationLength();
-                    if (length >= 1) {
-                      _scrollController.scrollToIndex(length - 1,
-                          duration: Duration(milliseconds: 500),
-                          preferPosition: AutoScrollPosition.end);
-                    }
+                  var chatConversationCubit =
+                      BlocProvider.of<ChatConversationCubit>(context);
+                  var length =
+                      chatConversationCubit.getCurrentConversationLength();
+                  if (length >= 1) {
+                    _scrollController.scrollToIndex(length - 1,
+                        duration: Duration(milliseconds: 500),
+                        preferPosition: AutoScrollPosition.end);
                   }
                 },
                 child: Icon(Icons.file_download_rounded),
@@ -716,7 +582,7 @@ class _ConversationPageState extends State<ConversationPage> {
       }); */
       if (_scrollController.hasClients) {
         var length = chatConversationCubit.getCurrentConversationLength();
-        if (_scrollController.position.pixels > 200 && length >= 1) {
+        if (length >= 1) {
           _scrollController.scrollToIndex(length,
               duration: Duration(milliseconds: 100),
               preferPosition: AutoScrollPosition.end);
