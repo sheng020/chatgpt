@@ -45,11 +45,15 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
     }
   }
 
-  Widget _responsePreparingWidget() {
-    return Container(
-      height: 60,
-      child: Image.asset("assets/loading_response.gif"),
-    );
+  Widget _responsePreparingWidget(bool isRequestProcessing) {
+    if (isRequestProcessing) {
+      return Container(
+        height: 60,
+        child: Image.asset("assets/loading_response.gif"),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 
   @override
@@ -70,19 +74,18 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
     return ListView.builder(
       cacheExtent: 1000,
       reverse: true,
-      itemCount: _calculateListItemLength(
-          widget.chatMessages.length, widget.isRequestProcessing),
+      itemCount: widget.chatMessages.length + 1,
       controller: widget.scrollController,
       itemBuilder: (context, index) {
-        if (widget.isRequestProcessing && index == 0) {
+        if (index == 0) {
           return AutoScrollTag(
             key: ValueKey(index),
             controller: widget.scrollController,
             index: index,
-            child: _responsePreparingWidget(),
+            child: _responsePreparingWidget(widget.isRequestProcessing),
           );
         } else {
-          var realIndex = widget.isRequestProcessing ? index - 1 : index;
+          var realIndex = index - 1;
           var chatMessage = widget.chatMessages[realIndex];
           //var itemKey = GlobalKey();
 
