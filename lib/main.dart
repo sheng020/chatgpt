@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chatgpt_clone/api/instance/chat/chat_models.dart';
 import 'package:flutter_chatgpt_clone/core/http_certificate_manager.dart';
 import 'package:flutter_chatgpt_clone/features/app/route/on_generate_route.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
@@ -17,6 +18,7 @@ import 'injection_container.dart' as di;
 
 const API_KEY = "api_key";
 const SERVER_ADDRESS = "server_address";
+const CHAT_MODEL = "chat_model";
 const DEFAULT_KEY = Env.DEFAULT_KEY;
 const DEFAULT_SERVER = Env.DEFAULT_SERVER;
 
@@ -39,6 +41,12 @@ void main() async {
   }
   OpenAI.baseUrl = serverAddress;
   OpenAI.apiKey = apiKey;
+
+  String modelName = box.read(CHAT_MODEL) ?? ChatModel.GPT_3_5_TURBO.name;
+  OpenAI.chatModel = ChatModel.values.firstWhere(
+    (element) => element.name == modelName,
+  );
+
   runApp(MyApp());
 }
 

@@ -19,7 +19,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
     // Creates A Stream Of Chat Completions.
     final chatStream = OpenAI.instance.chat.createStream(
-      model: "gpt-3.5-turbo",
+      model: OpenAI.chatModel.name,
       messages: [
         OpenAIChatCompletionChoiceMessageModel(
           content: queryPrompt,

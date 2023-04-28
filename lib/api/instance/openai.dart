@@ -1,3 +1,4 @@
+import 'package:flutter_chatgpt_clone/api/instance/chat/chat_models.dart';
 import 'package:meta/meta.dart';
 
 import '../core/base/openai_client/base.dart';
@@ -52,6 +53,14 @@ class OpenAI extends OpenAIClientBase {
   static set apiKey(String apiKey) {
     HeadersBuilder.apiKey = apiKey;
     _internalApiKey = apiKey;
+  }
+
+  static ChatModel _model = ChatModel.GPT_3_5_TURBO;
+
+  static ChatModel get chatModel => _model;
+
+  static set chatModel(ChatModel chatModel) {
+    _model = chatModel;
   }
 
   /// If you have multiple organizations, you can set it's id with this.

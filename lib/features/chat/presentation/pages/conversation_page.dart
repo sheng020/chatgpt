@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chatgpt_clone/api/instance/chat/chat_models.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_messages_list_widget.dart';
@@ -354,6 +355,29 @@ class _ConversationPageState extends State<ConversationPage> {
                     controller: apiKeyTextController,
                     decoration: InputDecoration(hintText: "input your key"),
                   ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Text("Model"),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      DropdownButton(
+                          value: OpenAI.chatModel,
+                          items: ChatModel.values
+                              .map((e) => DropdownMenuItem(
+                                  value: e, child: Text(e.name)))
+                              .toList(),
+                          onChanged: (value) {
+                            stateSetter(() {
+                              OpenAI.chatModel = value!;
+                            });
+                            box.write(CHAT_MODEL, value!.name);
+                          })
+                    ],
+                  )
                 ],
               ),
               actions: <Widget>[
