@@ -11,11 +11,12 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final PromptTrigger? onTap;
   final bool isRequestProcessing;
-  final ValueNotifier<int> inputMode = ValueNotifier(TYPE_CHAT);
+  final ValueNotifier<int> inputMode;
   CustomTextField(
       {Key? key,
       required this.textEditingController,
       this.onTap,
+      required this.inputMode,
       required this.isRequestProcessing})
       : super(key: key);
 
@@ -58,7 +59,7 @@ class CustomTextField extends StatelessWidget {
     }
   }
 
-  Widget getTextField() {
+  Widget getTextField(bool isRequestProcessing) {
     return ValueListenableBuilder(
       valueListenable: inputMode,
       builder: (context, value, child) {
@@ -118,7 +119,7 @@ class CustomTextField extends StatelessWidget {
                         constraints: BoxConstraints(
                           maxHeight: 90,
                         ),
-                        child: getTextField(),
+                        child: getTextField(isRequestProcessing),
                       ),
                     ),
                     SizedBox(

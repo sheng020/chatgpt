@@ -34,6 +34,7 @@ class _ConversationPageState extends State<ConversationPage> {
   //bool _isRequestProcessing = false;
 
   late AutoScrollController _scrollController;
+  final ValueNotifier<int> inputMode = ValueNotifier(TYPE_CHAT);
 
   @override
   void initState() {
@@ -222,6 +223,7 @@ class _ConversationPageState extends State<ConversationPage> {
                                                 _scrollController),
                                       ),
                                       StopGenerateWidget(
+                                          type: inputMode.value,
                                           isRequestProcessing:
                                               chatConversationState
                                                   .isRequestProcessing)
@@ -252,6 +254,7 @@ class _ConversationPageState extends State<ConversationPage> {
                             return CustomTextField(
                               isRequestProcessing:
                                   chatConversationState.isRequestProcessing,
+                              inputMode: inputMode,
                               textEditingController: _messageController,
                               onTap: (int type, {String? path}) async {
                                 _promptTrigger(

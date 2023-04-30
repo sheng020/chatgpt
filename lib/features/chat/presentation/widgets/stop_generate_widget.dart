@@ -4,8 +4,10 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conv
 
 class StopGenerateWidget extends StatelessWidget {
   final bool isRequestProcessing;
+  final int type;
 
-  const StopGenerateWidget({required this.isRequestProcessing});
+  const StopGenerateWidget(
+      {required this.isRequestProcessing, required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,8 @@ class StopGenerateWidget extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              BlocProvider.of<ChatConversationCubit>(context).stopGeneration();
+              BlocProvider.of<ChatConversationCubit>(context)
+                  .stopGeneration(type);
             },
           ),
         ),

@@ -249,6 +249,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           showConversationId: showConversationId,
           chatMessages: _conversations,
           isRequestProcessing: false));
+      sendChatMessage("", isRequestProcessing: false);
       DatabaseManager.getInstance().insertMessage(chatMessageNewResponse);
     } else if (type == TYPE_IMAGE_VARIATION) {
       final imageResponse = await chatConversationUseCase
@@ -266,8 +267,21 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     }
   }
 
-  void stopGeneration() {
-    closeStream();
+  void stopGeneration(int type) {
+    if (type == TYPE_IMAGE_GENERATION) {
+      emit(
+        ChatConversationLoaded(
+            showConversationId: selectedConversationId,
+            chatMessages: _conversations,
+            isRequestProcessing: false),
+      );
+      emit(NotifyTextFieldState(
+          selectedConversationId: selectedConversationId,
+          message: "",
+          isRequestProcessing: false));
+    } else {
+      closeStream();
+    }
   }
 
   Future<void> deleteAllConversation() async {
