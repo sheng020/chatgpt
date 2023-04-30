@@ -71,7 +71,7 @@ class _$AppDatabase extends AppDatabase {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -87,7 +87,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `message` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `messageId` TEXT, `queryPrompt` TEXT, `promptResponse` TEXT, `date` INTEGER, `conversationId` INTEGER)');
+            'CREATE TABLE IF NOT EXISTS `message` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `messageId` TEXT, `queryPrompt` TEXT, `promptResponse` TEXT, `date` INTEGER, `conversationId` INTEGER, `type` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `conversation` (`conversationId` INTEGER PRIMARY KEY AUTOINCREMENT)');
 
@@ -123,7 +123,8 @@ class _$MessageDao extends MessageDao {
                   'queryPrompt': item.queryPrompt,
                   'promptResponse': item.promptResponse,
                   'date': item.date,
-                  'conversationId': item.conversationId
+                  'conversationId': item.conversationId,
+                  'type': item.type
                 }),
         _chatMessageEntityUpdateAdapter = UpdateAdapter(
             database,
@@ -135,7 +136,8 @@ class _$MessageDao extends MessageDao {
                   'queryPrompt': item.queryPrompt,
                   'promptResponse': item.promptResponse,
                   'date': item.date,
-                  'conversationId': item.conversationId
+                  'conversationId': item.conversationId,
+                  'type': item.type
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -157,7 +159,8 @@ class _$MessageDao extends MessageDao {
             queryPrompt: row['queryPrompt'] as String?,
             promptResponse: row['promptResponse'] as String?,
             conversationId: row['conversationId'] as int?,
-            date: row['date'] as int?));
+            date: row['date'] as int?,
+            type: row['type'] as int));
   }
 
   @override

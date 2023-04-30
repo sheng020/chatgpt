@@ -1,14 +1,101 @@
+import 'dart:io';
 
-
-
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
+
+typedef PromptTrigger = void Function(int type, {String? path});
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController textEditingController;
-  final VoidCallback? onTap;
+  final PromptTrigger? onTap;
   final bool isRequestProcessing;
-  const CustomTextField({Key? key,required this.textEditingController,this.onTap,required this.isRequestProcessing}) : super(key: key);
+  final ValueNotifier<int> inputMode = ValueNotifier(TYPE_CHAT);
+  CustomTextField(
+      {Key? key,
+      required this.textEditingController,
+      this.onTap,
+      required this.isRequestProcessing})
+      : super(key: key);
+
+  List<PopupMenuItem<int>> getDropItems() {
+    return [
+      PopupMenuItem(
+          value: TYPE_CHAT,
+          child: getFeatureWidget(Icons.chat, "Chat completions")),
+      PopupMenuItem(
+          value: TYPE_IMAGE_GENERATION,
+          child: getFeatureWidget(Icons.photo, "Image generation")),
+      /* PopupMenuItem(
+          value: TYPE_IMAGE_VARIATION,
+          child: getFeatureWidget(Icons.generating_tokens, "Image variation")) */
+    ];
+  }
+
+  Widget getFeatureWidget(IconData icon, String title) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon),
+        SizedBox(
+          width: 8,
+        ),
+        Text(title)
+      ],
+    );
+  }
+
+  Widget getIcon(int type) {
+    if (type == TYPE_CHAT) {
+      return Icon(Icons.chat);
+    } else if (type == TYPE_IMAGE_GENERATION) {
+      return Icon(Icons.photo);
+    } else if (type == TYPE_IMAGE_VARIATION) {
+      return Icon(Icons.generating_tokens);
+    } else {
+      throw FlutterError("Unknown message type");
+    }
+  }
+
+  Widget getTextField() {
+    return ValueListenableBuilder(
+      valueListenable: inputMode,
+      builder: (context, value, child) {
+        if (value == TYPE_IMAGE_VARIATION) {
+          return InkWell(
+            onTap: () async {
+              FilePickerResult? result =
+                  await FilePicker.platform.pickFiles(type: FileType.image);
+              if (result != null) {
+                //File file = File(result.files.single.path!);
+                //print("result:${result.files.single.path}");
+                onTap?.call(TYPE_IMAGE_VARIATION,
+                    path: result.files.single.path!);
+              }
+            },
+            child: Text(
+              "Select a picture",
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+        } else {
+          return TextField(
+            enabled: !isRequestProcessing,
+            style: TextStyle(fontSize: 14),
+            controller: textEditingController,
+            decoration: InputDecoration(
+              hintText: "Open AI prompt",
+              border: InputBorder.none,
+            ),
+            onSubmitted: (str) {
+              onTap?.call(inputMode.value);
+            },
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,56 +106,73 @@ class CustomTextField extends StatelessWidget {
         children: [
           Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: colorDarkGray),
-                child: Column(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5), color: colorDarkGray),
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            constraints: BoxConstraints(
-                              maxHeight: 90,
-                            ),
-                            child: TextField(
-                              enabled: !isRequestProcessing,
-                              style: TextStyle(fontSize: 14),
-                              controller: textEditingController,
-                              decoration: InputDecoration(
-                                hintText: "Open AI prompt",
-                                border: InputBorder.none,
-                              ),
-                              onSubmitted: (str) {
-                                onTap?.call();
-                              },
-                            ),
-                          ),
+                    Expanded(
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxHeight: 90,
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        isRequestProcessing
-                            ? Container(
+                        child: getTextField(),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      height: 40,
+                      child: ValueListenableBuilder(
+                        valueListenable: inputMode,
+                        builder: (context, value, child) {
+                          return PopupMenuButton(
+                            position: PopupMenuPosition.over,
+                            initialValue: value,
+                            itemBuilder: (context) {
+                              return getDropItems();
+                            },
+                            onSelected: (value) {
+                              inputMode.value = value;
+                            },
+                            child: getIcon(value),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    isRequestProcessing
+                        ? Container(
                             height: 40,
                             child: Image.asset("assets/loading_response.gif"))
-                            : InkWell(
-                          onTap: textEditingController.text.isEmpty
-                              ? null
-                              : onTap,
-                          child: Icon(
-                            Icons.send,
-                            color: textEditingController.text.isEmpty
-                                ? Colors.grey.withOpacity(.4)
-                                : Colors.grey,
-                          ),
-                        ),
-                      ],
-                    )
+                        : ValueListenableBuilder(
+                            valueListenable: inputMode,
+                            builder: (context, value, child) {
+                              return InkWell(
+                                onTap: textEditingController.text.isEmpty ||
+                                        value == TYPE_IMAGE_VARIATION
+                                    ? null
+                                    : () {
+                                        onTap?.call(inputMode.value);
+                                      },
+                                child: Icon(
+                                  Icons.send,
+                                  color: textEditingController.text.isEmpty
+                                      ? Colors.grey.withOpacity(.4)
+                                      : Colors.grey,
+                                ),
+                              );
+                            }),
                   ],
-                ),
-              )),
+                )
+              ],
+            ),
+          )),
         ],
       ),
     );

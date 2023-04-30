@@ -1,11 +1,14 @@
 import 'package:collection/collection.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
 import 'sub_models/data.dart';
 
 export 'sub_models/data.dart';
+part 'image.g.dart';
 
 @immutable
+@JsonSerializable()
 class OpenAIImageModel {
   /// The time the image was created.
   final DateTime created;
@@ -31,6 +34,10 @@ class OpenAIImageModel {
           .toList(),
     );
   }
+
+  factory OpenAIImageModel.fromJson(Map<String, dynamic> json) =>
+      _$OpenAIImageModelFromJson(json);
+  Map<String, dynamic> toJson() => _$OpenAIImageModelToJson(this);
 
   @override
   String toString() => 'OpenAIImageModel(created: $created, data: $data)';

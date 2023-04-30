@@ -1,12 +1,19 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_chatgpt_clone/api/core/models/image/variation/variation.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../api/core/models/image/image/image.dart';
 import '../cubit/chat_conversation/chat_conversation_cubit.dart';
 import '../cubit/chat_conversation/chat_conversation_user_cubit.dart';
 
@@ -19,6 +26,55 @@ class ChatMessageSingleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _chatMessageItem(context);
+  }
+
+  Widget getResponseWidget(ChatMessageEntity chatMessage) {
+    if (chatMessage.type == TYPE_CHAT) {
+      return MarkdownWidget(
+          shrinkWrap: true,
+          selectable: true,
+          data: chatMessage.promptResponse!,
+          config: MarkdownConfig.darkConfig
+          //syntaxHighlighter: Highlighter(),
+          );
+    } else if (chatMessage.type == TYPE_IMAGE_GENERATION) {
+      OpenAIImageModel imageModel =
+          OpenAIImageModel.fromJson(json.decode(chatMessage.promptResponse!));
+      var children = imageModel.data.map(
+        (e) {
+          print("image generation:${e.url}");
+          return Padding(
+            padding: EdgeInsets.all(8),
+            child: CachedNetworkImage(
+              imageUrl: e.url,
+            ),
+          );
+        },
+      ).toList();
+      return Wrap(
+        children: children,
+      );
+    } else if (chatMessage.type == TYPE_IMAGE_VARIATION) {
+      OpenAIImageVariationModel variationModel =
+          OpenAIImageVariationModel.fromJson(
+              json.decode(chatMessage.promptResponse!));
+
+      var children = variationModel.data.map(
+        (e) {
+          return Padding(
+            padding: EdgeInsets.all(8),
+            child: CachedNetworkImage(
+              imageUrl: e.url,
+            ),
+          );
+        },
+      ).toList();
+      return Wrap(
+        children: children,
+      );
+    } else {
+      throw FlutterError("Unknown message type");
+    }
   }
 
   Widget _chatMessageItem(BuildContext context) {
@@ -46,13 +102,7 @@ class ChatMessageSingleItem extends StatelessWidget {
                 Expanded(
                   child: Container(
                       margin: EdgeInsets.only(bottom: 4, top: 4),
-                      child: MarkdownWidget(
-                          shrinkWrap: true,
-                          selectable: true,
-                          data: chatMessage.promptResponse!,
-                          config: MarkdownConfig.darkConfig
-                          //syntaxHighlighter: Highlighter(),
-                          )),
+                      child: getResponseWidget(chatMessage)),
                 ),
               ],
             ),
@@ -123,15 +173,23 @@ class ChatMessageSingleItem extends StatelessWidget {
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(bottom: 10, top: 10),
-                child: MarkdownWidget(
-                  selectable: true,
-                  shrinkWrap: true,
-                  data: chatMessage.queryPrompt!,
-                ),
+                child: getInputWidget(chatMessage),
               ),
             ),
           ],
         ),
+      );
+    }
+  }
+
+  Widget getInputWidget(ChatMessageEntity chatMessage) {
+    if (chatMessage.type == TYPE_IMAGE_VARIATION) {
+      return Image.file(File(chatMessage.queryPrompt!));
+    } else {
+      return MarkdownWidget(
+        selectable: true,
+        shrinkWrap: true,
+        data: chatMessage.queryPrompt!,
       );
     }
   }

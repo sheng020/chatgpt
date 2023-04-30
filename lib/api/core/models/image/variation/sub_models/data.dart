@@ -1,6 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+part 'data.g.dart';
 
 @immutable
+@JsonSerializable()
 class OpenAIVariationData {
   /// The url of the image.
   final String url;
@@ -17,6 +20,10 @@ class OpenAIVariationData {
   factory OpenAIVariationData.fromMap(Map<String, dynamic> json) {
     return OpenAIVariationData(url: json['url']);
   }
+
+  factory OpenAIVariationData.fromJson(Map<String, dynamic> json) =>
+      _$OpenAIVariationDataFromJson(json);
+  Map<String, dynamic> toJson() => _$OpenAIVariationDataToJson(this);
 
   @override
   String toString() => 'OpenAIVariationData(url: $url)';

@@ -253,9 +253,12 @@ class _ConversationPageState extends State<ConversationPage> {
                               isRequestProcessing:
                                   chatConversationState.isRequestProcessing,
                               textEditingController: _messageController,
-                              onTap: () async {
-                                _promptTrigger(chatConversationState
-                                    .selectedConversationId);
+                              onTap: (int type, {String? path}) async {
+                                _promptTrigger(
+                                    conversationId: chatConversationState
+                                        .selectedConversationId,
+                                    type: type,
+                                    path: path);
                               },
                             );
                           } else {
@@ -438,27 +441,38 @@ class _ConversationPageState extends State<ConversationPage> {
         });
   }
 
-  void _promptTrigger(int conversationId) {
+  void _promptTrigger(
+      {required int conversationId, required int type, String? path}) {
     if (_messageController.text.isEmpty) {
-      return;
+      if (type != TYPE_IMAGE_VARIATION) {
+        return;
+      }
     }
 
-    final humanChatMessage = ChatMessageEntity(
-        conversationId: conversationId,
-        messageId: ChatGptConst.Human,
-        queryPrompt: _messageController.text,
-        date: DateTime.now().millisecondsSinceEpoch);
+    final ChatMessageEntity humanChatMessage;
+
+    if (type != TYPE_IMAGE_VARIATION) {
+      humanChatMessage = ChatMessageEntity(
+          conversationId: conversationId,
+          messageId: ChatGptConst.Human,
+          type: TYPE_CHAT,
+          queryPrompt: _messageController.text,
+          date: DateTime.now().millisecondsSinceEpoch);
+    } else {
+      humanChatMessage = ChatMessageEntity(
+          conversationId: conversationId,
+          messageId: ChatGptConst.Human,
+          type: type,
+          queryPrompt: path,
+          date: DateTime.now().millisecondsSinceEpoch);
+    }
 
     var chatConversationCubit = BlocProvider.of<ChatConversationCubit>(context);
     chatConversationCubit
         .chatConversation(
+            type: type,
             conversationId: conversationId,
-            chatMessage: humanChatMessage,
-            onCompleteReqProcessing: (isRequestProcessing) {
-              /* setState(() {
-                _isRequestProcessing = isRequestProcessing;
-              }); */
-            })
+            chatMessage: humanChatMessage)
         .then((value) {
       //BlocProvider.of<ChatConversationCubit>(context).sendChatMessage("");
       /* setState(() {

@@ -1,10 +1,11 @@
 import 'package:collection/collection.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
 import 'sub_models/data.dart';
+part 'variation.g.dart';
 
-export 'sub_models/data.dart';
-
+@JsonSerializable()
 @immutable
 class OpenAIImageVariationModel {
   /// The time the image was created.
@@ -31,6 +32,10 @@ class OpenAIImageVariationModel {
           .toList(),
     );
   }
+
+  factory OpenAIImageVariationModel.fromJson(Map<String, dynamic> json) =>
+      _$OpenAIImageVariationModelFromJson(json);
+  Map<String, dynamic> toJson() => _$OpenAIImageVariationModelToJson(this);
 
   @override
   bool operator ==(covariant OpenAIImageVariationModel other) {

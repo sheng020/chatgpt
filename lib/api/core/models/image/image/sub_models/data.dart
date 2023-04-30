@@ -1,6 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+part 'data.g.dart';
 
 @immutable
+@JsonSerializable()
 class OpenAIImageData {
   /// The URL of the image.
   final String url;
@@ -17,6 +20,10 @@ class OpenAIImageData {
   factory OpenAIImageData.fromMap(Map<String, dynamic> json) {
     return OpenAIImageData(url: json['url']);
   }
+
+  factory OpenAIImageData.fromJson(Map<String, dynamic> json) =>
+      _$OpenAIImageDataFromJson(json);
+  Map<String, dynamic> toJson() => _$OpenAIImageDataToJson(this);
 
   @override
   bool operator ==(covariant OpenAIImageData other) {

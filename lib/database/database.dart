@@ -11,7 +11,7 @@ import '../features/chat/domain/entities/chat_message_entity.dart';
 part 'database.g.dart';
 
 //@TypeConverters([IntListConverter])
-@Database(version: 1, entities: [ChatMessageEntity, ConversationEntity])
+@Database(version: 2, entities: [ChatMessageEntity, ConversationEntity])
 abstract class AppDatabase extends FloorDatabase {
   MessageDao get messageDao;
   ConversationDao get conversationDao;
@@ -59,10 +59,17 @@ class DatabaseManager {
   }
 
   Future<AppDatabase> initialize() async {
-    _database = await $FloorAppDatabase.databaseBuilder('chat_gpt.db').build();
+    _database = await $FloorAppDatabase
+        .databaseBuilder('chat_gpt.db')
+        .addMigrations([migration1to2]).build();
     _messageDao = _database.messageDao;
     _conversationDao = _database.conversationDao;
     return _database;
     //_insertPersonalTask();
   }
+
+  final migration1to2 = Migration(1, 2, (database) async {
+    await database
+        .execute("ALTER TABLE `message` ADD COLUMN `type` INTEGER DEFAULT 0");
+  });
 }

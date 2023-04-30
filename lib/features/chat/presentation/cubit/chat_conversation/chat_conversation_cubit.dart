@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/conversation_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/usecases/chat_converstaion_usecase.dart';
@@ -119,11 +122,12 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     _streamController = null;
   }
 
-  Future<void> chatConversation({
-    required int conversationId,
-    required ChatMessageEntity chatMessage,
-    required Function(bool isReqComplete) onCompleteReqProcessing,
-  }) async {
+  Future<void> chatConversation(
+      {required int conversationId,
+      required ChatMessageEntity chatMessage,
+      required int type
+      //required Function(bool isReqComplete) onCompleteReqProcessing,
+      }) async {
     var database = DatabaseManager.getInstance();
     var chatMessages = _conversations[conversationId];
 
@@ -142,6 +146,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
     realChatMessage = ChatMessageEntity(
         id: chatMessage.id,
+        type: chatMessage.type,
         messageId: chatMessage.messageId,
         queryPrompt: chatMessage.queryPrompt,
         promptResponse: chatMessage.promptResponse,
@@ -161,83 +166,104 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           isRequestProcessing: true),
     );
 
-    onCompleteReqProcessing(true);
+    //onCompleteReqProcessing(true);
+    if (type == TYPE_CHAT) {
+      final conversationData =
+          chatConversationUseCase.call(realChatMessage.queryPrompt!);
 
-    final conversationData =
-        chatConversationUseCase.call(realChatMessage.queryPrompt!);
+      StringBuffer sb = StringBuffer();
 
-    StringBuffer sb = StringBuffer();
+      ChatMessageEntity? lastMessage;
 
-    ChatMessageEntity? lastMessage;
+      _streamController = conversationData;
 
-    _streamController = conversationData;
+      conversationData.stream.listen(
+        (streamChatCompletion) {
+          final content = streamChatCompletion.choices.first.delta.content;
+          //print(content);
+          if (content != null) {
+            if (lastMessage != null) {
+              chatMessages?.remove(lastMessage);
+            }
 
-    conversationData.stream.listen(
-      (streamChatCompletion) {
-        final content = streamChatCompletion.choices.first.delta.content;
-        //print(content);
-        if (content != null) {
-          if (lastMessage != null) {
-            chatMessages?.remove(lastMessage);
+            sb.write(content);
+
+            final chatMessageNewResponse = ChatMessageEntity(
+                type: type,
+                conversationId: showConversationId,
+                messageId: ChatGptConst.AIBot,
+                date: DateTime.now().millisecondsSinceEpoch,
+                promptResponse: sb.toString());
+            chatMessages?.insert(0, chatMessageNewResponse);
+            lastMessage = chatMessageNewResponse;
+            emit(ChatConversationLoaded(
+                showConversationId: showConversationId,
+                chatMessages: _conversations,
+                isRequestProcessing: true));
           }
-
-          sb.write(content);
-
-          final chatMessageNewResponse = ChatMessageEntity(
-              conversationId: showConversationId,
-              messageId: ChatGptConst.AIBot,
+        },
+        onError: (error) {
+          print(error);
+          closeStream();
+          //onCompleteReqProcessing(false);
+          final chatMessageErrorResponse = ChatMessageEntity(
               date: DateTime.now().millisecondsSinceEpoch,
-              promptResponse: sb.toString());
-          chatMessages?.insert(0, chatMessageNewResponse);
-          lastMessage = chatMessageNewResponse;
+              messageId: ChatGptConst.AIBot,
+              type: type,
+              promptResponse: error.message);
+
+          chatMessages?.insert(0, chatMessageErrorResponse);
+
           emit(ChatConversationLoaded(
               showConversationId: showConversationId,
               chatMessages: _conversations,
-              isRequestProcessing: true));
-        }
-      },
-      onError: (error) {
-        print(error);
-        closeStream();
-        onCompleteReqProcessing(false);
-        final chatMessageErrorResponse = ChatMessageEntity(
-            date: DateTime.now().millisecondsSinceEpoch,
-            messageId: ChatGptConst.AIBot,
-            promptResponse: error.message);
-
-        chatMessages?.insert(0, chatMessageErrorResponse);
-
-        emit(ChatConversationLoaded(
-            showConversationId: showConversationId,
-            chatMessages: _conversations,
-            isRequestProcessing: false));
-      },
-      cancelOnError: false,
-      onDone: () {
-        print("Done");
-        closeStream();
-        sendChatMessage("", isRequestProcessing: false);
-        onCompleteReqProcessing(false);
-        emit(ChatConversationLoaded(
-            chatMessages: _conversations,
-            showConversationId: showConversationId,
-            isRequestProcessing: false));
-        ChatMessageEntity? chatLastMessage = lastMessage;
-        if (chatLastMessage != null) {
-          DatabaseManager.getInstance().insertMessage(chatLastMessage);
-        }
-      },
-    );
-
-    /*final chatMessageResponse = ChatMessageEntity(
+              isRequestProcessing: false));
+        },
+        cancelOnError: false,
+        onDone: () {
+          print("Done");
+          closeStream();
+          sendChatMessage("", isRequestProcessing: false);
+          //onCompleteReqProcessing(false);
+          emit(ChatConversationLoaded(
+              chatMessages: _conversations,
+              showConversationId: showConversationId,
+              isRequestProcessing: false));
+          ChatMessageEntity? chatLastMessage = lastMessage;
+          if (chatLastMessage != null) {
+            DatabaseManager.getInstance().insertMessage(chatLastMessage);
+          }
+        },
+      );
+    } else if (type == TYPE_IMAGE_GENERATION) {
+      final imageResponse = await chatConversationUseCase
+          .createImageGeneration(realChatMessage.queryPrompt!);
+      final chatMessageNewResponse = ChatMessageEntity(
+          type: type,
+          conversationId: showConversationId,
           messageId: ChatGptConst.AIBot,
-          promptResponse: conversationData.choices!.first.message.content);
-
-      _chatMessages.add(chatMessageResponse);
-
+          date: DateTime.now().millisecondsSinceEpoch,
+          promptResponse: json.encode(imageResponse));
+      chatMessages.insert(0, chatMessageNewResponse);
       emit(ChatConversationLoaded(
-        chatMessages: _chatMessages,
-      ));*/
+          showConversationId: showConversationId,
+          chatMessages: _conversations,
+          isRequestProcessing: false));
+      DatabaseManager.getInstance().insertMessage(chatMessageNewResponse);
+    } else if (type == TYPE_IMAGE_VARIATION) {
+      final imageResponse = await chatConversationUseCase
+          .variation(File(realChatMessage.queryPrompt!));
+      final chatMessageNewResponse = ChatMessageEntity(
+          type: type,
+          conversationId: showConversationId,
+          messageId: ChatGptConst.AIBot,
+          date: DateTime.now().millisecondsSinceEpoch,
+          promptResponse: json.encode(imageResponse));
+      chatMessages.insert(0, chatMessageNewResponse);
+      DatabaseManager.getInstance().insertMessage(chatMessageNewResponse);
+    } else {
+      throw FlutterError("Unknown message type");
+    }
   }
 
   void stopGeneration() {

@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter_chatgpt_clone/api/core/models/image/enum.dart';
+import 'package:flutter_chatgpt_clone/api/core/models/image/image/image.dart';
+import 'package:flutter_chatgpt_clone/api/core/models/image/variation/variation.dart';
 import 'package:flutter_chatgpt_clone/features/chat/data/remote_data_source/chat_remote_data_source.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,5 +33,16 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     );
 
     return chatStream;
+  }
+
+  @override
+  Future<OpenAIImageModel> createImageGeneration(String prompt) {
+    return OpenAI.instance.image
+        .create(prompt: prompt, n: 4, size: OpenAIImageSize.size512);
+  }
+
+  Future<OpenAIImageVariationModel> variation(File image) {
+    return OpenAI.instance.image
+        .variation(image: image, n: 4, size: OpenAIImageSize.size512);
   }
 }
