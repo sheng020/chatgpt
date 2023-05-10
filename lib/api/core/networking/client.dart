@@ -246,7 +246,13 @@ class OpenAINetworkingClient {
           },
         );
       },
-    );
+    ).catchError((err) {
+      if (!controller.isClosed) {
+        controller.addError(err);
+        close();
+      }
+      print('Error: $err');
+    });
 
     return controller;
   }

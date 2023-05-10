@@ -28,9 +28,9 @@ class CustomTextField extends StatelessWidget {
       PopupMenuItem(
           value: TYPE_IMAGE_GENERATION,
           child: getFeatureWidget(Icons.photo, "Image generation")),
-      /* PopupMenuItem(
+      PopupMenuItem(
           value: TYPE_IMAGE_VARIATION,
-          child: getFeatureWidget(Icons.generating_tokens, "Image variation")) */
+          child: getFeatureWidget(Icons.generating_tokens, "Image variation"))
     ];
   }
 

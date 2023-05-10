@@ -103,6 +103,10 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           chatMessages: _conversations,
           isRequestProcessing: false),
     );
+    emit(NotifyTextFieldState(
+        selectedConversationId: selectedConversationId,
+        message: "",
+        isRequestProcessing: false));
     setFloatingActionButtonShow(false);
   }
 
