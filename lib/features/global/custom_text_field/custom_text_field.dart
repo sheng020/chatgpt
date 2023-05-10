@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
+import 'package:flutter_chatgpt_clone/features/global/custom_text_field/crop_page.dart';
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
 
 typedef PromptTrigger = void Function(int type, {String? path});
@@ -71,8 +72,14 @@ class CustomTextField extends StatelessWidget {
               if (result != null) {
                 //File file = File(result.files.single.path!);
                 //print("result:${result.files.single.path}");
-                onTap?.call(TYPE_IMAGE_VARIATION,
-                    path: result.files.single.path!);
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>
+                        CropPage(filePath: result.files.single.path!),
+                  ),
+                );
+                /* onTap?.call(TYPE_IMAGE_VARIATION,
+                    path: result.files.single.path!); */
               }
             },
             child: Text(
