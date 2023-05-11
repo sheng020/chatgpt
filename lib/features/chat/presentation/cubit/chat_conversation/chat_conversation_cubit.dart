@@ -272,6 +272,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           date: DateTime.now().millisecondsSinceEpoch,
           promptResponse: json.encode(imageResponse));
       chatMessages.insert(0, chatMessageNewResponse);
+      sendChatMessage("", isRequestProcessing: false);
       emit(ChatConversationLoaded(
           showConversationId: showConversationId,
           chatMessages: _conversations,
