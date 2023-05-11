@@ -261,6 +261,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
             showConversationId: showConversationId,
             chatMessages: _conversations,
             isRequestProcessing: false));
+        sendChatMessage("", isRequestProcessing: false);
         return;
       }
       final imageResponse = await chatConversationUseCase
