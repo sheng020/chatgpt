@@ -285,7 +285,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
   }
 
   void stopGeneration(int type) {
-    if (type == TYPE_IMAGE_GENERATION) {
+    if (type == TYPE_IMAGE_GENERATION || type == TYPE_IMAGE_VARIATION) {
       emit(
         ChatConversationLoaded(
             showConversationId: selectedConversationId,
