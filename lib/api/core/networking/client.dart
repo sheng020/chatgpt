@@ -306,7 +306,7 @@ class OpenAINetworkingClient {
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
     // ignore: avoid-unused-parameters
-    required Map<String, dynamic> body,
+    required Map<String, String> body,
     required File image,
   }) async {
     OpenAILogger.log("starting request to $to");
@@ -318,6 +318,7 @@ class OpenAINetworkingClient {
     final http.MultipartFile imageFile =
         await http.MultipartFile.fromPath("image", image.path);
     request.files.add(imageFile);
+    request.fields.addAll(body);
     final http.StreamedResponse response = await request.send();
     OpenAILogger.log(
         "request to $to finished with status code ${response.statusCode},");

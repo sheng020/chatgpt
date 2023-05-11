@@ -78,8 +78,7 @@ class CustomTextField extends StatelessWidget {
                         CropPage(filePath: result.files.single.path!),
                   ),
                 );
-                onTap?.call(TYPE_IMAGE_VARIATION,
-                    path: result.files.single.path!);
+                onTap?.call(TYPE_IMAGE_VARIATION, path: image);
               }
             },
             child: Text(

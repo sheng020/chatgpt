@@ -256,6 +256,13 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       sendChatMessage("", isRequestProcessing: false);
       DatabaseManager.getInstance().insertMessage(chatMessageNewResponse);
     } else if (type == TYPE_IMAGE_VARIATION) {
+      if (realChatMessage.queryPrompt == null) {
+        emit(ChatConversationLoaded(
+            showConversationId: showConversationId,
+            chatMessages: _conversations,
+            isRequestProcessing: false));
+        return;
+      }
       final imageResponse = await chatConversationUseCase
           .variation(File(realChatMessage.queryPrompt!));
       final chatMessageNewResponse = ChatMessageEntity(
@@ -265,6 +272,10 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           date: DateTime.now().millisecondsSinceEpoch,
           promptResponse: json.encode(imageResponse));
       chatMessages.insert(0, chatMessageNewResponse);
+      emit(ChatConversationLoaded(
+          showConversationId: showConversationId,
+          chatMessages: _conversations,
+          isRequestProcessing: false));
       DatabaseManager.getInstance().insertMessage(chatMessageNewResponse);
     } else {
       throw FlutterError("Unknown message type");
