@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:crop/crop.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'centered_slider_track_shape.dart';
 
@@ -21,52 +22,11 @@ class _CropPageState extends State<CropPage> {
   void _cropImage() async {
     final pixelRatio = MediaQuery.of(context).devicePixelRatio;
     final cropped = await controller.crop(pixelRatio: pixelRatio);
-
     if (cropped == null) {
-      return;
+      Navigator.of(context).pop(null);
+    } else {
+      Navigator.of(context).pop(await _saveScreenShot(cropped));
     }
-
-    if (!mounted) {
-      return;
-    }
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-            title: const Text('Crop Result'),
-            centerTitle: true,
-            actions: [
-              Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.save),
-                  onPressed: () async {
-                    /* final status = await Permission.storage.request();
-                    if (status == PermissionStatus.granted) {
-                      await _saveScreenShot(cropped);
-                      if (!mounted) {
-                        return;
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Saved to gallery.'),
-                        ),
-                      );
-                    } */
-                  },
-                ),
-              ),
-            ],
-          ),
-          body: Center(
-            child: RawImage(
-              image: cropped,
-            ),
-          ),
-        ),
-        fullscreenDialog: true,
-      ),
-    );
   }
 
   @override
@@ -173,10 +133,13 @@ class _CropPageState extends State<CropPage> {
   }
 }
 
-/* Future<dynamic> _saveScreenShot(ui.Image img) async {
+Future<String> _saveScreenShot(ui.Image img) async {
   var byteData = await img.toByteData(format: ui.ImageByteFormat.png);
   var buffer = byteData!.buffer.asUint8List();
-  final result = await ImageGallerySaver.saveImage(buffer);
+  //var file = File.fromRawPath(buffer);
+  final Directory directory = await getTemporaryDirectory();
+  final File file = File('${directory.path}/${img.hashCode}');
+  file.writeAsBytes(buffer);
 
-  return result;
-} */
+  return file.path;
+}

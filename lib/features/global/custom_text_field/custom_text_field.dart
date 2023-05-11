@@ -72,14 +72,14 @@ class CustomTextField extends StatelessWidget {
               if (result != null) {
                 //File file = File(result.files.single.path!);
                 //print("result:${result.files.single.path}");
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
+                var image = await Navigator.of(context).push(
+                  MaterialPageRoute<String?>(
                     builder: (BuildContext context) =>
                         CropPage(filePath: result.files.single.path!),
                   ),
                 );
-                /* onTap?.call(TYPE_IMAGE_VARIATION,
-                    path: result.files.single.path!); */
+                onTap?.call(TYPE_IMAGE_VARIATION,
+                    path: result.files.single.path!);
               }
             },
             child: Text(
