@@ -184,7 +184,10 @@ class ChatMessageSingleItem extends StatelessWidget {
 
   Widget getInputWidget(ChatMessageEntity chatMessage) {
     if (chatMessage.type == TYPE_IMAGE_VARIATION) {
-      return Image.file(File(chatMessage.queryPrompt!));
+      return Image.file(
+        File(chatMessage.queryPrompt!),
+        fit: BoxFit.cover,
+      );
     } else {
       return MarkdownWidget(
         selectable: true,
