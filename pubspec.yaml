@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: '>=3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -32,11 +32,12 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_screenutil: ^5.8.2
   flutter_bloc: ^8.1.1
   equatable: ^2.0.3
   http: ^0.13.5
   get_it: ^7.2.0
-  flutter_animate: 3.0.0
+  #flutter_animate: ^3.0.0
   markdown_widget: ^2.1.0
   share_plus: ^6.3.4
   #flutter_icons: ^1.1.0
@@ -55,6 +56,7 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_cache_manager: ^3.3.0
   crop: ^0.5.5
+  loading_indicator: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -68,7 +70,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.2
   floor_generator: ^1.4.1
-  intl: ^0.17.0
+  intl: ^0.18.0
   envied_generator: ^0.3.0
   json_serializable: ^6.6.1
 

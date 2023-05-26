@@ -61,5 +61,6 @@ class NotifyTextFieldState extends ChatConversationState {
       required this.isRequestProcessing});
 
   @override
-  List<Object?> get props => [selectedConversationId, message];
+  List<Object?> get props =>
+      [selectedConversationId, message, isRequestProcessing];
 }

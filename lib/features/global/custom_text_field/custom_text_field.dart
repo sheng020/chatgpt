@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_loading_widget.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/crop_page.dart';
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 typedef PromptTrigger = void Function(int type, {String? path});
 
@@ -13,12 +15,14 @@ class CustomTextField extends StatelessWidget {
   final PromptTrigger? onTap;
   final bool isRequestProcessing;
   final ValueNotifier<int> inputMode;
+  final ValueNotifier<String> textInputNotifier;
   CustomTextField(
       {Key? key,
       required this.textEditingController,
       this.onTap,
       required this.inputMode,
-      required this.isRequestProcessing})
+      required this.isRequestProcessing,
+      required this.textInputNotifier})
       : super(key: key);
 
   List<PopupMenuItem<int>> getDropItems() {
@@ -88,13 +92,15 @@ class CustomTextField extends StatelessWidget {
           );
         } else {
           return TextField(
-            enabled: !isRequestProcessing,
-            style: TextStyle(fontSize: 14),
+            //enabled: !isRequestProcessing,
+            style: TextStyle(fontSize: 14.sp),
             controller: textEditingController,
             decoration: InputDecoration(
               hintText: "Open AI prompt",
               border: InputBorder.none,
             ),
+            textInputAction: TextInputAction.send,
+            onEditingComplete: () {}, // this prevents keyboard from closing
             onSubmitted: (str) {
               onTap?.call(inputMode.value);
             },
@@ -107,80 +113,72 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 28, left: 150, right: 150),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-              child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5), color: colorDarkGray),
-            child: Column(
+      margin: EdgeInsets.only(bottom: 8.h, left: 16.w, right: 16.w),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.r), color: colorDarkGray),
+        child: Column(
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxHeight: 90,
-                        ),
-                        child: getTextField(isRequestProcessing),
-                      ),
+                Expanded(
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxHeight: 90,
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      height: 40,
-                      child: ValueListenableBuilder(
-                        valueListenable: inputMode,
-                        builder: (context, value, child) {
-                          return PopupMenuButton(
-                            position: PopupMenuPosition.over,
-                            initialValue: value,
-                            itemBuilder: (context) {
-                              return getDropItems();
-                            },
-                            onSelected: (value) {
-                              inputMode.value = value;
-                            },
-                            child: getIcon(value),
-                          );
+                    child: getTextField(isRequestProcessing),
+                  ),
+                ),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Container(
+                  height: 40.h,
+                  child: ValueListenableBuilder(
+                    valueListenable: inputMode,
+                    builder: (context, value, child) {
+                      return PopupMenuButton(
+                        position: PopupMenuPosition.over,
+                        initialValue: value,
+                        itemBuilder: (context) {
+                          return getDropItems();
                         },
-                      ),
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    isRequestProcessing
-                        ? Container(
-                            height: 40,
-                            child: Image.asset("assets/loading_response.gif"))
-                        : ValueListenableBuilder(
-                            valueListenable: inputMode,
-                            builder: (context, value, child) {
-                              return InkWell(
-                                onTap: textEditingController.text.isEmpty ||
-                                        value == TYPE_IMAGE_VARIATION
-                                    ? null
-                                    : () {
-                                        onTap?.call(inputMode.value);
-                                      },
-                                child: Icon(
-                                  Icons.send,
-                                  color: textEditingController.text.isEmpty
-                                      ? Colors.grey.withOpacity(.4)
-                                      : Colors.grey,
-                                ),
-                              );
-                            }),
-                  ],
-                )
+                        onSelected: (value) {
+                          inputMode.value = value;
+                        },
+                        child: getIcon(value),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                isRequestProcessing
+                    ? SizedBox(height: 40.h, child: ConversationLoadingWidget())
+                    : ValueListenableBuilder(
+                        valueListenable: textInputNotifier,
+                        builder: ((context, value, child) {
+                          return InkWell(
+                            onTap: textEditingController.text.isEmpty ||
+                                    inputMode.value == TYPE_IMAGE_VARIATION
+                                ? null
+                                : () {
+                                    onTap?.call(inputMode.value);
+                                  },
+                            child: Icon(
+                              Icons.send,
+                              color: value.isEmpty
+                                  ? Color(0xFF1DC338).withOpacity(.4)
+                                  : Color(0xFF1DC338),
+                            ),
+                          );
+                        })),
               ],
-            ),
-          )),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

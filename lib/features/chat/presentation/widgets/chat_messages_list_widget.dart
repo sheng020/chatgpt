@@ -57,19 +57,6 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
   }
 
   @override
-  void initState() {
-    /* if (widget.isScrollViewFirstLoad) {
-      print("first scroll");
-      widget.isScrollViewFirstLoad = false;
-      Future.delayed(Duration(milliseconds: 50), () {
-        widget.scrollController.scrollToIndex(widget.chatMessages.length - 1,
-            duration: Duration(milliseconds: 500));
-      });
-    } */
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       cacheExtent: 1000,

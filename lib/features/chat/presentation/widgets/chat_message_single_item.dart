@@ -10,6 +10,7 @@ import 'package:flutter_chatgpt_clone/api/core/models/image/variation/variation.
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -44,7 +45,7 @@ class ChatMessageSingleItem extends StatelessWidget {
         (e) {
           print("image generation:${e.url}");
           return Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(8.r),
             child: CachedNetworkImage(
               imageUrl: e.url,
             ),
@@ -62,7 +63,7 @@ class ChatMessageSingleItem extends StatelessWidget {
       var children = variationModel.data.map(
         (e) {
           return Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(8.r),
             child: CachedNetworkImage(
               imageUrl: e.url,
             ),
@@ -80,7 +81,7 @@ class ChatMessageSingleItem extends StatelessWidget {
   Widget _chatMessageItem(BuildContext context) {
     if (chatMessage.messageId == ChatGptConst.AIBot) {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 150),
+        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
         decoration: BoxDecoration(
           color: colorGrayLight,
         ),
@@ -91,64 +92,64 @@ class ChatMessageSingleItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                    height: 35,
-                    width: 35,
+                    height: 35.r,
+                    width: 35.r,
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                         child: Image.asset("assets/openAIChatbot.png"))),
                 SizedBox(
-                  width: 20,
+                  width: 20.w,
                 ),
                 Expanded(
                   child: Container(
-                      margin: EdgeInsets.only(bottom: 4, top: 4),
+                      margin: EdgeInsets.symmetric(vertical: 4.h),
                       child: getResponseWidget(chatMessage)),
                 ),
               ],
             ),
             SizedBox(
-              height: 8,
+              height: 8.h,
             ),
             Container(
-              margin: EdgeInsets.only(left: 50),
+              margin: EdgeInsets.only(left: 50.w),
               child: Row(
                 children: [
                   InkWell(
                       onTap: () {
                         Clipboard.setData(
-                            ClipboardData(text: chatMessage.promptResponse));
+                            ClipboardData(text: chatMessage.promptResponse!));
                         //toast("Copied");
                       },
-                      child: Icon(Icons.copy, size: 18)),
+                      child: Icon(Icons.copy, size: 24.r)),
                   SizedBox(
-                    width: 10,
+                    width: 10.w,
                   ),
                   InkWell(
                       onTap: () {
                         Share.share(chatMessage.promptResponse!);
                       },
-                      child: Icon(Icons.share, size: 18)),
+                      child: Icon(Icons.share, size: 24.r)),
                 ],
               ),
             ),
             SizedBox(
-              height: 8,
+              height: 8.h,
             ),
           ],
         ),
       );
     } else {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 150),
+        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              height: 35,
-              width: 35,
+              height: 35.r,
+              width: 35.r,
               decoration: BoxDecoration(
                   color: Colors.blueGrey,
-                  borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(8.r)),
               child: Center(
                 child: BlocBuilder<ChatUserNameCubit, ChatConversationState>(
                   builder: (context, conversationUser) {
@@ -168,11 +169,11 @@ class ChatMessageSingleItem extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 20,
+              width: 16.w,
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(bottom: 10, top: 10),
+                margin: EdgeInsets.symmetric(vertical: 8.h),
                 child: getInputWidget(chatMessage),
               ),
             ),

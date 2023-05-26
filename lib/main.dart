@@ -10,6 +10,7 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conv
 import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/conversation_page.dart';
 import 'package:flutter_chatgpt_clone/injection_container.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'api/instance/openai.dart';
 import 'env.dart';
@@ -62,27 +63,33 @@ class MyApp extends StatelessWidget {
           create: (_) => di.sl<ChatUserNameCubit>(),
         ),
       ],
-      child: MaterialApp(
-        title: 'ChatGpt',
-        theme: ThemeData(brightness: Brightness.dark),
-        initialRoute: '/',
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: OnGenerateRoute.route,
-        routes: {
-          "/": (context) {
-            return ConversationPage();
-          }
+      child: ScreenUtilInit(
+        designSize: const Size(360, 780),
+        useInheritedMediaQuery: true,
+        builder: (context, child) {
+          return MaterialApp(
+            title: 'ChatGpt',
+            theme: ThemeData(brightness: Brightness.dark),
+            initialRoute: '/',
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: OnGenerateRoute.route,
+            routes: {
+              "/": (context) {
+                return ConversationPage();
+              }
 
-          // add dark and light theme.
-          // chatMessages history
+              // add dark and light theme.
+              // chatMessages history
+            },
+            supportedLocales: S.delegate.supportedLocales,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+          );
         },
-        supportedLocales: S.delegate.supportedLocales,
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
       ),
     );
   }

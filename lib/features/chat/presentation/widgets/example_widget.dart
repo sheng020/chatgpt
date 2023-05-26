@@ -1,5 +1,4 @@
-
-
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/prompt_entitiy.dart';
@@ -22,53 +21,58 @@ class _ExampleWidgetState extends State<ExampleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 120),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 140,
-            ),
-            Text(
-              "ChatGPT",
-              style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 60,
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  _rowItem(
-                      icon: Icons.light_mode_outlined,
-                      title: "Examples",
-                      data: PromptEntity.exampleListData,
-                      isClickAble: true),
-                  _rowItem(
-                      icon: Icons.energy_savings_leaf,
-                      title: "Capabilities",
-                      data: PromptEntity.capabilitiesListData,
-                      isClickAble: false),
-                  _rowItem(
-                      icon: FontAwesomeIcons.triangleExclamation,
-                      title: "Limitation",
-                      data: PromptEntity.limitationListData,
-                      isClickAble: false),
-                ],
+    if (Platform.isAndroid) {
+      return SizedBox.shrink();
+    } else {
+      return Center(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 120),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 140,
               ),
-            )
-          ],
+              Text(
+                "ChatGPT",
+                style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 60,
+              ),
+              Expanded(
+                child: Row(
+                  children: [
+                    _rowItem(
+                        icon: Icons.light_mode_outlined,
+                        title: "Examples",
+                        data: PromptEntity.exampleListData,
+                        isClickAble: true),
+                    _rowItem(
+                        icon: Icons.energy_savings_leaf,
+                        title: "Capabilities",
+                        data: PromptEntity.capabilitiesListData,
+                        isClickAble: false),
+                    _rowItem(
+                        icon: FontAwesomeIcons.triangleExclamation,
+                        title: "Limitation",
+                        data: PromptEntity.limitationListData,
+                        isClickAble: false),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
-  Widget _rowItem({required IconData icon,
-    required String title,
-    required List<PromptEntity> data,
-    required bool isClickAble}) {
+  Widget _rowItem(
+      {required IconData icon,
+      required String title,
+      required List<PromptEntity> data,
+      required bool isClickAble}) {
     return Expanded(
       child: Column(
         children: [
@@ -98,15 +102,15 @@ class _ExampleWidgetState extends State<ExampleWidget> {
                   onHover: isClickAble == false
                       ? null
                       : (value) {
-                    setState(() {
-                      _itemHoverIndex = value == true ? index : -1;
-                    });
-                  },
+                          setState(() {
+                            _itemHoverIndex = value == true ? index : -1;
+                          });
+                        },
                   onTap: isClickAble == false
                       ? null
                       : () {
-                    widget.onMessageController(prompt.title!);
-                  },
+                          widget.onMessageController(prompt.title!);
+                        },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 40, vertical: 3),
                     child: Card(
@@ -115,7 +119,7 @@ class _ExampleWidgetState extends State<ExampleWidget> {
                           : colorDarkGray,
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                         child: Text("${prompt.title}"),
                       ),
                     ),

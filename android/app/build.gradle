@@ -48,16 +48,57 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    signingConfigs {
+        def keystorePropertiesFile = rootProject.file("key.properties")
+        def keystoreProperties = new Properties()
+
+        if (keystorePropertiesFile.exists()) {
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+        } else {
+            def storePassword = System.getenv('KEY_STORE_PASSWORD')
+            def keyPassword = System.getenv('KEY_PASSWORD')
+            def keyAlias = System.getenv('KEY_ALIAS')
+            def storeFile = System.getenv('KEY_PATH')
+            if (storePassword != null) {
+                keystoreProperties.setProperty('storePassword', storePassword)
+            } else {
+                keystoreProperties.setProperty('storePassword', "android")
+            }
+            if (keyPassword != null) {
+                keystoreProperties.setProperty('keyPassword', keyPassword)
+            } else {
+                keystoreProperties.setProperty('keyPassword', "android")
+            }
+            if (keyAlias != null) {
+                keystoreProperties.setProperty('keyAlias', keyAlias)
+            } else {
+                keystoreProperties.setProperty('keyAlias', "androiddebugkey")
+            }
+            if (storeFile != null) {
+                keystoreProperties.setProperty('storeFile', storeFile)
+            } else {
+                keystoreProperties.setProperty('storeFile', "debug.keystore")
+            }
+
+        }
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
     }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }

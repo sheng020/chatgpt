@@ -5,6 +5,7 @@ import 'package:flutter_chatgpt_clone/database/conversation_dao.dart';
 import 'package:flutter_chatgpt_clone/database/message_dao.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/conversation_entity.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../features/chat/domain/entities/chat_message_entity.dart';
 
@@ -31,34 +32,46 @@ class DatabaseManager {
   DatabaseManager._internal();
 
   Future<List<ConversationEntity>?> queryConversationList() {
+    if (kIsWeb) {
+      return Future.value(<ConversationEntity>[]);
+    }
     return _conversationDao.queryConversations();
   }
 
   Future<int> insertConversation(ConversationEntity conversationEntity) {
+    if (kIsWeb) return Future.value(0);
     return _conversationDao.insertConversation(conversationEntity);
   }
 
   Future<List<ChatMessageEntity>?> queryMessageList() {
+    if (kIsWeb) {
+      return Future.value(<ChatMessageEntity>[]);
+    }
     return _messageDao.allMessage();
   }
 
   Future<int> insertMessage(ChatMessageEntity messageEntity) {
+    if (kIsWeb) return Future.value(0);
     return _messageDao.insertMessage(messageEntity);
   }
 
   Future<int> updateMessage(ChatMessageEntity messageEntity) {
+    if (kIsWeb) return Future.value(0);
     return _messageDao.updateMessage(messageEntity);
   }
 
   Future<int?> deleteMessage(int id) {
+    if (kIsWeb) return Future.value(0);
     return _messageDao.deleteMessage(id);
   }
 
   Future<int?> deleteConversation(int conversationId) {
+    if (kIsWeb) return Future.value(0);
     return _conversationDao.deleteConversation(conversationId);
   }
 
-  Future<AppDatabase> initialize() async {
+  Future<AppDatabase?> initialize() async {
+    if (kIsWeb) return null;
     _database = await $FloorAppDatabase
         .databaseBuilder('chat_gpt.db')
         .addMigrations([migration1to2]).build();
