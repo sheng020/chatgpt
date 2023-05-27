@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_loading_widget.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -46,13 +49,17 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
   }
 
   Widget _responsePreparingWidget(bool isRequestProcessing) {
-    if (isRequestProcessing) {
-      return Container(
-        height: 60,
-        child: Image.asset("assets/loading_response.gif"),
-      );
-    } else {
+    if (Platform.isAndroid) {
       return SizedBox.shrink();
+    } else {
+      if (isRequestProcessing) {
+        return Container(
+          height: 60,
+          child: ConversationLoadingWidget(),
+        );
+      } else {
+        return SizedBox.shrink();
+      }
     }
   }
 

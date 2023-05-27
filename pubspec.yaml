@@ -115,11 +115,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-  assets:
-    - assets/app_logo.png
-    - assets/chatgpt_img.jpeg
-    - assets/loading_response.gif
-    - assets/openAIChatbot.png
-    - assets/openai-avatar.png
+  # assets:
+  #   - assets/loading_response.gif
 flutter_intl:
   enabled: true

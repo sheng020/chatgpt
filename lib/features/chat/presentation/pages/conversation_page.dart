@@ -86,7 +86,7 @@ class _ConversationPageState extends State<ConversationPage> {
           ConversationItemList(),
           Expanded(
               child: Container(
-            decoration: BoxDecoration(color: Color.fromRGBO(52, 53, 64, 1)),
+            decoration: BoxDecoration(color: Colors.white),
             child: Column(
               children: [
                 Expanded(

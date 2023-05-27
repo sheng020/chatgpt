@@ -1,0 +1,9 @@
+{
+  "cancel": "ยกเลิก",
+  "ok": "ตกลง",
+  "change_name": "เปลี่ยนชื่อ",
+  "new_chat": "+ แชทใหม่",
+  "new_conversation": "การสนทนาใหม่",
+  "input_message": "ข้อความเข้า",
+  "stop_generating": "หยุดสร้าง"
+}

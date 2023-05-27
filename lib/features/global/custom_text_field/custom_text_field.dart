@@ -6,6 +6,7 @@ import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_loading_widget.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/crop_page.dart';
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
+import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 typedef PromptTrigger = void Function(int type, {String? path});
@@ -53,12 +54,22 @@ class CustomTextField extends StatelessWidget {
   }
 
   Widget getIcon(int type) {
+    Color color = Color(0xFF1DC338);
     if (type == TYPE_CHAT) {
-      return Icon(Icons.chat);
+      return Icon(
+        Icons.chat,
+        color: color,
+      );
     } else if (type == TYPE_IMAGE_GENERATION) {
-      return Icon(Icons.photo);
+      return Icon(
+        Icons.photo,
+        color: color,
+      );
     } else if (type == TYPE_IMAGE_VARIATION) {
-      return Icon(Icons.generating_tokens);
+      return Icon(
+        Icons.generating_tokens,
+        color: color,
+      );
     } else {
       throw FlutterError("Unknown message type");
     }
@@ -93,10 +104,10 @@ class CustomTextField extends StatelessWidget {
         } else {
           return TextField(
             //enabled: !isRequestProcessing,
-            style: TextStyle(fontSize: 14.sp),
+            style: TextStyle(fontSize: 14.sp, color: Colors.black),
             controller: textEditingController,
             decoration: InputDecoration(
-              hintText: "Open AI prompt",
+              hintText: S.of(context).input_message,
               border: InputBorder.none,
             ),
             textInputAction: TextInputAction.send,
@@ -117,7 +128,9 @@ class CustomTextField extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.r), color: colorDarkGray),
+            border: Border.all(color: Color(0xFF6D2DF5), width: 2),
+            borderRadius: BorderRadius.circular(8.r),
+            color: Colors.white),
         child: Column(
           children: [
             Row(

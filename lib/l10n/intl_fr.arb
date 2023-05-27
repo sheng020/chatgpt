@@ -1,0 +1,9 @@
+{
+  "cancel": "Annuler",
+  "ok": "D'ACCORD",
+  "change_name": "Changer de nom",
+  "new_chat": "+ Nouveau chat",
+  "new_conversation": "Nouvelle conversation",
+  "input_message": "Message d'entrée",
+  "stop_generating": "Arrêtez de générer."
+}

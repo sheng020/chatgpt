@@ -3,5 +3,7 @@
   "ok": "OK",
   "change_name": "Change name",
   "new_chat": "+ New Chat",
-  "new_conversation": "New conversation"
+  "new_conversation": "New conversation",
+  "input_message": "Input message",
+  "stop_generating": "Stop generating."
 }

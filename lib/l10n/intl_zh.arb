@@ -3,5 +3,6 @@
   "ok": "确认",
   "change_name": "更改名称",
   "new_chat": "+ 新建会话",
-  "new_conversation": "新会话"
+  "new_conversation": "新会话",
+  "input_message": "输入消息"
 }

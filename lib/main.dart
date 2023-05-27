@@ -30,7 +30,7 @@ void main() async {
   ///没有的话也可以不设置，默认是OpenAI的域名，但是需要翻墙才能访问
   ///OpenAI.baseUrl = "your client address";
   WidgetsFlutterBinding.ensureInitialized();
-  HttpOverrides.global = new MyHttpOverrides();
+  //HttpOverrides.global = new MyHttpOverrides();
   await di.init();
   String? apiKey = box.read(API_KEY);
   if (apiKey == null || apiKey.isEmpty) {
@@ -43,10 +43,10 @@ void main() async {
   OpenAI.baseUrl = serverAddress;
   OpenAI.apiKey = apiKey;
 
-  String modelName = box.read(CHAT_MODEL) ?? ChatModel.GPT_3_5_TURBO.name;
+  /* String modelName = box.read(CHAT_MODEL) ?? ChatModel.GPT_3_5_TURBO.name;
   OpenAI.chatModel = ChatModel.values.firstWhere(
     (element) => element.name == modelName,
-  );
+  ); */
 
   runApp(MyApp());
 }
@@ -68,8 +68,8 @@ class MyApp extends StatelessWidget {
         useInheritedMediaQuery: true,
         builder: (context, child) {
           return MaterialApp(
-            title: 'ChatGpt',
-            theme: ThemeData(brightness: Brightness.dark),
+            title: 'Hi GPT',
+            theme: ThemeData(brightness: Brightness.light),
             initialRoute: '/',
             debugShowCheckedModeBanner: false,
             onGenerateRoute: OnGenerateRoute.route,

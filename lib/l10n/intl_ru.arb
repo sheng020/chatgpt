@@ -1,0 +1,9 @@
+{
+  "cancel": "Отмена",
+  "ok": "ХОРОШО",
+  "change_name": "Изменить имя",
+  "new_chat": "+ Новый чат",
+  "new_conversation": "Новый разговор",
+  "input_message": "Входное сообщение",
+  "stop_generating": "Хватит генерировать."
+}

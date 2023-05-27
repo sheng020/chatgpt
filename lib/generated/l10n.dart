@@ -99,6 +99,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Input message`
+  String get input_message {
+    return Intl.message(
+      'Input message',
+      name: 'input_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stop generating.`
+  String get stop_generating {
+    return Intl.message(
+      'Stop generating.',
+      name: 'stop_generating',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
@@ -107,7 +127,29 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'af'),
+      Locale.fromSubtags(languageCode: 'ar'),
+      Locale.fromSubtags(languageCode: 'bn'),
+      Locale.fromSubtags(languageCode: 'fa'),
+      Locale.fromSubtags(languageCode: 'fil'),
+      Locale.fromSubtags(languageCode: 'fr'),
+      Locale.fromSubtags(languageCode: 'ga'),
+      Locale.fromSubtags(languageCode: 'ha'),
+      Locale.fromSubtags(languageCode: 'hi'),
+      Locale.fromSubtags(languageCode: 'in'),
+      Locale.fromSubtags(languageCode: 'iw'),
+      Locale.fromSubtags(languageCode: 'la'),
+      Locale.fromSubtags(languageCode: 'ms'),
+      Locale.fromSubtags(languageCode: 'my'),
+      Locale.fromSubtags(languageCode: 'om'),
+      Locale.fromSubtags(languageCode: 'ru'),
+      Locale.fromSubtags(languageCode: 'sw'),
+      Locale.fromSubtags(languageCode: 'th'),
+      Locale.fromSubtags(languageCode: 'tr'),
+      Locale.fromSubtags(languageCode: 'ur'),
+      Locale.fromSubtags(languageCode: 'vi'),
       Locale.fromSubtags(languageCode: 'zh'),
+      Locale.fromSubtags(languageCode: 'zu'),
     ];
   }
 

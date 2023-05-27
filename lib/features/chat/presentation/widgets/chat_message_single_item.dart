@@ -83,22 +83,24 @@ class ChatMessageSingleItem extends StatelessWidget {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
         decoration: BoxDecoration(
-          color: colorGrayLight,
+          color: Colors.white,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                    height: 35.r,
-                    width: 35.r,
+                    height: 16.r,
+                    width: 16.r,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.r),
-                        child: Image.asset("assets/openAIChatbot.png"))),
+                        child: Container(
+                          color: Color(0xFF1DC338),
+                        ))),
                 SizedBox(
-                  width: 20.w,
+                  width: 12.w,
                 ),
                 Expanded(
                   child: Container(
@@ -111,7 +113,7 @@ class ChatMessageSingleItem extends StatelessWidget {
               height: 8.h,
             ),
             Container(
-              margin: EdgeInsets.only(left: 50.w),
+              margin: EdgeInsets.only(left: 32.w),
               child: Row(
                 children: [
                   InkWell(
@@ -145,29 +147,13 @@ class ChatMessageSingleItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              height: 35.r,
-              width: 35.r,
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  borderRadius: BorderRadius.circular(8.r)),
-              child: Center(
-                child: BlocBuilder<ChatUserNameCubit, ChatConversationState>(
-                  builder: (context, conversationUser) {
-                    if (conversationUser is ConversationUser) {
-                      return Text(
-                        conversationUser.userName,
-                        style: TextStyle(color: Colors.white),
-                      );
-                    } else {
-                      return Text(
-                        "CJS",
-                        style: TextStyle(color: Colors.white),
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
+                height: 16.r,
+                width: 16.r,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: Container(
+                      color: Color(0xFF6D2DF5),
+                    ))),
             SizedBox(
               width: 16.w,
             ),
