@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.atom.android.chatgpt">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="Hi GPT"
-        android:name="${applicationName}"
+        android:name=".App"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -30,5 +31,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-9457261600013797~1687797552"/>
     </application>
 </manifest>

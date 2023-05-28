@@ -2,27 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chatgpt_clone/api/instance/chat/chat_models.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_messages_list_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_item_list.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/left_nav_button_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/stop_generate_widget.dart';
-import 'package:flutter_chatgpt_clone/features/global/common/common.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
-import 'package:flutter_chatgpt_clone/injection_container.dart';
-import 'package:flutter_chatgpt_clone/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-
-import '../../../../api/instance/openai.dart';
-import '../../../../generated/l10n.dart';
-import '../cubit/chat_conversation/chat_conversation_user_cubit.dart';
 
 class ConversationPage extends StatefulWidget {
   const ConversationPage({Key? key}) : super(key: key);
@@ -51,6 +42,7 @@ class _ConversationPageState extends State<ConversationPage> {
         _scrollController.position
             .jumpTo(_scrollController.position.maxScrollExtent);
       }); */
+      BlocProvider.of<PurchaseCubit>(context).loadRewardAdIfAvaliable();
     });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels > 200) {
@@ -81,7 +73,8 @@ class _ConversationPageState extends State<ConversationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
+      body: SafeArea(
+          child: Row(
         children: [
           ConversationItemList(),
           Expanded(
@@ -89,6 +82,32 @@ class _ConversationPageState extends State<ConversationPage> {
             decoration: BoxDecoration(color: Colors.white),
             child: Column(
               children: [
+                BlocBuilder<PurchaseCubit, PurchaseState>(
+                    builder: (context, purchaseState) {
+                  if (purchaseState.isPurchased) {
+                    return SizedBox.shrink();
+                  } else {
+                    return Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.h, horizontal: 16.w),
+                        child: Row(children: [
+                          Text("未订阅，订阅可无限使用"),
+                          SizedBox(
+                            width: 16.w,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                BlocProvider.of<PurchaseCubit>(context)
+                                    .startShowRewardAd();
+                              },
+                              child: Text("去订阅"))
+                        ]),
+                      ),
+                    );
+                  }
+                }),
                 Expanded(
                   child: BlocBuilder<ChatConversationCubit,
                           ChatConversationState>(
@@ -184,7 +203,7 @@ class _ConversationPageState extends State<ConversationPage> {
             ),
           ))
         ],
-      ),
+      )),
       floatingActionButton:
           BlocBuilder<ChatConversationCubit, ChatConversationState>(
         buildWhen: (previous, current) => current is FloatingActionState,

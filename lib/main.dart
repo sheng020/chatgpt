@@ -7,6 +7,7 @@ import 'package:flutter_chatgpt_clone/core/http_certificate_manager.dart';
 import 'package:flutter_chatgpt_clone/features/app/route/on_generate_route.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_user_cubit.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/conversation_page.dart';
 import 'package:flutter_chatgpt_clone/injection_container.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => di.sl<ChatUserNameCubit>(),
         ),
+        BlocProvider(create: (_) => di.sl<PurchaseCubit>())
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 780),
@@ -71,7 +73,7 @@ class MyApp extends StatelessWidget {
             title: 'Hi GPT',
             theme: ThemeData(brightness: Brightness.light),
             initialRoute: '/',
-            debugShowCheckedModeBanner: false,
+            //debugShowCheckedModeBanner: false,
             onGenerateRoute: OnGenerateRoute.route,
             routes: {
               "/": (context) {
