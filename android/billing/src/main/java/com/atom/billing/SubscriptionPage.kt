@@ -375,7 +375,7 @@ fun SubscriptionHeader(
         Spacer(modifier = Modifier.height(4.dp))
         FullAccessFeature(title = stringResource(id = R.string.support_gpt4))
         Spacer(modifier = Modifier.height(4.dp))
-        FullAccessFeature(title = stringResource(id = R.string.unlimited_video_translation))
+        FullAccessFeature(title = stringResource(id = R.string.unlimited_use))
         Spacer(modifier = Modifier.height(12.dp))
         PriceDescription(billingState = billingState, selectedOffer = selectedOffer)
     }

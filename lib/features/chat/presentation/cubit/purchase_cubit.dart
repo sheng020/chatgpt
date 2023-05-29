@@ -6,7 +6,8 @@ class PurchaseCubit extends Cubit<PurchaseState> {
   PurchaseCubit() : super(PurchaseState(isPurchased: false));
 
   Future<void> checkIsPurchase() async {
-    emit(PurchaseState(isPurchased: await NativeChannel.isPurchased()));
+    var isPurchased = await NativeChannel.isPurchased();
+    emit(PurchaseState(isPurchased: isPurchased));
   }
 
   Future<void> loadRewardAdIfAvaliable() async {
@@ -14,10 +15,6 @@ class PurchaseCubit extends Cubit<PurchaseState> {
     if (!isPurchase) {
       NativeChannel.loadRewardAd();
     }
-  }
-
-  Future<void> startShowRewardAd() {
-    return NativeChannel.showRewardAd();
   }
 }
 

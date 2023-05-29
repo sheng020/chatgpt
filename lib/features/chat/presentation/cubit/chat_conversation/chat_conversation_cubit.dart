@@ -8,7 +8,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/conversation_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/usecases/chat_converstaion_usecase.dart';
+import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
+import 'package:flutter_chatgpt_clone/features/global/const/constants.dart';
+import 'package:flutter_chatgpt_clone/injection_container.dart';
 
 import '../../../../../database/database.dart';
 
@@ -88,6 +91,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         selectedConversationId: selectedConversationId,
         message: "",
         isRequestProcessing: false));
+    emit(ConversationLeftCount(leftCount: getLeftCount()));
   }
 
   Future<void> newConversation() async {
@@ -188,6 +192,10 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           if (content != null) {
             if (lastMessage != null) {
               chatMessages?.remove(lastMessage);
+            } else {
+              consumeOneTime().then((leftCount) {
+                emit(ConversationLeftCount(leftCount: leftCount));
+              });
             }
 
             sb.write(content);
@@ -254,6 +262,8 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           chatMessages: _conversations,
           isRequestProcessing: false));
       sendChatMessage("", isRequestProcessing: false);
+      var leftCount = await consumeOneTime();
+      emit(ConversationLeftCount(leftCount: leftCount));
       DatabaseManager.getInstance().insertMessage(chatMessageNewResponse);
     } else if (type == TYPE_IMAGE_VARIATION) {
       if (realChatMessage.queryPrompt == null) {
@@ -279,6 +289,8 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           chatMessages: _conversations,
           isRequestProcessing: false));
       DatabaseManager.getInstance().insertMessage(chatMessageNewResponse);
+      var leftCount = await consumeOneTime();
+      emit(ConversationLeftCount(leftCount: leftCount));
     } else {
       throw FlutterError("Unknown message type");
     }
@@ -328,5 +340,17 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
     var database = DatabaseManager.getInstance();
 
     return database.deleteMessage(chatId);
+  }
+
+  Future<void> startShowRewardAd() {
+    return NativeChannel.showRewardAd().then((value) {
+      print("get rewarded:${value}");
+      if (value == true) {
+        var leftCount = getLeftCount();
+        leftCount += 3;
+        writeLeftCount(leftCount);
+        emit(ConversationLeftCount(leftCount: leftCount));
+      }
+    });
   }
 }

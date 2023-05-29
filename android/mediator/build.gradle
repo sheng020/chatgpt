@@ -37,4 +37,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation "com.android.billingclient:billing-ktx:6.0.0"
+
+    implementation 'com.flurry.android:analytics:14.2.0'
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+
+    implementation("com.google.code.gson:gson:2.9.0")
 }

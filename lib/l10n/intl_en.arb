@@ -5,5 +5,10 @@
   "new_chat": "+ New Chat",
   "new_conversation": "New conversation",
   "input_message": "Input message",
-  "stop_generating": "Stop generating."
+  "stop_generating": "Stop generating.",
+  "left_chance": "{count} chance left. Go subscription for more",
+  "subscription": "Subscription",
+  "watch_video": "Watch video to gain chances",
+  "select_picture": "Select a picture",
+  "no_chance_left": "No chance left, watch a video or go to subscribe"
 }

@@ -12,10 +12,20 @@ import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import java.util.*
 
 interface OnShowAdStartListener {
     fun nextStepTrigger(rewarded: Boolean)
+
+    fun showAtOnce()
 }
 
 class RewardAdManager(private val mContext: Context) {
@@ -31,11 +41,15 @@ class RewardAdManager(private val mContext: Context) {
 
     fun loadAd(
         showAtOnce: Boolean = false,
-        activity: Activity? = null,
         onShowAdStartListener: OnShowAdStartListener? = null
     ) {
-        check(showAtOnce && activity != null)
+
         if (adIsLoading) {
+            if (showAtOnce) {
+                //这里说明已经调用过loadad了，但ad未返回，又调用了showad
+                //设置监听ad返回
+                this.onShowAdStartListener = onShowAdStartListener
+            }
             return
         }
         if (isOnlineAdAvailable()) {
@@ -44,7 +58,8 @@ class RewardAdManager(private val mContext: Context) {
         adIsLoading = true
         val adRequest = AdRequest.Builder().build()
 
-        reportEvent(mContext, "Ad_interstitial_ad_start_load")
+        reportEvent(mContext, "Ad_rewarded_ad_start_load")
+        Log.d("cjslog", "real load rewarded ad")
         RewardedAd.load(
             mContext,
             getRewardUnitId(),
@@ -58,6 +73,8 @@ class RewardAdManager(private val mContext: Context) {
                         "Ad_reward_ad_failed_to_load",
                         hashMapOf("reason" to adError.message)
                     )
+                    this@RewardAdManager.onShowAdStartListener?.nextStepTrigger(false)
+                    this@RewardAdManager.onShowAdStartListener = null
                 }
 
                 override fun onAdLoaded(ad: RewardedAd) {
@@ -65,12 +82,12 @@ class RewardAdManager(private val mContext: Context) {
                     adIsLoading = false
                     loadTime = Date().time
                     reportEvent(mContext, "Ad_reward_ad_loaded")
-                    if (showAtOnce) {
-                        showRewarded()
-                    }
+                    this@RewardAdManager.onShowAdStartListener?.showAtOnce()
+                    this@RewardAdManager.onShowAdStartListener = null
                 }
             }
         )
+
     }
 
     /** Check if ad exists and can be shown. */
@@ -81,11 +98,11 @@ class RewardAdManager(private val mContext: Context) {
         return rewardedAd != null && wasLoadTimeLessThanNHoursAgo(4, loadTime)
     }
 
-    //private var onShowAdStartListener: OnShowAdStartListener? = null
+    private var onShowAdStartListener: OnShowAdStartListener? = null
 
-    fun showRewarded(activity: Activity, onShowAdStartListener: OnShowAdStartListener) {
+    fun showRewarded(activity: Activity, onShowAdStartListener: OnShowAdStartListener?) {
         if (isShowingAd) {
-            Log.d(TAG, "The interstitial ad is already showing.")
+            Log.d(TAG, "The rewarded ad is already showing.")
             return
         }
 
@@ -93,7 +110,7 @@ class RewardAdManager(private val mContext: Context) {
             //如果广告没加载成功，等广告成功
             //onShowAdStartListener.nextStepTrigger(false)
             //this.onShowAdStartListener = onShowAdStartListener
-            loadAd(showAtOnce = true, activity, onShowAdStartListener)
+            loadAd(showAtOnce = true, onShowAdStartListener)
             return
         }
         rewardedAd?.let {
@@ -115,7 +132,7 @@ class RewardAdManager(private val mContext: Context) {
                         hashMapOf("reason" to adError.message)
                     )
 
-                    onShowAdStartListener.nextStepTrigger(false)
+                    onShowAdStartListener?.nextStepTrigger(false)
                 }
 
                 override fun onAdShowedFullScreenContent() {
@@ -134,9 +151,9 @@ class RewardAdManager(private val mContext: Context) {
             reportEvent(activity, "ad_rewarded_call_show")
             it.show(
                 activity
-            ) { rewardItem -> onShowAdStartListener.nextStepTrigger(rewardItem.amount > 0) }
+            ) { rewardItem -> onShowAdStartListener?.nextStepTrigger(rewardItem.amount > 0) }
         } ?: run {
-            onShowAdStartListener.nextStepTrigger(false)
+            onShowAdStartListener?.nextStepTrigger(false)
         }
     }
 }

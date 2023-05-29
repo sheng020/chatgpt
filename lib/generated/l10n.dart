@@ -119,6 +119,56 @@ class S {
       args: [],
     );
   }
+
+  /// `{count} chance left. Go subscription for more`
+  String left_chance(Object count) {
+    return Intl.message(
+      '$count chance left. Go subscription for more',
+      name: 'left_chance',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Subscription`
+  String get subscription {
+    return Intl.message(
+      'Subscription',
+      name: 'subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch video to gain chances`
+  String get watch_video {
+    return Intl.message(
+      'Watch video to gain chances',
+      name: 'watch_video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a picture`
+  String get select_picture {
+    return Intl.message(
+      'Select a picture',
+      name: 'select_picture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No chance left, watch a video or go to subscribe`
+  String get no_chance_left {
+    return Intl.message(
+      'No chance left, watch a video or go to subscribe',
+      name: 'no_chance_left',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

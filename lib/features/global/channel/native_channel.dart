@@ -25,7 +25,7 @@ class NativeChannel {
     return _channel.invokeMethod("load_reward_ad");
   }
 
-  static Future<void> showRewardAd() {
+  static Future<bool?> showRewardAd() {
     return _channel.invokeMethod("show_reward_ad");
   }
 }

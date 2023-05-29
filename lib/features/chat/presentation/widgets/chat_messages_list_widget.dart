@@ -93,8 +93,7 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
                 var visiblePercentage = visibilityInfo.visibleFraction * 100;
 
                 var key = visibilityInfo.key as ValueKey;
-                print(
-                    "visible:${visiblePercentage}  ${key.value} ${widget.chatMessages.length}");
+
                 if (widget.isRequestProcessing && key.value == "index_0") {
                   var widgetKey =
                       getCachedKey("index_${chatMessage.messageId}_0");

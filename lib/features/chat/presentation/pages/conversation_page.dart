@@ -10,8 +10,11 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/convers
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/stop_generate_widget.dart';
+import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
+import 'package:flutter_chatgpt_clone/features/global/const/constants.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
+import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
@@ -43,6 +46,7 @@ class _ConversationPageState extends State<ConversationPage> {
             .jumpTo(_scrollController.position.maxScrollExtent);
       }); */
       BlocProvider.of<PurchaseCubit>(context).loadRewardAdIfAvaliable();
+      BlocProvider.of<PurchaseCubit>(context).checkIsPurchase();
     });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels > 200) {
@@ -90,19 +94,38 @@ class _ConversationPageState extends State<ConversationPage> {
                     return Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 8.h, horizontal: 16.w),
-                        child: Row(children: [
-                          Text("未订阅，订阅可无限使用"),
-                          SizedBox(
-                            width: 16.w,
-                          ),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Column(children: [
                           TextButton(
-                              onPressed: () {
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero),
+                              onPressed: () async {
+                                var result =
+                                    await NativeChannel.openSubscriptionPage();
                                 BlocProvider.of<PurchaseCubit>(context)
+                                    .checkIsPurchase();
+                              },
+                              child: BlocBuilder<ChatConversationCubit,
+                                  ChatConversationState>(
+                                builder: (context, state) {
+                                  if (state is ConversationLeftCount) {
+                                    return Text(S
+                                        .of(context)
+                                        .left_chance(state.leftCount));
+                                  }
+                                  return SizedBox.shrink();
+                                },
+                                buildWhen: (previous, current) =>
+                                    current is ConversationLeftCount,
+                              )),
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero),
+                              onPressed: () {
+                                BlocProvider.of<ChatConversationCubit>(context)
                                     .startShowRewardAd();
                               },
-                              child: Text("去订阅"))
+                              child: Text(S.of(context).watch_video)),
                         ]),
                       ),
                     );
@@ -177,11 +200,20 @@ class _ConversationPageState extends State<ConversationPage> {
                         textEditingController: _messageController,
                         textInputNotifier: textInputNotifier,
                         onTap: (int type, {String? path}) async {
-                          _promptTrigger(
-                              conversationId:
-                                  chatConversationState.selectedConversationId,
-                              type: type,
-                              path: path);
+                          var leftCount = getLeftCount();
+                          var isPurchased = await NativeChannel.isPurchased();
+                          if (leftCount <= 0 && !isPurchased) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(S.of(context).no_chance_left),
+                              duration: Duration(seconds: 2),
+                            ));
+                          } else {
+                            _promptTrigger(
+                                conversationId: chatConversationState
+                                    .selectedConversationId,
+                                type: type,
+                                path: path);
+                          }
                         },
                       );
                     } else {

@@ -20,16 +20,26 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(count) => "${count} chance left. Go subscription for more";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "change_name": MessageLookupByLibrary.simpleMessage("Change name"),
         "input_message": MessageLookupByLibrary.simpleMessage("Input message"),
+        "left_chance": m0,
         "new_chat": MessageLookupByLibrary.simpleMessage("+ New Chat"),
         "new_conversation":
             MessageLookupByLibrary.simpleMessage("New conversation"),
+        "no_chance_left": MessageLookupByLibrary.simpleMessage(
+            "No chance left, watch a video or go to subscribe"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
+        "select_picture":
+            MessageLookupByLibrary.simpleMessage("Select a picture"),
         "stop_generating":
-            MessageLookupByLibrary.simpleMessage("Stop generating.")
+            MessageLookupByLibrary.simpleMessage("Stop generating."),
+        "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
+        "watch_video":
+            MessageLookupByLibrary.simpleMessage("Watch video to gain chances")
       };
 }

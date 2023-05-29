@@ -64,3 +64,11 @@ class NotifyTextFieldState extends ChatConversationState {
   List<Object?> get props =>
       [selectedConversationId, message, isRequestProcessing];
 }
+
+class ConversationLeftCount extends ChatConversationState {
+  final int leftCount;
+  ConversationLeftCount({required this.leftCount});
+
+  @override
+  List<Object?> get props => [leftCount];
+}
