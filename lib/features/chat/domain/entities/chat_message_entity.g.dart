@@ -12,7 +12,6 @@ ChatMessageEntity _$ChatMessageEntityFromJson(Map<String, dynamic> json) =>
       messageId: json['messageId'] as String?,
       queryPrompt: json['queryPrompt'] as String?,
       promptResponse: json['promptResponse'] as String?,
-      conversationId: json['conversationId'] as int?,
       date: json['date'] as int?,
       type: json['type'] as int,
     );
@@ -24,6 +23,5 @@ Map<String, dynamic> _$ChatMessageEntityToJson(ChatMessageEntity instance) =>
       'queryPrompt': instance.queryPrompt,
       'promptResponse': instance.promptResponse,
       'date': instance.date,
-      'conversationId': instance.conversationId,
       'type': instance.type,
     };

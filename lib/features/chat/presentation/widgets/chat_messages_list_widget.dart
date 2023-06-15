@@ -13,12 +13,14 @@ class ChatMessagesListWidget extends StatefulWidget {
   final bool isRequestProcessing;
   var isScrollViewFirstLoad = true;
   AutoScrollController scrollController;
+  final TextEditingController editingController;
 
   ChatMessagesListWidget(
       {super.key,
       required this.chatMessages,
       required this.isRequestProcessing,
-      required this.scrollController});
+      required this.scrollController,
+      required this.editingController});
 
   @override
   State<StatefulWidget> createState() {
@@ -66,8 +68,8 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      cacheExtent: 1000,
       reverse: true,
+      shrinkWrap: true,
       itemCount: widget.chatMessages.length + 1,
       controller: widget.scrollController,
       itemBuilder: (context, index) {
@@ -112,6 +114,7 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
                 }
               },
               child: ChatMessageSingleItem(
+                editingController: widget.editingController,
                 key: getCachedKey("index_${chatMessage.messageId}_$realIndex"),
                 chatMessage: chatMessage,
               ),

@@ -6,7 +6,6 @@ import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_messages_list_widget.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_item_list.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/stop_generate_widget.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_chatgpt_clone/features/global/const/constants.dart';
 import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 class ConversationPage extends StatefulWidget {
@@ -40,6 +40,9 @@ class _ConversationPageState extends State<ConversationPage> {
             Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.vertical);
     Future.microtask(() async {
+      if (isNewUser()) {
+        Navigator.of(context).pushNamed("/discounts");
+      }
       await BlocProvider.of<ChatConversationCubit>(context).initMessageList();
       /* Future.delayed(Duration(milliseconds: 500), () {
         _scrollController.position
@@ -60,10 +63,23 @@ class _ConversationPageState extends State<ConversationPage> {
 
     _messageController.addListener(() {
       textInputNotifier.value = _messageController.text;
+      if (inputMode.value == TYPE_REAL_TIME_TRANSLATE) {
+        startRealTimeTranslate(_messageController.text);
+      }
     });
 
     super.initState();
   }
+
+  void startRealTimeTranslate(String text) {
+    timer?.cancel();
+    timer = Timer(Duration(milliseconds: 500), () {
+      BlocProvider.of<ChatConversationCubit>(context)
+          .startRealTimeTranslate(text);
+    });
+  }
+
+  Timer? timer;
 
   //var _isVisible = false;
 
@@ -71,169 +87,171 @@ class _ConversationPageState extends State<ConversationPage> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+    timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0,
+        leading: Text("HiGPT"),
+      ),
+      backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-          child: Row(
+          child: Column(
         children: [
-          ConversationItemList(),
           Expanded(
-              child: Container(
-            decoration: BoxDecoration(color: Colors.white),
-            child: Column(
-              children: [
-                BlocBuilder<PurchaseCubit, PurchaseState>(
-                    builder: (context, purchaseState) {
-                  if (purchaseState.isPurchased) {
-                    return SizedBox.shrink();
-                  } else {
-                    return Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: Column(children: [
-                          TextButton(
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero),
-                              onPressed: () async {
-                                var result =
-                                    await NativeChannel.openSubscriptionPage();
-                                BlocProvider.of<PurchaseCubit>(context)
-                                    .checkIsPurchase();
-                              },
-                              child: BlocBuilder<ChatConversationCubit,
-                                  ChatConversationState>(
-                                builder: (context, state) {
-                                  if (state is ConversationLeftCount) {
-                                    return Text(S
-                                        .of(context)
-                                        .left_chance(state.leftCount));
-                                  }
-                                  return SizedBox.shrink();
-                                },
-                                buildWhen: (previous, current) =>
-                                    current is ConversationLeftCount,
-                              )),
-                          TextButton(
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero),
-                              onPressed: () {
-                                BlocProvider.of<ChatConversationCubit>(context)
-                                    .startShowRewardAd();
-                              },
-                              child: Text(S.of(context).watch_video)),
-                        ]),
-                      ),
-                    );
-                  }
-                }),
-                Expanded(
-                  child: BlocBuilder<ChatConversationCubit,
-                          ChatConversationState>(
-                      buildWhen: (previous, current) =>
-                          current is ChatConversationLoaded ||
-                          current is ChatConversationInitial ||
-                          current is ChatConversationLoading,
-                      builder: (context, chatConversationState) {
-                        if (chatConversationState is ChatConversationLoaded) {
-                          final chatMessages =
-                              chatConversationState.getShowMessageList();
+            child: BlocBuilder<ChatConversationCubit, ChatConversationState>(
+                buildWhen: (previous, current) =>
+                    current is ChatConversationLoaded ||
+                    current is ChatConversationInitial ||
+                    current is ChatConversationLoading,
+                builder: (context, chatConversationState) {
+                  if (chatConversationState is ChatConversationLoaded) {
+                    final chatMessages =
+                        chatConversationState.getShowMessageList();
 
-                          if (chatMessages == null || chatMessages.isEmpty) {
-                            return ExampleWidget(
-                              onMessageController: (message) {
-                                BlocProvider.of<ChatConversationCubit>(context)
-                                    .sendChatMessage(message);
-                              },
-                            );
-                          } else {
-                            return Stack(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 16.w),
-                                  child: ChatMessagesListWidget(
-                                      chatMessages: chatMessages,
-                                      isRequestProcessing: chatConversationState
-                                          .isRequestProcessing,
-                                      scrollController: _scrollController),
-                                ),
-                                StopGenerateWidget(
-                                    type: inputMode.value,
-                                    isRequestProcessing: chatConversationState
-                                        .isRequestProcessing)
-                              ],
-                            );
-                          }
-                        }
-                        return ExampleWidget(
-                          onMessageController: (message) {
-                            BlocProvider.of<ChatConversationCubit>(context)
-                                .sendChatMessage(message);
-                            /* setState(() {
-                                    _messageController.value =
-                                        TextEditingValue(text: message);
-                                  }); */
-                          },
-                        );
-                      }),
-                ),
-                BlocBuilder<ChatConversationCubit, ChatConversationState>(
-                  buildWhen: (previous, current) =>
-                      current is NotifyTextFieldState,
-                  builder: (context, chatConversationState) {
-                    if (chatConversationState is NotifyTextFieldState) {
-                      if (chatConversationState.isRequestProcessing) {
-                        _messageController.text = "";
-                      } else {
-                        _messageController.value = TextEditingValue(
-                            text: chatConversationState.message);
-                      }
-
-                      return CustomTextField(
-                        isRequestProcessing:
-                            chatConversationState.isRequestProcessing,
-                        inputMode: inputMode,
-                        textEditingController: _messageController,
-                        textInputNotifier: textInputNotifier,
-                        onTap: (int type, {String? path}) async {
-                          var leftCount = getLeftCount();
-                          var isPurchased = await NativeChannel.isPurchased();
-                          if (leftCount <= 0 && !isPurchased) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(S.of(context).no_chance_left),
-                              duration: Duration(seconds: 2),
-                            ));
-                          } else {
-                            _promptTrigger(
-                                conversationId: chatConversationState
-                                    .selectedConversationId,
-                                type: type,
-                                path: path);
-                          }
+                    if (chatMessages == null || chatMessages.isEmpty) {
+                      return ExampleWidget(
+                        onMessageController: (message) {
+                          BlocProvider.of<ChatConversationCubit>(context)
+                              .sendChatMessage(message);
                         },
                       );
                     } else {
-                      return Container();
+                      return Stack(
+                        children: [
+                          ChatMessagesListWidget(
+                              editingController: _messageController,
+                              chatMessages: chatMessages,
+                              isRequestProcessing:
+                                  chatConversationState.isRequestProcessing,
+                              scrollController: _scrollController),
+                          StopGenerateWidget(
+                              type: inputMode.value,
+                              isRequestProcessing:
+                                  chatConversationState.isRequestProcessing)
+                        ],
+                      );
                     }
-                  },
-                ),
-                /* Container(
-                  margin: EdgeInsets.symmetric(horizontal: 90),
-                  child: Text(
-                    "ChatGPT Jan 30 Version. Free Research Preview. Our goal is to make AI systems more natural and safe to interact with. Your feedback will help us improve.",
-                    style: TextStyle(color: Colors.grey, fontSize: 13),
-                  ),
-                ), */
-                SizedBox(
-                  height: 8.h,
-                ),
-              ],
-            ),
-          ))
+                  }
+                  return ExampleWidget(
+                    onMessageController: (message) {
+                      BlocProvider.of<ChatConversationCubit>(context)
+                          .sendChatMessage(message);
+                      /* setState(() {
+                                    _messageController.value =
+                                        TextEditingValue(text: message);
+                                  }); */
+                    },
+                  );
+                }),
+          ),
+          BlocBuilder<ChatConversationCubit, ChatConversationState>(
+            buildWhen: (previous, current) => current is NotifyTextFieldState,
+            builder: (context, chatConversationState) {
+              if (chatConversationState is NotifyTextFieldState) {
+                /* if (chatConversationState.isRequestProcessing) {
+                  _messageController.text = "";
+                } else {
+                  _messageController.value =
+                      TextEditingValue(text: chatConversationState.message);
+                } */
+
+                return Column(
+                  children: [
+                    ValueListenableBuilder(
+                        valueListenable: inputMode,
+                        builder:
+                            (BuildContext context, int value, Widget? child) {
+                          if (value == TYPE_REAL_TIME_TRANSLATE) {
+                            if (chatConversationState.translation != null) {
+                              return Container(
+                                height: 48.h,
+                                color: Color(0xFF3A4154),
+                                child: Row(children: [
+                                  Expanded(
+                                      child: Text(
+                                    chatConversationState.translation!,
+                                    style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  )),
+                                  Material(
+                                    type: MaterialType.transparency,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (chatConversationState.translation !=
+                                            null) {
+                                          _messageController.text =
+                                              chatConversationState
+                                                  .translation!;
+                                          _messageController.selection =
+                                              TextSelection.collapsed(
+                                                  offset: _messageController
+                                                      .text.length);
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            S.of(context).usage,
+                                            style: TextStyle(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF298DFF)),
+                                          ),
+                                          SizedBox(
+                                            width: 4.w,
+                                          ),
+                                          SvgPicture.asset(
+                                              "assets/images/ic_down_arrow.svg"),
+                                          SizedBox(
+                                            width: 12.w,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ]),
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        }),
+                    CustomTextField(
+                      isRequestProcessing:
+                          chatConversationState.isRequestProcessing,
+                      inputMode: inputMode,
+                      textEditingController: _messageController,
+                      textInputNotifier: textInputNotifier,
+                      onTap: (int type, {String? path}) async {
+                        var leftCount = getLeftCount();
+                        var isPurchased = await NativeChannel.isPurchased();
+                        if (leftCount <= 0 && !isPurchased) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(S.of(context).no_chance_left),
+                            duration: Duration(seconds: 2),
+                          ));
+                        } else {
+                          _promptTrigger(type: type, path: path);
+                        }
+                      },
+                    )
+                  ],
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
         ],
       )),
       floatingActionButton:
@@ -271,8 +289,7 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 
-  void _promptTrigger(
-      {required int conversationId, required int type, String? path}) {
+  void _promptTrigger({required int type, String? path}) {
     if (_messageController.text.isEmpty) {
       if (type != TYPE_IMAGE_VARIATION) {
         return;
@@ -283,14 +300,12 @@ class _ConversationPageState extends State<ConversationPage> {
 
     if (type != TYPE_IMAGE_VARIATION) {
       humanChatMessage = ChatMessageEntity(
-          conversationId: conversationId,
           messageId: ChatGptConst.Human,
           type: TYPE_CHAT,
           queryPrompt: _messageController.text,
           date: DateTime.now().millisecondsSinceEpoch);
     } else {
       humanChatMessage = ChatMessageEntity(
-          conversationId: conversationId,
           messageId: ChatGptConst.Human,
           type: type,
           queryPrompt: path,
@@ -299,10 +314,7 @@ class _ConversationPageState extends State<ConversationPage> {
 
     var chatConversationCubit = BlocProvider.of<ChatConversationCubit>(context);
     chatConversationCubit
-        .chatConversation(
-            type: type,
-            conversationId: conversationId,
-            chatMessage: humanChatMessage)
+        .chatConversation(type: type, chatMessage: humanChatMessage)
         .then((value) {
       //BlocProvider.of<ChatConversationCubit>(context).sendChatMessage("");
       /* setState(() {

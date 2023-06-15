@@ -24,21 +24,42 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "answer_question_tips": MessageLookupByLibrary.simpleMessage(
+            "Explain quantum computing in simple terms"),
+        "answer_question_title":
+            MessageLookupByLibrary.simpleMessage("Answer questions"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "change_name": MessageLookupByLibrary.simpleMessage("Change name"),
+        "code_assistant_title":
+            MessageLookupByLibrary.simpleMessage("Code assistant"),
+        "code_helper_tips": MessageLookupByLibrary.simpleMessage(
+            "How do I make an HTTP request in java"),
         "input_message": MessageLookupByLibrary.simpleMessage("Input message"),
         "left_chance": m0,
+        "mode_completions":
+            MessageLookupByLibrary.simpleMessage("Chat completions"),
+        "mode_image_generation":
+            MessageLookupByLibrary.simpleMessage("Image generation"),
+        "mode_image_variation":
+            MessageLookupByLibrary.simpleMessage("Image variation"),
         "new_chat": MessageLookupByLibrary.simpleMessage("+ New Chat"),
         "new_conversation":
             MessageLookupByLibrary.simpleMessage("New conversation"),
         "no_chance_left": MessageLookupByLibrary.simpleMessage(
             "No chance left, watch a video or go to subscribe"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
+        "real_time_translate":
+            MessageLookupByLibrary.simpleMessage("Real time translate"),
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Select a picture"),
         "stop_generating":
             MessageLookupByLibrary.simpleMessage("Stop generating."),
         "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
+        "translate_tool_tips": MessageLookupByLibrary.simpleMessage(
+            "How to translate \"How are you\" into Chinese and Janpanese"),
+        "translate_tool_title":
+            MessageLookupByLibrary.simpleMessage("Translate tool"),
+        "usage": MessageLookupByLibrary.simpleMessage("Use"),
         "watch_video":
             MessageLookupByLibrary.simpleMessage("Watch video to gain chances")
       };

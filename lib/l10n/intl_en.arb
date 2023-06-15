@@ -10,5 +10,16 @@
   "subscription": "Subscription",
   "watch_video": "Watch video to gain chances",
   "select_picture": "Select a picture",
-  "no_chance_left": "No chance left, watch a video or go to subscribe"
+  "no_chance_left": "No chance left, watch a video or go to subscribe",
+  "answer_question_tips": "Explain quantum computing in simple terms",
+  "code_helper_tips": "How do I make an HTTP request in java",
+  "translate_tool_tips": "How to translate \"How are you\" into Chinese and Janpanese",
+  "answer_question_title": "Answer questions",
+  "code_assistant_title": "Code assistant",
+  "translate_tool_title": "Translate tool",
+  "mode_completions": "Chat completions",
+  "mode_image_generation": "Image generation",
+  "mode_image_variation": "Image variation",
+  "real_time_translate": "Real time translate",
+  "usage": "Use"
 }

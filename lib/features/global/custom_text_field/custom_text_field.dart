@@ -9,6 +9,7 @@ import 'package:flutter_chatgpt_clone/features/global/custom_text_field/crop_pag
 import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 typedef PromptTrigger = void Function(int type, {String? path});
 
@@ -27,49 +28,70 @@ class CustomTextField extends StatelessWidget {
       required this.textInputNotifier})
       : super(key: key);
 
-  List<PopupMenuItem<int>> getDropItems() {
+  List<PopupMenuItem<int>> getDropItems(BuildContext context) {
     return [
       PopupMenuItem(
           value: TYPE_CHAT,
-          child: getFeatureWidget(Icons.chat, "Chat completions")),
+          child: getFeatureWidget(
+              SvgPicture.asset("assets/images/mode_image_generation.svg"),
+              S.of(context).mode_completions)),
       PopupMenuItem(
           value: TYPE_IMAGE_GENERATION,
-          child: getFeatureWidget(Icons.photo, "Image generation")),
+          child: getFeatureWidget(
+              SvgPicture.asset("assets/images/mode_image_generation.svg"),
+              S.of(context).mode_image_generation)),
       PopupMenuItem(
           value: TYPE_IMAGE_VARIATION,
-          child: getFeatureWidget(Icons.generating_tokens, "Image variation"))
+          child: getFeatureWidget(
+              SvgPicture.asset("assets/images/mode_image_variation.svg"),
+              S.of(context).mode_image_variation)),
+      PopupMenuItem(
+          value: TYPE_REAL_TIME_TRANSLATE,
+          child: getFeatureWidget(
+              SvgPicture.asset("assets/images/real_time_translate.svg"),
+              S.of(context).real_time_translate))
     ];
   }
 
-  Widget getFeatureWidget(IconData icon, String title) {
+  Widget getFeatureWidget(Widget header, String title) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon),
+        header,
         SizedBox(
-          width: 8,
+          width: 4,
         ),
-        Text(title)
+        Text(
+          title,
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 14.sp),
+        )
       ],
     );
   }
 
   Widget getIcon(int type) {
-    Color color = Color(0xFF1DC338);
     if (type == TYPE_CHAT) {
-      return Icon(
-        Icons.chat,
-        color: color,
+      return SvgPicture.asset(
+        "assets/images/mode_image_generation.svg",
+        colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
       );
     } else if (type == TYPE_IMAGE_GENERATION) {
-      return Icon(
-        Icons.photo,
-        color: color,
+      return SvgPicture.asset(
+        "assets/images/mode_image_generation.svg",
+        colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
       );
     } else if (type == TYPE_IMAGE_VARIATION) {
-      return Icon(
-        Icons.generating_tokens,
-        color: color,
+      return SvgPicture.asset(
+        "assets/images/mode_image_variation.svg",
+        colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+      );
+    } else if (type == TYPE_REAL_TIME_TRANSLATE) {
+      return SvgPicture.asset(
+        "assets/images/real_time_translate.svg",
+        colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
       );
     } else {
       throw FlutterError("Unknown message type");
@@ -125,74 +147,74 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8.h, left: 16.w, right: 16.w),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFF6D2DF5), width: 2),
-            borderRadius: BorderRadius.circular(8.r),
-            color: Colors.white),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxHeight: 90,
-                    ),
-                    child: getTextField(isRequestProcessing),
-                  ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Container(
-                  height: 40.h,
-                  child: ValueListenableBuilder(
-                    valueListenable: inputMode,
-                    builder: (context, value, child) {
-                      return PopupMenuButton(
-                        position: PopupMenuPosition.over,
-                        initialValue: value,
-                        itemBuilder: (context) {
-                          return getDropItems();
-                        },
-                        onSelected: (value) {
-                          inputMode.value = value;
-                        },
-                        child: getIcon(value),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                isRequestProcessing
-                    ? SizedBox(height: 40.h, child: ConversationLoadingWidget())
-                    : ValueListenableBuilder(
-                        valueListenable: textInputNotifier,
-                        builder: ((context, value, child) {
-                          return InkWell(
-                            onTap: textEditingController.text.isEmpty ||
-                                    inputMode.value == TYPE_IMAGE_VARIATION
-                                ? null
-                                : () {
-                                    onTap?.call(inputMode.value);
-                                  },
-                            child: Icon(
-                              Icons.send,
-                              color: value.isEmpty
-                                  ? Color(0xFF1DC338).withOpacity(.4)
-                                  : Color(0xFF1DC338),
-                            ),
-                          );
-                        })),
-              ],
-            )
-          ],
-        ),
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: 90,
+              ),
+              child: getTextField(isRequestProcessing),
+            ),
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          Container(
+            height: 40.h,
+            child: ValueListenableBuilder(
+              valueListenable: inputMode,
+              builder: (context, value, child) {
+                return PopupMenuButton(
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.r))),
+                  color: Color(0xFF2F374C),
+                  position: PopupMenuPosition.over,
+                  initialValue: value,
+                  itemBuilder: (context) {
+                    return getDropItems(context);
+                  },
+                  onSelected: (value) {
+                    inputMode.value = value;
+                  },
+                  child: getIcon(value),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          isRequestProcessing
+              ? SizedBox(height: 40.h, child: ConversationLoadingWidget())
+              : ValueListenableBuilder(
+                  valueListenable: textInputNotifier,
+                  builder: ((context, value, child) {
+                    return Material(
+                      type: MaterialType.transparency,
+                      child: InkWell(
+                        onTap: textEditingController.text.isEmpty ||
+                                inputMode.value == TYPE_IMAGE_VARIATION
+                            ? null
+                            : () {
+                                onTap?.call(inputMode.value);
+                              },
+                        child: SvgPicture.asset(
+                          "assets/images/ic_send_message.svg",
+                          colorFilter: value.isNotEmpty
+                              ? ColorFilter.mode(
+                                  Color(0xFF298DFF), BlendMode.srcIn)
+                              : ColorFilter.mode(
+                                  Color(0xFF298DFF).withOpacity(.3),
+                                  BlendMode.srcIn),
+                        ),
+                      ),
+                    );
+                  })),
+        ],
       ),
     );
   }

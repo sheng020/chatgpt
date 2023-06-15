@@ -7,6 +7,7 @@ part 'chat_message_entity.g.dart';
 const TYPE_CHAT = 0;
 const TYPE_IMAGE_GENERATION = 1;
 const TYPE_IMAGE_VARIATION = 2;
+const TYPE_REAL_TIME_TRANSLATE = 3;
 
 @JsonSerializable()
 @Entity(tableName: 'message')
@@ -17,7 +18,6 @@ class ChatMessageEntity extends Equatable {
   final String? queryPrompt;
   final String? promptResponse;
   final int? date;
-  final int? conversationId;
   final int type;
 
   ChatMessageEntity(
@@ -25,13 +25,12 @@ class ChatMessageEntity extends Equatable {
       this.messageId,
       this.queryPrompt,
       this.promptResponse,
-      this.conversationId,
       this.date,
       required this.type});
 
   @override
   List<Object?> get props =>
-      [this.id, messageId, queryPrompt, promptResponse, conversationId, date];
+      [this.id, messageId, queryPrompt, promptResponse, date];
 
   factory ChatMessageEntity.fromJson(Map<String, dynamic> json) =>
       _$ChatMessageEntityFromJson(json);

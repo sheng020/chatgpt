@@ -169,6 +169,116 @@ class S {
       args: [],
     );
   }
+
+  /// `Explain quantum computing in simple terms`
+  String get answer_question_tips {
+    return Intl.message(
+      'Explain quantum computing in simple terms',
+      name: 'answer_question_tips',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How do I make an HTTP request in java`
+  String get code_helper_tips {
+    return Intl.message(
+      'How do I make an HTTP request in java',
+      name: 'code_helper_tips',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How to translate "How are you" into Chinese and Janpanese`
+  String get translate_tool_tips {
+    return Intl.message(
+      'How to translate "How are you" into Chinese and Janpanese',
+      name: 'translate_tool_tips',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Answer questions`
+  String get answer_question_title {
+    return Intl.message(
+      'Answer questions',
+      name: 'answer_question_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code assistant`
+  String get code_assistant_title {
+    return Intl.message(
+      'Code assistant',
+      name: 'code_assistant_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Translate tool`
+  String get translate_tool_title {
+    return Intl.message(
+      'Translate tool',
+      name: 'translate_tool_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chat completions`
+  String get mode_completions {
+    return Intl.message(
+      'Chat completions',
+      name: 'mode_completions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image generation`
+  String get mode_image_generation {
+    return Intl.message(
+      'Image generation',
+      name: 'mode_image_generation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image variation`
+  String get mode_image_variation {
+    return Intl.message(
+      'Image variation',
+      name: 'mode_image_variation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Real time translate`
+  String get real_time_translate {
+    return Intl.message(
+      'Real time translate',
+      name: 'real_time_translate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use`
+  String get usage {
+    return Intl.message(
+      'Use',
+      name: 'usage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -15,20 +15,17 @@ class ChatConversationLoading extends ChatConversationState {
 }
 
 class ChatConversationLoaded extends ChatConversationState {
-  final Map<int, List<ChatMessageEntity>> chatMessages;
-  final int showConversationId;
+  final List<ChatMessageEntity> chatMessages;
   final DateTime dateTime = DateTime.now();
   final bool isRequestProcessing;
 
   ChatConversationLoaded(
-      {required this.chatMessages,
-      required this.showConversationId,
-      required this.isRequestProcessing});
+      {required this.chatMessages, required this.isRequestProcessing});
   @override
-  List<Object> get props => [chatMessages, showConversationId, dateTime];
+  List<Object> get props => [chatMessages, dateTime];
 
   List<ChatMessageEntity>? getShowMessageList() {
-    return chatMessages[showConversationId];
+    return chatMessages;
   }
 }
 
@@ -52,17 +49,16 @@ class FloatingActionState extends ChatConversationState {
 
 class NotifyTextFieldState extends ChatConversationState {
   final String message;
-  final int selectedConversationId;
   final bool isRequestProcessing;
+  String? translation;
 
   NotifyTextFieldState(
-      {required this.selectedConversationId,
-      required this.message,
-      required this.isRequestProcessing});
+      {required this.message,
+      required this.isRequestProcessing,
+      this.translation});
 
   @override
-  List<Object?> get props =>
-      [selectedConversationId, message, isRequestProcessing];
+  List<Object?> get props => [message, isRequestProcessing, translation];
 }
 
 class ConversationLeftCount extends ChatConversationState {

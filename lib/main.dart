@@ -9,6 +9,7 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conv
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_user_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/conversation_page.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/discounts_page.dart';
 import 'package:flutter_chatgpt_clone/injection_container.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -71,13 +72,17 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MaterialApp(
             title: 'Hi GPT',
-            theme: ThemeData(brightness: Brightness.light),
+            theme: ThemeData(
+                brightness: Brightness.light, primaryColor: Color(0xFF283046)),
             initialRoute: '/',
             //debugShowCheckedModeBanner: false,
             onGenerateRoute: OnGenerateRoute.route,
             routes: {
               "/": (context) {
                 return ConversationPage();
+              },
+              "/discounts": (context) {
+                return DiscountsPage();
               }
 
               // add dark and light theme.
