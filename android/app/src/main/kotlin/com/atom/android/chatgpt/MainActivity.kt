@@ -4,8 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.util.SparseArray
 import com.atom.android.chatgpt.ad.OnShowAdStartListener
+import com.atom.billing.YEARLY
+import com.atom.billing.findSubscriptionOfferByTag
 import com.atom.mediator.MediatorService
 import com.atom.mediator.billing.SubscriptionService
 import com.atom.mediator.billing.isSubscriptionUser
@@ -14,8 +17,11 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainActivity: FlutterActivity(), MethodChannel.MethodCallHandler {
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
     companion object {
         const val REQUEST_SUBSCRIBE_ACTIVITY = 1003
@@ -47,15 +53,18 @@ class MainActivity: FlutterActivity(), MethodChannel.MethodCallHandler {
                 val isPurchase = mSubscriptionService.isPurchased()
                 result.success(isPurchase)
             }
+
             "open_subscription_page" -> {
                 mSubscriptionService.openSubscriptionActivity(this, REQUEST_SUBSCRIBE_ACTIVITY)
                 //result.success(null)
                 sparseArray.put(REQUEST_SUBSCRIBE_ACTIVITY, result)
             }
+
             "load_reward_ad" -> {
                 (application as App).loadRewardAd()
                 result.success(null)
             }
+
             "show_reward_ad" -> {
                 (application as App).showRewardAd(this, object : OnShowAdStartListener {
                     override fun nextStepTrigger(rewarded: Boolean) {
@@ -64,19 +73,43 @@ class MainActivity: FlutterActivity(), MethodChannel.MethodCallHandler {
 
                     override fun showAtOnce() {
                         //second try
-                        (application as App).showRewardAd(this@MainActivity, object : OnShowAdStartListener {
-                            override fun nextStepTrigger(rewarded: Boolean) {
-                                result.success(rewarded)
-                            }
+                        (application as App).showRewardAd(
+                            this@MainActivity,
+                            object : OnShowAdStartListener {
+                                override fun nextStepTrigger(rewarded: Boolean) {
+                                    result.success(rewarded)
+                                }
 
-                            override fun showAtOnce() {
-                                //do nothing
-                            }
+                                override fun showAtOnce() {
+                                    //do nothing
+                                }
 
-                        })
+                            })
                     }
 
                 })
+            }
+
+            "get_yearly_price" -> {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val offerDetails =
+                        mSubscriptionService.getProducts()?.findSubscriptionOfferByTag(YEARLY)
+                    val priceDetail = offerDetails?.pricingPhases?.pricingPhaseList?.filter {
+                        it.priceAmountMicros != 0L
+                    }?.firstOrNull()
+                    Log.d("cjslog", "price detail:${priceDetail}")
+                    if (priceDetail == null) {
+                        result.success(null)
+                    } else {
+                        result.success(
+                            mapOf(
+                                "priceCurrencyCode" to priceDetail.priceCurrencyCode,
+                                "priceAmountMicros" to priceDetail.priceAmountMicros
+                            )
+                        )
+
+                    }
+                }
             }
         }
     }

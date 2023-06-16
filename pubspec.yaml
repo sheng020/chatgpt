@@ -66,6 +66,7 @@ dependencies:
   retrofit: ^4.0.1
   dio: ^5.1.2
   google_mlkit_language_id: ^0.7.0
+  webview_flutter: ^4.0.7
 
 dev_dependencies:
   flutter_test:

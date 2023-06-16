@@ -28,4 +28,23 @@ class NativeChannel {
   static Future<bool?> showRewardAd() {
     return _channel.invokeMethod("show_reward_ad");
   }
+
+  static Future<YearlyPrice?> getYearlyPrice() {
+    return _channel.invokeMethod("get_yearly_price").then((value) {
+      if (value == null) {
+        return null;
+      } else {
+        String currency = value['priceCurrencyCode'];
+        int amount = value['priceAmountMicros'];
+        return YearlyPrice(currency: currency, amount: amount);
+      }
+    });
+  }
+}
+
+class YearlyPrice {
+  final String currency;
+  final int amount;
+
+  YearlyPrice({required this.currency, required this.amount});
 }

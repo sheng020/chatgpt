@@ -22,18 +22,26 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(count) => "${count} chance left. Go subscription for more";
 
+  static String m1(count) => "${count} trail opportunities remaining";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "answer_question_tips": MessageLookupByLibrary.simpleMessage(
             "Explain quantum computing in simple terms"),
         "answer_question_title":
             MessageLookupByLibrary.simpleMessage("Answer questions"),
+        "as_low_as": MessageLookupByLibrary.simpleMessage("As low as"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "cancel_any_time":
+            MessageLookupByLibrary.simpleMessage("Cancel any time"),
         "change_name": MessageLookupByLibrary.simpleMessage("Change name"),
         "code_assistant_title":
             MessageLookupByLibrary.simpleMessage("Code assistant"),
         "code_helper_tips": MessageLookupByLibrary.simpleMessage(
             "How do I make an HTTP request in java"),
+        "daily": MessageLookupByLibrary.simpleMessage("daily"),
+        "gpt_4_models":
+            MessageLookupByLibrary.simpleMessage("Faster GPT-4 models"),
         "input_message": MessageLookupByLibrary.simpleMessage("Input message"),
         "left_chance": m0,
         "mode_completions":
@@ -45,22 +53,40 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_chat": MessageLookupByLibrary.simpleMessage("+ New Chat"),
         "new_conversation":
             MessageLookupByLibrary.simpleMessage("New conversation"),
+        "no_back_history":
+            MessageLookupByLibrary.simpleMessage("No back history item"),
         "no_chance_left": MessageLookupByLibrary.simpleMessage(
             "No chance left, watch a video or go to subscribe"),
+        "no_forward_history":
+            MessageLookupByLibrary.simpleMessage("No forward history item"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
+        "opportunitie_remaining": m1,
+        "privacy_policy":
+            MessageLookupByLibrary.simpleMessage("Privacy policy"),
         "real_time_translate":
             MessageLookupByLibrary.simpleMessage("Real time translate"),
+        "remove_ads": MessageLookupByLibrary.simpleMessage("Remove Ads"),
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Select a picture"),
+        "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "special_offers":
+            MessageLookupByLibrary.simpleMessage("Special offers"),
+        "start_free_trial":
+            MessageLookupByLibrary.simpleMessage("Start free trial"),
         "stop_generating":
             MessageLookupByLibrary.simpleMessage("Stop generating."),
         "subscription": MessageLookupByLibrary.simpleMessage("Subscription"),
+        "support_multilingual_gpt": MessageLookupByLibrary.simpleMessage(
+            "Support for multilingual GPT"),
         "translate_tool_tips": MessageLookupByLibrary.simpleMessage(
             "How to translate \"How are you\" into Chinese and Janpanese"),
         "translate_tool_title":
             MessageLookupByLibrary.simpleMessage("Translate tool"),
+        "unlimited_quick_translation":
+            MessageLookupByLibrary.simpleMessage("Unlimited quick translation"),
         "usage": MessageLookupByLibrary.simpleMessage("Use"),
         "watch_video":
-            MessageLookupByLibrary.simpleMessage("Watch video to gain chances")
+            MessageLookupByLibrary.simpleMessage("Watch video to gain chances"),
+        "yearly": MessageLookupByLibrary.simpleMessage("Yearly")
       };
 }

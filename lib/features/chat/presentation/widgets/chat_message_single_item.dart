@@ -293,26 +293,18 @@ class ChatMessageSingleItem extends StatelessWidget {
       );
     } else if (chatMessage.messageId == ChatGptConst.AIBot) {
       return Container(
+        margin: EdgeInsets.only(bottom: 8.h),
         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
+        color: Color(0xFF298DFF),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                    height: 16.r,
-                    width: 16.r,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.r),
-                        child: Container(
-                          color: Color(0xFF1DC338),
-                        ))),
+                SvgPicture.asset("assets/images/ic_robot_header.svg"),
                 SizedBox(
-                  width: 12.w,
+                  width: 8.w,
                 ),
                 Expanded(
                   child: Container(
@@ -354,20 +346,15 @@ class ChatMessageSingleItem extends StatelessWidget {
       );
     } else {
       return Container(
+        margin: EdgeInsets.only(top: 8.h),
+        color: Colors.white,
         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-                height: 16.r,
-                width: 16.r,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.r),
-                    child: Container(
-                      color: Color(0xFF6D2DF5),
-                    ))),
+            SvgPicture.asset("assets/images/ic_user_header.svg"),
             SizedBox(
-              width: 16.w,
+              width: 8.w,
             ),
             Expanded(
               child: Container(

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>mdpi/编组 7</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="首页备份" transform="translate(-139.000000, -502.000000)">
+            <g id="编组-4" transform="translate(0.000000, 490.000000)">
+                <g id="编组-3-+-编组-6-+-编组-3备份-+-编组-3备份-2-蒙版" transform="translate(127.000000, 0.000000)">
+                    <g id="编组-7" transform="translate(12.000000, 12.000000)">
+                        <rect id="矩形" x="0" y="0" width="24" height="24"></rect>
+                        <g id="文本翻译" transform="translate(3.000000, 3.000000)" stroke="#FFFFFF">
+                            <path d="M14.3936132,1.1 C15.0789572,1.1 15.6974122,1.39714489 16.1464471,1.86815323 C16.6140682,2.35865741 16.9,3.03689094 16.9,3.78286498 L16.9,3.78286498 L16.9,14.217135 C16.9,14.9631091 16.6140682,15.6413426 16.1464471,16.1318468 C15.6974122,16.6028551 15.0789572,16.9 14.3936132,16.9 L14.3936132,16.9 L3.60602997,16.9 C2.92083526,16.9 2.30248134,16.6028368 1.85350643,16.1318448 C1.38592702,15.6413359 1.1,14.9631056 1.1,14.217135 L1.1,14.217135 L1.1,3.78286498 C1.1,3.03689614 1.38592465,2.35866749 1.85348318,1.86815623 C2.30242811,1.39717232 2.92073149,1.1 3.60585157,1.1 L3.60585157,1.1 Z" id="形状" stroke-width="2.2"></path>
+                            <line x1="5" y1="6.5" x2="13" y2="6.5" id="路径-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line>
+                            <line x1="9.04596257" y1="7.04340111" x2="9.04596257" y2="12.5697171" id="路径-4备份" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></line>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

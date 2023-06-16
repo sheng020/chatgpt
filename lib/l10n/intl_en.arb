@@ -21,5 +21,20 @@
   "mode_image_generation": "Image generation",
   "mode_image_variation": "Image variation",
   "real_time_translate": "Real time translate",
-  "usage": "Use"
+  "usage": "Use",
+  "opportunitie_remaining": "{count} trail opportunities remaining",
+  "special_offers": "Special offers",
+  "remove_ads": "Remove Ads",
+  "gpt_4_models": "Faster GPT-4 models",
+  "unlimited_quick_translation": "Unlimited quick translation",
+  "support_multilingual_gpt": "Support for multilingual GPT",
+  "yearly": "Yearly",
+  "as_low_as": "As low as",
+  "daily": "daily",
+  "cancel_any_time": "Cancel any time",
+  "start_free_trial": "Start free trial",
+  "privacy_policy": "Privacy policy",
+  "no_back_history": "No back history item",
+  "no_forward_history": "No forward history item",
+  "settings": "Settings"
 }

@@ -279,6 +279,156 @@ class S {
       args: [],
     );
   }
+
+  /// `{count} trail opportunities remaining`
+  String opportunitie_remaining(Object count) {
+    return Intl.message(
+      '$count trail opportunities remaining',
+      name: 'opportunitie_remaining',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Special offers`
+  String get special_offers {
+    return Intl.message(
+      'Special offers',
+      name: 'special_offers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove Ads`
+  String get remove_ads {
+    return Intl.message(
+      'Remove Ads',
+      name: 'remove_ads',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Faster GPT-4 models`
+  String get gpt_4_models {
+    return Intl.message(
+      'Faster GPT-4 models',
+      name: 'gpt_4_models',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlimited quick translation`
+  String get unlimited_quick_translation {
+    return Intl.message(
+      'Unlimited quick translation',
+      name: 'unlimited_quick_translation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support for multilingual GPT`
+  String get support_multilingual_gpt {
+    return Intl.message(
+      'Support for multilingual GPT',
+      name: 'support_multilingual_gpt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yearly`
+  String get yearly {
+    return Intl.message(
+      'Yearly',
+      name: 'yearly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `As low as`
+  String get as_low_as {
+    return Intl.message(
+      'As low as',
+      name: 'as_low_as',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `daily`
+  String get daily {
+    return Intl.message(
+      'daily',
+      name: 'daily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel any time`
+  String get cancel_any_time {
+    return Intl.message(
+      'Cancel any time',
+      name: 'cancel_any_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start free trial`
+  String get start_free_trial {
+    return Intl.message(
+      'Start free trial',
+      name: 'start_free_trial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Privacy policy`
+  String get privacy_policy {
+    return Intl.message(
+      'Privacy policy',
+      name: 'privacy_policy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No back history item`
+  String get no_back_history {
+    return Intl.message(
+      'No back history item',
+      name: 'no_back_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No forward history item`
+  String get no_forward_history {
+    return Intl.message(
+      'No forward history item',
+      name: 'no_forward_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get settings {
+    return Intl.message(
+      'Settings',
+      name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -240,6 +240,7 @@ class OpenAINetworkingClient {
             close();
           },
           onError: (error, stackTrace) {
+            print("post error");
             if (!controller.isClosed) {
               controller.addError(error, stackTrace);
             }

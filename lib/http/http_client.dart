@@ -11,6 +11,9 @@ const APP_KEY = "ce16cb3b7a24";
 const PACKAGE_NAME = " com.atom.android.chatgpt";
 const String TOKEN_CHARACTER =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const String serverApiKey = "9644b3f644474eada3d75657cd690e57";
+const String serverSecret = "05ba1e0b-18a9-431b-b2a6-49c0dfdb73da";
+const String languageTag = "zh";
 
 class HttpClient {
   static HttpClient? _instance;
@@ -49,9 +52,16 @@ class HttpClient {
   }
 }
 
+//val randomKey = "${serverAppKey}&$toLangCode&$timeStamp&${serverSecret}&$random"
+
 String generateSignature(int time, String token) {
-  var bytes = utf8.encode("$APP_KEY$time$token");
-  var digest = sha1.convert(bytes);
+  var bytes =
+      utf8.encode("${APP_KEY}&${languageTag}&$time&$serverSecret&$token");
+
+  /* bytes = utf8.encode(
+      "ce16cb3b7a24&zh&1686807585&05ba1e0b-18a9-431b-b2a6-49c0dfdb73da&nmNU"); */
+  var digest = md5.convert(bytes);
+  print("dist:${digest.toString()}");
   return digest.toString();
 }
 

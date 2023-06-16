@@ -4,12 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_loading_widget.dart';
-import 'package:flutter_chatgpt_clone/features/global/const/constants.dart';
-import 'package:flutter_chatgpt_clone/features/global/custom_text_field/crop_page.dart';
-import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'crop_page.dart';
 
 typedef PromptTrigger = void Function(int type, {String? path});
 
@@ -33,27 +32,38 @@ class CustomTextField extends StatelessWidget {
       PopupMenuItem(
           value: TYPE_CHAT,
           child: getFeatureWidget(
-              SvgPicture.asset("assets/images/mode_image_generation.svg"),
-              S.of(context).mode_completions)),
+              header: SvgPicture.asset("assets/images/ic_text_completion.svg"),
+              title: S.of(context).mode_completions,
+              tail: SizedBox.shrink())),
       PopupMenuItem(
           value: TYPE_IMAGE_GENERATION,
           child: getFeatureWidget(
-              SvgPicture.asset("assets/images/mode_image_generation.svg"),
-              S.of(context).mode_image_generation)),
+              header:
+                  SvgPicture.asset("assets/images/mode_image_generation.svg"),
+              title: S.of(context).mode_image_generation,
+              tail: getVipWidget())),
       PopupMenuItem(
           value: TYPE_IMAGE_VARIATION,
           child: getFeatureWidget(
-              SvgPicture.asset("assets/images/mode_image_variation.svg"),
-              S.of(context).mode_image_variation)),
+              header:
+                  SvgPicture.asset("assets/images/mode_image_variation.svg"),
+              title: S.of(context).mode_image_variation,
+              tail: getVipWidget())),
       PopupMenuItem(
           value: TYPE_REAL_TIME_TRANSLATE,
           child: getFeatureWidget(
-              SvgPicture.asset("assets/images/real_time_translate.svg"),
-              S.of(context).real_time_translate))
+              header: SvgPicture.asset("assets/images/real_time_translate.svg"),
+              title: S.of(context).real_time_translate,
+              tail: getVipWidget()))
     ];
   }
 
-  Widget getFeatureWidget(Widget header, String title) {
+  Widget getVipWidget() {
+    return SvgPicture.asset("assets/images/ic_feature_vip.svg");
+  }
+
+  Widget getFeatureWidget(
+      {required Widget header, required String title, required Widget tail}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -67,7 +77,11 @@ class CustomTextField extends StatelessWidget {
               color: Colors.white,
               fontWeight: FontWeight.w500,
               fontSize: 14.sp),
-        )
+        ),
+        SizedBox(
+          width: 8.w,
+        ),
+        tail
       ],
     );
   }
@@ -75,7 +89,7 @@ class CustomTextField extends StatelessWidget {
   Widget getIcon(int type) {
     if (type == TYPE_CHAT) {
       return SvgPicture.asset(
-        "assets/images/mode_image_generation.svg",
+        "assets/images/ic_text_completion.svg",
         colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
       );
     } else if (type == TYPE_IMAGE_GENERATION) {
@@ -103,25 +117,30 @@ class CustomTextField extends StatelessWidget {
       valueListenable: inputMode,
       builder: (context, value, child) {
         if (value == TYPE_IMAGE_VARIATION) {
-          return InkWell(
-            onTap: () async {
-              FilePickerResult? result =
-                  await FilePicker.platform.pickFiles(type: FileType.image);
-              if (result != null) {
-                //File file = File(result.files.single.path!);
-                //print("result:${result.files.single.path}");
-                var image = await Navigator.of(context).push(
-                  MaterialPageRoute<String?>(
-                    builder: (BuildContext context) =>
-                        CropPage(filePath: result.files.single.path!),
-                  ),
-                );
-                onTap?.call(TYPE_IMAGE_VARIATION, path: image);
-              }
-            },
-            child: Text(
-              S.of(context).select_picture,
-              style: TextStyle(color: Colors.white),
+          return Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: () async {
+                FilePickerResult? result =
+                    await FilePicker.platform.pickFiles(type: FileType.image);
+                if (result != null) {
+                  //File file = File(result.files.single.path!);
+                  //print("result:${result.files.single.path}");
+                  var image = await Navigator.of(context).push(
+                    MaterialPageRoute<String?>(
+                      builder: (BuildContext context) =>
+                          CropPage(filePath: result.files.single.path!),
+                    ),
+                  );
+                  onTap?.call(TYPE_IMAGE_VARIATION, path: image);
+                }
+              },
+              child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  child: Text(
+                    S.of(context).select_picture,
+                    style: TextStyle(color: Colors.black),
+                  )),
             ),
           );
         } else {

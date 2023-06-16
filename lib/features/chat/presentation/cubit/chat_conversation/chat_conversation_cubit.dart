@@ -45,7 +45,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
   }
 
   void startRealTimeTranslate(String text) async {
-    print("start real time translate");
+    if (text.isEmpty) return;
     final languageIdentifier = LanguageIdentifier(confidenceThreshold: 0.7);
 
     final List<IdentifiedLanguage> possibleLanguages =

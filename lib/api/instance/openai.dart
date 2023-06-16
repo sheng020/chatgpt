@@ -57,7 +57,7 @@ class OpenAI extends OpenAIClientBase {
 
   static ChatModel _model = ChatModel.GPT_3_5_TURBO;
 
-  static ChatModel get chatModel => _model;
+  static ChatModel get chatModel => _model;123
 
   static set chatModel(ChatModel chatModel) {
     _model = chatModel;

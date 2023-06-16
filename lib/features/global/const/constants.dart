@@ -6,6 +6,8 @@ const NEW_USER = "new_user";
 
 const DEFAULT_LEFT_COUNT = 3;
 
+const PRIVACY_URL = "https://atominfo.tech/higpt-privacy-policy.html";
+
 bool isNewUser() {
   return box.read(NEW_USER) ?? true;
 }

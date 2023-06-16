@@ -12,7 +12,7 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/stop_ge
 import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/constants.dart';
-import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
+import 'package:flutter_chatgpt_clone/features/global/input/custom_text_field.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,7 +41,7 @@ class _ConversationPageState extends State<ConversationPage> {
         axis: Axis.vertical);
     Future.microtask(() async {
       if (isNewUser()) {
-        Navigator.of(context).pushNamed("/discounts");
+        await Navigator.of(context).pushNamed("/discounts");
       }
       await BlocProvider.of<ChatConversationCubit>(context).initMessageList();
       /* Future.delayed(Duration(milliseconds: 500), () {
@@ -94,15 +94,70 @@ class _ConversationPageState extends State<ConversationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0,
-        leading: Text("HiGPT"),
-      ),
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
           child: Column(
         children: [
+          SizedBox(
+            height: 8.h,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 24.w,
+              ),
+              SvgPicture.asset("assets/images/ic_logo.svg"),
+              SizedBox(
+                width: 4.w,
+              ),
+              BlocBuilder<PurchaseCubit, PurchaseState>(
+                  builder: (context, purchaseState) {
+                if (purchaseState.isPurchased) {
+                  return Row(
+                    children: [
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      SvgPicture.asset("assets/images/ic_vip_logo.svg")
+                    ],
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              }),
+              Spacer(),
+              BlocBuilder<PurchaseCubit, PurchaseState>(
+                  builder: (context, purchaseState) {
+                if (purchaseState.isPurchased) {
+                  return SizedBox.shrink();
+                } else {
+                  return InkWell(
+                    onTap: () {
+                      BlocProvider.of<PurchaseCubit>(context)
+                          .openSubscriptionPage();
+                    },
+                    child: Image.asset(
+                      "assets/images/ic_vip_entrance.png",
+                      width: 54.w,
+                      height: 24.h,
+                    ),
+                  );
+                }
+              }),
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("/settings");
+                  },
+                  icon: Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                  ))
+            ],
+          ),
+          SizedBox(
+            height: 12.h,
+          ),
           Expanded(
             child: BlocBuilder<ChatConversationCubit, ChatConversationState>(
                 buildWhen: (previous, current) =>
@@ -150,6 +205,36 @@ class _ConversationPageState extends State<ConversationPage> {
                   );
                 }),
           ),
+          BlocBuilder<PurchaseCubit, PurchaseState>(
+              builder: (context, purchaseState) {
+            if (purchaseState.isPurchased) {
+              return SizedBox.shrink();
+            } else {
+              return BlocBuilder<ChatConversationCubit, ChatConversationState>(
+                builder: (context, leftCountState) {
+                  if (leftCountState is ConversationLeftCount) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      child: Text(
+                        S
+                            .of(context)
+                            .opportunitie_remaining(leftCountState.leftCount),
+                        style: TextStyle(
+                            color: Color(0xFF21D8E8),
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
+                buildWhen: (previous, current) {
+                  return current is ConversationLeftCount;
+                },
+              );
+            }
+          }),
           BlocBuilder<ChatConversationCubit, ChatConversationState>(
             buildWhen: (previous, current) => current is NotifyTextFieldState,
             builder: (context, chatConversationState) {
@@ -173,6 +258,14 @@ class _ConversationPageState extends State<ConversationPage> {
                                 height: 48.h,
                                 color: Color(0xFF3A4154),
                                 child: Row(children: [
+                                  SizedBox(
+                                    width: 12.w,
+                                  ),
+                                  SvgPicture.asset(
+                                      "assets/images/ic_translate_logo.svg"),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
                                   Expanded(
                                       child: Text(
                                     chatConversationState.translation!,
@@ -284,8 +377,8 @@ class _ConversationPageState extends State<ConversationPage> {
       ),
       floatingActionButtonLocation: CustomStandardFabLocation(
           location: FloatingActionButtonLocation.endDocked,
-          offsetX: -32,
-          offsetY: -128),
+          offsetX: -16,
+          offsetY: -120),
     );
   }
 

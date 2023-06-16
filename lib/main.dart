@@ -10,6 +10,8 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conv
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/conversation_page.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/discounts_page.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/settings_page.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/pages/webview_page.dart';
 import 'package:flutter_chatgpt_clone/injection_container.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,11 +40,11 @@ void main() async {
   if (apiKey == null || apiKey.isEmpty) {
     apiKey = DEFAULT_KEY;
   }
-  String? serverAddress = box.read(SERVER_ADDRESS);
+  /* String? serverAddress = box.read(SERVER_ADDRESS);
   if (serverAddress == null || serverAddress.isEmpty) {
     serverAddress = DEFAULT_SERVER;
-  }
-  OpenAI.baseUrl = serverAddress;
+  } */
+  OpenAI.baseUrl = DEFAULT_SERVER;
   OpenAI.apiKey = apiKey;
 
   /* String modelName = box.read(CHAT_MODEL) ?? ChatModel.GPT_3_5_TURBO.name;
@@ -83,6 +85,12 @@ class MyApp extends StatelessWidget {
               },
               "/discounts": (context) {
                 return DiscountsPage();
+              },
+              "/webview": (context) {
+                return WebViewPage();
+              },
+              "/settings": (context) {
+                return SettingsPage();
               }
 
               // add dark and light theme.
