@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">Pata ufikiaji wa Toleo la Pro</string>
+
+    <string name="purchase_price_loading">Bei ya upakiaji…</string>
+    <string name="try_subscribe_for_free">Anza jaribio la bure</string>
+    <string name="subscription_description_text">Siku ya 7 ya majaribio ya bure. Kusasisha kiotomatiki kwa %1$s/%2$s, hiari, ghairi wakati wowote.</string>
+
+    <string name="no_ads">Ondoa Matangazo</string>
+    <string name="faster_gpt4_support">Mfano wa haraka wa GPT-4</string>
+    <string name="unlimited_quick_translate">Tafsiri ya haraka isiyo na kikomo</string>
+    <string name="support_multi_gpt">Msaada kwa GPT ya lugha nyingi</string>
+    <string name="month">Mwezi</string>
+    <string name="months">Miezi</string>
+    <string name="days">Siku</string>
+    <string name="year">Mwaka</string>
+    <string name="purchase_obtain_fail">Hali ya usajili inathibitisha imeshindwa, tafadhali angalia kwenye Google Play</string>
+</resources>

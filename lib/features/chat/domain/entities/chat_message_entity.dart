@@ -16,7 +16,7 @@ class ChatMessageEntity extends Equatable {
   int? id;
   final String? messageId;
   final String? queryPrompt;
-  final String? promptResponse;
+  String? promptResponse;
   final int? date;
   final int type;
 

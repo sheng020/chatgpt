@@ -68,3 +68,13 @@ class ConversationLeftCount extends ChatConversationState {
   @override
   List<Object?> get props => [leftCount];
 }
+
+class TranslateStatus extends ChatConversationState {
+  final bool requesting;
+  final int id;
+
+  TranslateStatus({required this.requesting, required this.id});
+
+  @override
+  List<Object?> get props => [requesting, id];
+}

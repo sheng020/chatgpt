@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">Dapatkan akses kepada Pro Edition</string>
+
+    <string name="purchase_price_loading">Memuatkan harga…</string>
+    <string name="try_subscribe_for_free">Mulakan percubaan percuma</string>
+    <string name="subscription_description_text">Percubaan percuma 7 hari. Perbaharui automatik pada %1$s/%2$s, pilihan, batal pada bila-bila masa.</string>
+
+    <string name="no_ads">Alih Keluar Iklan</string>
+    <string name="faster_gpt4_support">Model GPT-4 yang lebih pantas</string>
+    <string name="unlimited_quick_translate">Terjemahan pantas tanpa had</string>
+    <string name="support_multi_gpt">Sokongan untuk GPT berbilang bahasa</string>
+    <string name="month">Bulan</string>
+    <string name="months">Bulan</string>
+    <string name="days">Hari</string>
+    <string name="year">Tahun</string>
+    <string name="purchase_obtain_fail">Status langganan mengesahkan gagal, sila semak di google play</string>
+</resources>

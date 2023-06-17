@@ -44,34 +44,45 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         message: message, isRequestProcessing: isRequestProcessing));
   }
 
-  void startRealTimeTranslate(String text) async {
+  void startRealTimeTranslate(String text, {int? id}) async {
     if (text.isEmpty) return;
     final languageIdentifier = LanguageIdentifier(confidenceThreshold: 0.7);
 
     final List<IdentifiedLanguage> possibleLanguages =
         await languageIdentifier.identifyPossibleLanguages(text);
     var detectedLanguage = possibleLanguages.firstOrNull;
-    var sourceLanguage = "en";
-    if (detectedLanguage != null) {
-      sourceLanguage = detectedLanguage.languageTag;
+    var targetLanguage = "en";
+
+    //默认翻译成en，如果原文检查到是en，翻译成系统语言
+    if (detectedLanguage != null &&
+        detectedLanguage.languageTag.startsWith("en")) {
+      targetLanguage = PlatformDispatcher.instance.locale.languageCode;
     }
 
-    HttpClient.getInstance()
-        .requestDictionary(
-            from: sourceLanguage,
-            str: text,
-            to: PlatformDispatcher.instance.locale.languageCode,
-            sendTime: DateTime.now().millisecondsSinceEpoch)
-        .then((value) {
-      emit(NotifyTextFieldState(
-          message: text,
-          isRequestProcessing: false,
-          translation: value.data.translated));
-      print("translate:${value.data.translated}");
+    if (id != null) {
+      emit(TranslateStatus(id: id, requesting: true));
+    }
+
+    HttpClient.getInstance().translate(
+      texts: [text],
+      to: targetLanguage,
+    ).then((value) {
+      if (id == null) {
+        emit(NotifyTextFieldState(
+            message: text,
+            isRequestProcessing: false,
+            translation: value.result.texts.firstOrNull));
+      } else {
+        emit(TranslateStatus(id: id, requesting: false));
+        var message = _conversations.firstWhere((element) => element.id == id);
+        message.promptResponse = value.result.texts.firstOrNull;
+        emit(ChatConversationLoaded(
+            chatMessages: _conversations, isRequestProcessing: false));
+      }
     }).catchError((e) {
       print(e);
     });
-    languageIdentifier.close();
+    //languageIdentifier.close();
   }
 
   //List<ChatMessageEntity> _chatMessages = [];

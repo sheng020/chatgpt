@@ -329,10 +329,99 @@ class _ConversationPageState extends State<ConversationPage> {
                         var leftCount = getLeftCount();
                         var isPurchased = await NativeChannel.isPurchased();
                         if (leftCount <= 0 && !isPurchased) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          /* ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(S.of(context).no_chance_left),
                             duration: Duration(seconds: 2),
-                          ));
+                          )); */
+                          showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(24.r),
+                                  topRight: Radius.circular(24.r)),
+                            ),
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return Wrap(children: <Widget>[
+                                Container(
+                                  child: Container(
+                                    decoration: new BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: new BorderRadius.only(
+                                            topLeft: Radius.circular(24.r),
+                                            topRight: Radius.circular(24.r))),
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                            "assets/images/ic_vip_dialog_header.png"),
+                                        getVipFeature(S.of(context).remove_ads),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        getVipFeature(
+                                            S.of(context).gpt_4_models),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        getVipFeature(S
+                                            .of(context)
+                                            .unlimited_quick_translation),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        getVipFeature(S
+                                            .of(context)
+                                            .support_multilingual_gpt),
+                                        SizedBox(
+                                          height: 24.h,
+                                        ),
+                                        TextButton(
+                                            style: TextButton.styleFrom(
+                                                minimumSize: Size(312.w, 54.h),
+                                                backgroundColor:
+                                                    Color(0xFF298DFF)),
+                                            onPressed: () {
+                                              NativeChannel
+                                                  .openSubscriptionPage();
+                                            },
+                                            child: Text(
+                                              S.of(context).start_free_trial,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16.sp),
+                                            )),
+                                        SizedBox(
+                                          height: 12.h,
+                                        ),
+                                        TextButton(
+                                            style: TextButton.styleFrom(
+                                                minimumSize: Size(312.w, 54.h),
+                                                backgroundColor:
+                                                    Color(0xFFF5FAFF)),
+                                            onPressed: () {
+                                              BlocProvider.of<
+                                                          ChatConversationCubit>(
+                                                      context)
+                                                  .startShowRewardAd();
+                                            },
+                                            child: Text(
+                                              S.of(context).watch_video,
+                                              style: TextStyle(
+                                                  color: Color(0xFF3259B4),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16.sp),
+                                            )),
+                                        SizedBox(
+                                          height: 24.h,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ]);
+                            },
+                          );
                         } else {
                           _promptTrigger(type: type, path: path);
                         }
@@ -382,6 +471,33 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 
+  Widget getVipFeature(String title) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 40.w),
+      child: Row(
+        children: [
+          ClipOval(
+            child: Container(
+              height: 6.r,
+              width: 6.r,
+              color: Color(0xFF0077FF),
+            ),
+          ),
+          SizedBox(
+            width: 8.w,
+          ),
+          Text(
+            title,
+            style: TextStyle(
+                fontSize: 14.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600),
+          )
+        ],
+      ),
+    );
+  }
+
   void _promptTrigger({required int type, String? path}) {
     if (_messageController.text.isEmpty) {
       if (type != TYPE_IMAGE_VARIATION) {
@@ -427,5 +543,6 @@ class _ConversationPageState extends State<ConversationPage> {
         }
       }
     });
+    _messageController.clear();
   }
 }

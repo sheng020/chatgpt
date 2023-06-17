@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_loading_widget.dart';
+import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -196,8 +197,16 @@ class CustomTextField extends StatelessWidget {
                   itemBuilder: (context) {
                     return getDropItems(context);
                   },
-                  onSelected: (value) {
-                    inputMode.value = value;
+                  onSelected: (value) async {
+                    var isPurchase = await NativeChannel.isPurchased();
+                    if (!isPurchase) {
+                      isPurchase = await NativeChannel.openSubscriptionPage();
+                      if (isPurchase) {
+                        inputMode.value = value;
+                      }
+                    } else {
+                      inputMode.value = value;
+                    }
                   },
                   child: getIcon(value),
                 );

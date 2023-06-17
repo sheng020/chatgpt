@@ -69,6 +69,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Select a picture"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "share": MessageLookupByLibrary.simpleMessage("Share"),
+        "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Special offers"),
         "start_free_trial":
@@ -84,9 +86,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Translate tool"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("Unlimited quick translation"),
+        "update": MessageLookupByLibrary.simpleMessage("Update"),
         "usage": MessageLookupByLibrary.simpleMessage("Use"),
-        "watch_video":
-            MessageLookupByLibrary.simpleMessage("Watch video to gain chances"),
+        "watch_video": MessageLookupByLibrary.simpleMessage(
+            "Watch an ad for a chance to use it"),
         "yearly": MessageLookupByLibrary.simpleMessage("Yearly")
       };
 }

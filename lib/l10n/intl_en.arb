@@ -8,7 +8,7 @@
   "stop_generating": "Stop generating.",
   "left_chance": "{count} chance left. Go subscription for more",
   "subscription": "Subscription",
-  "watch_video": "Watch video to gain chances",
+  "watch_video": "Watch an ad for a chance to use it",
   "select_picture": "Select a picture",
   "no_chance_left": "No chance left, watch a video or go to subscribe",
   "answer_question_tips": "Explain quantum computing in simple terms",
@@ -36,5 +36,8 @@
   "privacy_policy": "Privacy policy",
   "no_back_history": "No back history item",
   "no_forward_history": "No forward history item",
-  "settings": "Settings"
+  "settings": "Settings",
+  "skip": "Skip",
+  "share": "Share",
+  "update": "Update"
 }

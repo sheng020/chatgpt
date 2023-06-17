@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">pro版にアクセスします</string>
+
+    <string name="purchase_price_loading">装着価格だからね。</string>
+    <string name="try_subscribe_for_free">無料トライアルを開始する</string>
+    <string name="subscription_description_text">無料7かな。%1$s/%2$sで自動更新、オプション、いつでもキャンセル。</string>
+
+    <string name="no_ads">広告を取り除く</string>
+    <string name="faster_gpt4_support">速くGPT-4モデル</string>
+    <string name="unlimited_quick_translate">無限早く翻訳</string>
+    <string name="support_multi_gpt">多言語gptのサポート</string>
+    <string name="month">月</string>
+    <string name="months">ヵ月</string>
+    <string name="days">日</string>
+    <string name="year">年</string>
+    <string name="purchase_obtain_fail">サブスクリプションの状態確認に失敗しましたので、google playでご確認ください</string>
+</resources>

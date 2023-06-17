@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">احصل على الوصول إلى النسخة المحترفة</string>
+
+    <string name="purchase_price_loading">سعر التحميل …</string>
+    <string name="try_subscribe_for_free">بدء إصدار تجريبي مجاني</string>
+    <string name="subscription_description_text">محاكمة مجانية لمدة 7 أيام. التجديد التلقائي عند %1$s/%2$s اختياري، يتم الإلغاء في أي وقت.</string>
+
+    <string name="no_ads">إزالة الإعلانات</string>
+    <string name="faster_gpt4_support">أسرع طراز جي بي تي -4</string>
+    <string name="unlimited_quick_translate">ترجمة سريعة غير محدودة</string>
+    <string name="support_multi_gpt">دعم GPT متعدد اللغات</string>
+    <string name="month">شهر واحد</string>
+    <string name="months">أشهر</string>
+    <string name="days">أيام</string>
+    <string name="year">سنة واحدة</string>
+    <string name="purchase_obtain_fail">فشل التحقق من حالة الاشتراك، الرجاء التحقق من تشغيل جوجل</string>
+</resources>

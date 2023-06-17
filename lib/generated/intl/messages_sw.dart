@@ -20,15 +20,68 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'sw';
 
+  static String m0(count) =>
+      "${count} nafasi imesalia. Nenda usajili kwa zaidi";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "answer_question_tips": MessageLookupByLibrary.simpleMessage(
+            "Fafanua mkusanyiko wa pesa kwa maneno rahisi"),
+        "answer_question_title":
+            MessageLookupByLibrary.simpleMessage("Jibu maswali"),
+        "as_low_as": MessageLookupByLibrary.simpleMessage("Chini kama"),
         "cancel": MessageLookupByLibrary.simpleMessage("Ghairi"),
+        "cancel_any_time":
+            MessageLookupByLibrary.simpleMessage("Ghairi wakati wowote"),
         "change_name": MessageLookupByLibrary.simpleMessage("Badilisha jina"),
+        "code_assistant_title":
+            MessageLookupByLibrary.simpleMessage("Kisaidizi cha msimbo"),
+        "code_helper_tips": MessageLookupByLibrary.simpleMessage(
+            "Ninawezaje kufanya ombi la HTTP katika java"),
+        "daily": MessageLookupByLibrary.simpleMessage("kila siku"),
+        "gpt_4_models":
+            MessageLookupByLibrary.simpleMessage("Mifano za haraka za GPT-4"),
         "input_message": MessageLookupByLibrary.simpleMessage("Ingiza ujumbe"),
+        "left_chance": m0,
+        "mode_completions":
+            MessageLookupByLibrary.simpleMessage("wamemaliza mazungumzo"),
+        "mode_image_generation":
+            MessageLookupByLibrary.simpleMessage("Kizazi cha picha"),
+        "mode_image_variation":
+            MessageLookupByLibrary.simpleMessage("Tofauti ya picha"),
+        "new_chat": MessageLookupByLibrary.simpleMessage("+ Gumzo Jipya"),
         "new_conversation":
             MessageLookupByLibrary.simpleMessage("Mazungumzo mapya"),
+        "no_back_history": MessageLookupByLibrary.simpleMessage(
+            "Hakuna kipengee cha historia ya nyuma"),
+        "no_chance_left": MessageLookupByLibrary.simpleMessage(
+            "Hakuna nafasi iliyobaki, angalia video au nenda kujisajili"),
+        "no_forward_history": MessageLookupByLibrary.simpleMessage(
+            "Hakuna kipengee cha historia mbele"),
         "ok": MessageLookupByLibrary.simpleMessage("sawa"),
+        "privacy_policy":
+            MessageLookupByLibrary.simpleMessage("Sera ya faragha"),
+        "real_time_translate":
+            MessageLookupByLibrary.simpleMessage("Wakati halisi kutafsiri"),
+        "remove_ads": MessageLookupByLibrary.simpleMessage("Ondoa Matangazo"),
+        "select_picture": MessageLookupByLibrary.simpleMessage("Chagua picha"),
+        "settings": MessageLookupByLibrary.simpleMessage("Mipangilio"),
+        "skip": MessageLookupByLibrary.simpleMessage("Ruka"),
+        "special_offers": MessageLookupByLibrary.simpleMessage("Ofa maalum"),
+        "start_free_trial":
+            MessageLookupByLibrary.simpleMessage("Anza jaribio la bure"),
         "stop_generating":
-            MessageLookupByLibrary.simpleMessage("Acha kuzalisha.")
+            MessageLookupByLibrary.simpleMessage("Acha kuzalisha."),
+        "subscription": MessageLookupByLibrary.simpleMessage("Usajili"),
+        "translate_tool_tips": MessageLookupByLibrary.simpleMessage(
+            "Jinsi ya kutafsiri \"Habari yako\" kwa Kichina na Janpanese"),
+        "translate_tool_title":
+            MessageLookupByLibrary.simpleMessage("Tafsiri chombo"),
+        "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
+            "Tafsiri isiyo na kikomo ya haraka"),
+        "usage": MessageLookupByLibrary.simpleMessage("Tumia"),
+        "watch_video": MessageLookupByLibrary.simpleMessage(
+            "Tazama tangazo ili upate nafasi ya kulitumia"),
+        "yearly": MessageLookupByLibrary.simpleMessage("Kila mwaka")
       };
 }

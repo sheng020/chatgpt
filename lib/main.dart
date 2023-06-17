@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt_clone/api/instance/chat/chat_models.dart';
 import 'package:flutter_chatgpt_clone/core/http_certificate_manager.dart';
-import 'package:flutter_chatgpt_clone/features/app/route/on_generate_route.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_user_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
@@ -78,7 +77,7 @@ class MyApp extends StatelessWidget {
                 brightness: Brightness.light, primaryColor: Color(0xFF283046)),
             initialRoute: '/',
             //debugShowCheckedModeBanner: false,
-            onGenerateRoute: OnGenerateRoute.route,
+            //onGenerateRoute: OnGenerateRoute.route,
             routes: {
               "/": (context) {
                 return ConversationPage();

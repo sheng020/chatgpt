@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">د پرو نسخې ته لاسرسی ومومئ</string>
+
+    <string name="purchase_price_loading">د بار وړلو قیمت ...</string>
+    <string name="try_subscribe_for_free">وړیا ازموینه پیل کړئ</string>
+    <string name="subscription_description_text">د 7 ورځو وړیا محاکمه. په %1$s/%2$s کې اتومات نوی کول ، اختیاری ، په هر وخت کې لغوه کړئ.</string>
+
+    <string name="no_ads">خبرتیاوې لرې کړئ</string>
+    <string name="faster_gpt4_support">چټک GPT-4 موډل</string>
+    <string name="unlimited_quick_translate">نامحدود چټک ژباړه</string>
+    <string name="support_multi_gpt">د څو ژبو GPT ملاتړ</string>
+    <string name="month">میاشت</string>
+    <string name="months">میاشتې</string>
+    <string name="days">ورځې</string>
+    <string name="year">کال</string>
+    <string name="purchase_obtain_fail">د ګډون حالت تایید ناکام شو ، مهربانی وکړئ په ګوګل پلی کې وګورئ</string>
+</resources>

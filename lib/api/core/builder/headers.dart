@@ -50,7 +50,7 @@ abstract class HeadersBuilder {
 
     headers["Authorization"] = "Bearer $apiKey";
 
-    headers["package"] = PACKAGE_NAME;
+    headers["package"] = HttpClient.PACKAGE_NAME;
 
     int time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     headers['timestamp'] = time.toString();
@@ -59,7 +59,7 @@ abstract class HeadersBuilder {
     headers['nonce'] = token;
     headers['sig'] = generateSignature(time, token);
 
-    headers['app_key'] = APP_KEY;
+    headers['appKey'] = HttpClient.APP_KEY;
     return headers;
   }
 

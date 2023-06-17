@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">Uzyskaj dostęp do wersji Pro Edition</string>
+
+    <string name="purchase_price_loading">Cena załadunku…</string>
+    <string name="try_subscribe_for_free">Rozpocznij bezpłatny okres próbny</string>
+    <string name="subscription_description_text">7-dniowy bezpłatny okres próbny. Automatyczne odnawianie przy %1$s/%2$s, opcjonalnie, anuluj w dowolnym momencie.</string>
+
+    <string name="no_ads">Usuń reklamy</string>
+    <string name="faster_gpt4_support">Szybszy model GPT-4</string>
+    <string name="unlimited_quick_translate">Nieograniczone szybkie tłumaczenie</string>
+    <string name="support_multi_gpt">Obsługa wielojęzycznego GPT</string>
+    <string name="month">miesiąc</string>
+    <string name="months">Miesiące</string>
+    <string name="days">Dni</string>
+    <string name="year">rok</string>
+    <string name="purchase_obtain_fail">Weryfikacja statusu subskrypcji nie powiodła się, sprawdź w Google Play</string>
+</resources>

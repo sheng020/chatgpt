@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_chatgpt_clone/http/translate_response.dart';
 
 import 'package:retrofit/retrofit.dart';
 
@@ -19,4 +20,8 @@ abstract class RestClient {
       @Field("timestamp") int timestamp,
       @Field("nonce") String nonce,
       @Field("sig") String sig);
+
+  @POST("/v1/t2t/translate")
+  Future<TranslateResponse> translate(
+      @Field("to") String to, @Field("texts") List<String> texts);
 }

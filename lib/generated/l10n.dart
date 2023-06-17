@@ -140,10 +140,10 @@ class S {
     );
   }
 
-  /// `Watch video to gain chances`
+  /// `Watch an ad for a chance to use it`
   String get watch_video {
     return Intl.message(
-      'Watch video to gain chances',
+      'Watch an ad for a chance to use it',
       name: 'watch_video',
       desc: '',
       args: [],
@@ -425,6 +425,36 @@ class S {
     return Intl.message(
       'Settings',
       name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip`
+  String get skip {
+    return Intl.message(
+      'Skip',
+      name: 'skip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share`
+  String get share {
+    return Intl.message(
+      'Share',
+      name: 'share',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
       desc: '',
       args: [],
     );

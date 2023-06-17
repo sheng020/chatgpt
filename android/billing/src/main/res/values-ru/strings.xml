@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">Получить доступ к Pro Edition</string>
+
+    <string name="purchase_price_loading">Цена за погрузку…</string>
+    <string name="try_subscribe_for_free">Начать бесплатный суд.</string>
+    <string name="subscription_description_text">7 дней бесплатного суда. Автоматическое обновление в %1$s/%2$s, опционально, отмена в любое время.</string>
+
+    <string name="no_ads">Удалить объявления</string>
+    <string name="faster_gpt4_support">Более быстрая модель GPT-4</string>
+    <string name="unlimited_quick_translate">Безлимитный быстрый перевод</string>
+    <string name="support_multi_gpt">Поддержка многоязычного GPT</string>
+    <string name="month">В течение месяца</string>
+    <string name="months">Количество месяцев в месяц</string>
+    <string name="days">В течение нескольких дней</string>
+    <string name="year">Год выпуска 2007</string>
+    <string name="purchase_obtain_fail">Статус подписки проверить не удалось, пожалуйста, проверьте в google play</string>
+</resources>

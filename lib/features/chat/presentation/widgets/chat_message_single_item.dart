@@ -13,6 +13,7 @@ import 'package:flutter_chatgpt_clone/features/global/theme/style.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -33,13 +34,28 @@ class ChatMessageSingleItem extends StatelessWidget {
     return _chatMessageItem(context);
   }
 
+  static MarkdownConfig darkConfig = MarkdownConfig(configs: [
+    HrConfig.darkConfig,
+    H1Config.darkConfig,
+    H2Config.darkConfig,
+    H3Config.darkConfig,
+    H4Config.darkConfig,
+    H5Config.darkConfig,
+    H6Config.darkConfig,
+    PreConfig.darkConfig,
+    PConfig(
+        textStyle: TextStyle(
+            color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.w500)),
+    CodeConfig.darkConfig,
+  ]);
+
   Widget getResponseWidget(ChatMessageEntity chatMessage) {
     if (chatMessage.type == TYPE_CHAT) {
       return MarkdownWidget(
           shrinkWrap: true,
           selectable: true,
           data: chatMessage.promptResponse!,
-          config: MarkdownConfig.darkConfig
+          config: darkConfig
           //syntaxHighlighter: Highlighter(),
           );
     } else if (chatMessage.type == TYPE_IMAGE_GENERATION) {
@@ -92,6 +108,42 @@ class ChatMessageSingleItem extends StatelessWidget {
         title
       ],
     );
+  }
+
+  Widget getTranslateWidget(
+      BuildContext context, ChatMessageEntity chatMessage) {
+    if (chatMessage.type == TYPE_CHAT) {
+      return BlocBuilder<ChatConversationCubit, ChatConversationState>(
+          builder: (context, chatConversationState) {
+        var button = InkWell(
+            onTap: () {
+              if (chatMessage.promptResponse != null) {
+                BlocProvider.of<ChatConversationCubit>(context)
+                    .startRealTimeTranslate(chatMessage.promptResponse!,
+                        id: chatMessage.id);
+              }
+            },
+            child: SvgPicture.asset("assets/images/ic_translate.svg"));
+        if (chatConversationState is TranslateStatus) {
+          if (chatConversationState.requesting &&
+              chatMessage.id == chatConversationState.id) {
+            return SizedBox.square(
+              dimension: 24.r,
+              child: LoadingIndicator(
+                indicatorType: Indicator.ballPulse,
+                colors: [Colors.white],
+              ),
+            );
+          } else {
+            return button;
+          }
+        } else {
+          return button;
+        }
+      });
+    } else {
+      return SizedBox.shrink();
+    }
   }
 
   Widget _chatMessageItem(BuildContext context) {
@@ -316,27 +368,29 @@ class ChatMessageSingleItem extends StatelessWidget {
             SizedBox(
               height: 8.h,
             ),
-            Container(
-              margin: EdgeInsets.only(left: 32.w),
-              child: Row(
-                children: [
-                  InkWell(
-                      onTap: () {
-                        Clipboard.setData(
-                            ClipboardData(text: chatMessage.promptResponse!));
-                        //toast("Copied");
-                      },
-                      child: Icon(Icons.copy, size: 24.r)),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Share.share(chatMessage.promptResponse!);
-                      },
-                      child: Icon(Icons.share, size: 24.r)),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                getTranslateWidget(context, chatMessage),
+                SizedBox(
+                  width: 12.w,
+                ),
+                InkWell(
+                    onTap: () {
+                      Share.share(chatMessage.promptResponse!);
+                    },
+                    child: SvgPicture.asset("assets/images/ic_share.svg")),
+                SizedBox(
+                  width: 12.w,
+                ),
+                InkWell(
+                    onTap: () {
+                      Clipboard.setData(
+                          ClipboardData(text: chatMessage.promptResponse!));
+                      //toast("Copied");
+                    },
+                    child: SvgPicture.asset("assets/images/ic_copy.svg")),
+              ],
             ),
             SizedBox(
               height: 8.h,

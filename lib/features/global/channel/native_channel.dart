@@ -1,4 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_chatgpt_clone/api/instance/chat/chat_models.dart';
+import 'package:flutter_chatgpt_clone/api/instance/openai.dart';
+import 'package:flutter_chatgpt_clone/http/http_client.dart';
 
 class NativeChannel {
   static const CHANNEL_NAME = "com.atom.chatgpt.channel";
@@ -10,14 +13,33 @@ class NativeChannel {
       if (value == null) {
         return false;
       } else {
+        setEnv(value);
         return value;
       }
     });
   }
 
+  static void setEnv(bool isPurchase) {
+    if (isPurchase) {
+      OpenAI.chatModel = ChatModel.GPT_4;
+      HttpClient.APP_KEY = APP_KEY_VIP;
+      HttpClient.PACKAGE_NAME = PACKAGE_NAME_VIP;
+      HttpClient.serverApiKey = serverApiKeyVip;
+      HttpClient.serverSecret = serverSecretVip;
+    } else {
+      OpenAI.chatModel = ChatModel.GPT_3_5_TURBO;
+      HttpClient.APP_KEY = APP_KEY_NORMAL;
+      HttpClient.PACKAGE_NAME = PACKAGE_NAME_NORMAL;
+      HttpClient.serverApiKey = serverApiKeyNormal;
+      HttpClient.serverSecret = serverSecretNormal;
+    }
+  }
+
   static Future<bool> openSubscriptionPage() {
     return _channel.invokeMethod("open_subscription_page").then((value) {
-      return value ?? true;
+      bool isPurchase = value ?? true;
+      setEnv(isPurchase);
+      return isPurchase;
     });
   }
 
@@ -39,6 +61,10 @@ class NativeChannel {
         return YearlyPrice(currency: currency, amount: amount);
       }
     });
+  }
+
+  static Future<void> navigateAppStore() {
+    return _channel.invokeMethod("navigate_app_store");
   }
 }
 

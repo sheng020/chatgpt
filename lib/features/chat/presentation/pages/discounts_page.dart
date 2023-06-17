@@ -12,7 +12,39 @@ class DiscountsPage extends StatelessWidget {
       body: Center(
           child: Column(children: [
         SizedBox(
-          height: 80.h,
+          height: 48.h,
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Ink(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                  decoration: BoxDecoration(
+                      border:
+                          Border.all(color: Color(0xFF298DFF), width: 0.5.r),
+                      color: Color(0x4D298DFF),
+                      borderRadius: BorderRadius.all(Radius.circular(16.r))),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      S.of(context).skip,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  )),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 16.h,
         ),
         ShaderMask(
           blendMode: BlendMode.srcIn,
@@ -30,7 +62,7 @@ class DiscountsPage extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 8.h,
+          height: 16.h,
         ),
         Stack(
           children: [
@@ -109,7 +141,7 @@ class DiscountsPage extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 30.h,
+          height: 32.h,
         ),
         FutureBuilder<YearlyPrice?>(
             future: NativeChannel.getYearlyPrice(),
@@ -151,7 +183,7 @@ class DiscountsPage extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 4.h,
+                      height: 12.h,
                     ),
                     Text(
                       "${S.of(context).as_low_as} ${yearlyPrice.currency} ${dailyPrice} / ${S.of(context).daily}",
@@ -167,7 +199,7 @@ class DiscountsPage extends StatelessWidget {
               }
             }),
         SizedBox(
-          height: 16.h,
+          height: 24.h,
         ),
         Text(
           S.of(context).cancel_any_time,

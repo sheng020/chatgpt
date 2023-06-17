@@ -2,6 +2,7 @@ package com.atom.android.chatgpt
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -62,6 +63,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
             "load_reward_ad" -> {
                 (application as App).loadRewardAd()
+                result.success(null)
+            }
+            "navigate_app_store" -> {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(
+                        "https://play.google.com/store/apps/details?id=${packageName}"
+                    )
+                    setPackage("com.android.vending")
+                }
+                startActivity(intent)
                 result.success(null)
             }
 

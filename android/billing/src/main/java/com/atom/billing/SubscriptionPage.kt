@@ -1,6 +1,5 @@
 package com.atom.billing
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,15 +27,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.billingclient.api.ProductDetails
@@ -62,12 +60,9 @@ fun SubscriptionScreen(
                 .padding(padding)
                 .padding(horizontal = 24.dp)
                 .fillMaxSize()
-                .paint(
-                    painterResource(id = R.drawable.ic_subscription_bg),
-                    contentScale = ContentScale.FillBounds
-                ),
+                .background(color = Color.White),
         ) {
-            Spacer(modifier = Modifier.weight(0.03F))
+            Spacer(modifier = Modifier.weight(0.02F))
             Image(
                 painter = painterResource(id = R.drawable.ic_back_arrow),
                 contentDescription = "Back",
@@ -76,7 +71,13 @@ fun SubscriptionScreen(
                         onCloseClick()
                     }
             )
-            Spacer(modifier = Modifier.weight(0.32F))
+            Spacer(modifier = Modifier.weight(0.01F))
+            Image(
+                modifier = Modifier.fillMaxWidth(),
+                painter = painterResource(id = R.drawable.ic_subscribe_background),
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.weight(0.02F))
 
             SubscriptionHeader(billingState = billingState, selectedOffer = selectedOffer)
             Spacer(modifier = Modifier.weight(0.03F))
@@ -85,7 +86,7 @@ fun SubscriptionScreen(
                 selectedOffer,
                 offerSelectClick
             )
-            Spacer(modifier = Modifier.weight(0.04F))
+            Spacer(modifier = Modifier.weight(0.03F))
             SubscribeButton(billingState = billingState, buy = buy, selectedOffer)
             Spacer(modifier = Modifier.weight(0.03F))
         }
@@ -114,7 +115,6 @@ fun PlanOutline(
 
     Box(
         modifier = modifier
-            .height(96.dp)
             .background(color = contentBackground, shape = RoundedCornerShape(16.dp))
             .border(width = 2.dp, color = borderColor, shape = RoundedCornerShape(16.dp))
             .clip(shape = RoundedCornerShape(16.dp))
@@ -130,6 +130,7 @@ fun PlanOutline(
 fun PriceContent(
     count: Int,
     period: String,
+    oldPrice: String?,
     price: String,
     isSelected: Boolean,
 ) {
@@ -158,6 +159,17 @@ fun PriceContent(
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
         )
+        if (oldPrice != null) {
+            Text(
+                text = oldPrice,
+                color = colorResource(id = R.color.subscription_old_price_color),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                style = TextStyle(textDecoration = TextDecoration.LineThrough)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+
     }
 }
 
@@ -198,11 +210,16 @@ fun ProductPlanField(
                 val price = BigDecimal.valueOf((pricingPhase.priceAmountMicros / 1_000_000.0))
                     .setScale(2, RoundingMode.HALF_UP)
                     .toString()
+                val oldPrice =
+                    BigDecimal.valueOf((pricingPhase.priceAmountMicros * 2 / 1_000_000.0))
+                        .setScale(2, RoundingMode.HALF_UP)
+                        .toString()
                 PriceContent(
                     count = count,
                     period = stringResource(
                         id = periodStringId,
                     ),
+                    oldPrice = "${currency.getSymbol(Locale.getDefault())}$oldPrice",
                     price = "${currency.getSymbol(Locale.getDefault())}${price}",
                     isSelected = isSelected
                 )
@@ -323,7 +340,8 @@ fun SubscriptionPlan(
                         count = 7,
                         period = stringResource(
                             id = R.string.days,
-                        ), price = "US$0.49", isSelected = selectedOffer() == QUARTERLY
+                        ), price = "US$0.49", isSelected = selectedOffer() == QUARTERLY,
+                        oldPrice = null
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -337,7 +355,8 @@ fun SubscriptionPlan(
                         count = 1,
                         period = stringResource(
                             id = R.string.month,
-                        ), price = "US$1.99", isSelected = selectedOffer() == MONTHLY
+                        ), price = "US$1.99", isSelected = selectedOffer() == MONTHLY,
+                        oldPrice = null
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -351,7 +370,8 @@ fun SubscriptionPlan(
                         count = 1,
                         period = stringResource(
                             id = R.string.year,
-                        ), price = "US$6.99", isSelected = selectedOffer() == YEARLY
+                        ), price = "US$6.99", isSelected = selectedOffer() == YEARLY,
+                        oldPrice = null
                     )
                 }
             }
@@ -373,9 +393,11 @@ fun SubscriptionHeader(
         Spacer(modifier = Modifier.height(8.dp))
         FullAccessFeature(title = stringResource(id = R.string.no_ads))
         Spacer(modifier = Modifier.height(4.dp))
-        FullAccessFeature(title = stringResource(id = R.string.support_gpt4))
+        FullAccessFeature(title = stringResource(id = R.string.faster_gpt4_support))
         Spacer(modifier = Modifier.height(4.dp))
-        FullAccessFeature(title = stringResource(id = R.string.unlimited_use))
+        FullAccessFeature(title = stringResource(id = R.string.unlimited_quick_translate))
+        Spacer(modifier = Modifier.height(4.dp))
+        FullAccessFeature(title = stringResource(id = R.string.support_multi_gpt))
         Spacer(modifier = Modifier.height(12.dp))
         PriceDescription(billingState = billingState, selectedOffer = selectedOffer)
     }

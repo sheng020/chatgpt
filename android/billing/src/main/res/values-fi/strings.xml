@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">Hanki pääsy Pro Editioniin</string>
+
+    <string name="purchase_price_loading">Ladataan hintaa…</string>
+    <string name="try_subscribe_for_free">Aloita maksuton kokeilu</string>
+    <string name="subscription_description_text">7 päivän ilmainen kokeilujakso. Automaattinen uusiminen hintaan %1$s/%2$s, valinnainen, peruuta milloin tahansa.</string>
+
+    <string name="no_ads">Mainosten poistaminen</string>
+    <string name="faster_gpt4_support">Nopeampi GPT-4-malli</string>
+    <string name="unlimited_quick_translate">Rajoittamaton nopea käännös</string>
+    <string name="support_multi_gpt">Monikielisen GPT: n tuki</string>
+    <string name="month">kuukausi</string>
+    <string name="months">Kuukautta</string>
+    <string name="days">Päivää</string>
+    <string name="year">vuosi</string>
+    <string name="purchase_obtain_fail">Tilauksen tilan vahvistus epäonnistui, tarkista Google Playsta</string>
+</resources>

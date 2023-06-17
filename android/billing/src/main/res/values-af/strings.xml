@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">Kry toegang tot die Pro Edition</string>
+
+    <string name="purchase_price_loading">Laai prys…</string>
+    <string name="try_subscribe_for_free">Begin \'n gratis proeflopie</string>
+    <string name="subscription_description_text">7-dae gratis proeftydperk. Outohernu teen %1$s/%2$s, opsioneel, kanselleer te eniger tyd.</string>
+
+    <string name="no_ads">Verwyder advertensies</string>
+    <string name="faster_gpt4_support">Vinniger GPT-4-model</string>
+    <string name="unlimited_quick_translate">Onbeperkte vinnige vertaling</string>
+    <string name="support_multi_gpt">Ondersteuning vir veeltalige GPT</string>
+    <string name="month">Maand</string>
+    <string name="months">Maande</string>
+    <string name="days">Dae</string>
+    <string name="year">Jaar</string>
+    <string name="purchase_obtain_fail">Intekeningstatus verifieer misluk, gaan asseblief Google Play in</string>
+</resources>

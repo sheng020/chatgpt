@@ -1,0 +1,17 @@
+<resources>
+    <string name="full_access">پرو ایڈیشن تک رسائی حاصل کریں</string>
+
+    <string name="purchase_price_loading">لوڈنگ قیمت...</string>
+    <string name="try_subscribe_for_free">ایک مفت آزمائش شروع کریں</string>
+    <string name="subscription_description_text">7 دن کی مفت آزمائش. ٪1$s/٪2$s پر خود کار تجدید، اختیاری، کسی بھی وقت منسوخ کریں۔</string>
+
+    <string name="no_ads">اشتہارات حذف کریں</string>
+    <string name="faster_gpt4_support">تیز ترین جی پی ٹی -4 ماڈل</string>
+    <string name="unlimited_quick_translate">لامحدود فوری ترجمہ</string>
+    <string name="support_multi_gpt">کثیر لسانی جی پی ٹی کے لئے حمایت</string>
+    <string name="month">مہینہ</string>
+    <string name="months">مہینے</string>
+    <string name="days">دن</string>
+    <string name="year">سال</string>
+    <string name="purchase_obtain_fail">رکنیت کی حیثیت کی تصدیق ناکام، براہ کرم گوگل پلے میں چیک کریں</string>
+</resources>
