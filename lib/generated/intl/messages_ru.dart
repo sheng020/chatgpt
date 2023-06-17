@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Выберите картинку"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
+        "share": MessageLookupByLibrary.simpleMessage("Делиться"),
         "skip": MessageLookupByLibrary.simpleMessage("Пропускать"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Специальные предложения"),
@@ -87,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Переведите инструмент"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Неограниченный быстрый перевод"),
+        "update": MessageLookupByLibrary.simpleMessage("Обновлять"),
         "usage": MessageLookupByLibrary.simpleMessage("Использовать"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Посмотрите рекламу, чтобы получить шанс использовать ее"),

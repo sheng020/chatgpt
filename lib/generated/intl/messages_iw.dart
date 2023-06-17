@@ -66,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_ads": MessageLookupByLibrary.simpleMessage("הסר פרסומות"),
         "select_picture": MessageLookupByLibrary.simpleMessage("בחר תמונה"),
         "settings": MessageLookupByLibrary.simpleMessage("הגדרות"),
+        "share": MessageLookupByLibrary.simpleMessage("לַחֲלוֹק"),
         "skip": MessageLookupByLibrary.simpleMessage("לדלג"),
         "special_offers": MessageLookupByLibrary.simpleMessage("הצעות מיוחדות"),
         "start_free_trial":
@@ -80,6 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("כלי תרגום"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("תרגום מהיר ללא הגבלה"),
+        "update": MessageLookupByLibrary.simpleMessage("עדכון"),
         "usage": MessageLookupByLibrary.simpleMessage("להשתמש"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "צפה במודעה לקבלת הזדמנות להשתמש בה"),

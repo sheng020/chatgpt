@@ -37,5 +37,7 @@
   "no_back_history": "Walang back history item",
   "no_forward_history": "Walang forward history item",
   "settings": "Mga setting",
-  "skip": "Laktawan"
+  "skip": "Laktawan",
+  "share": "Ibahagi",
+  "update": "Update"
 }

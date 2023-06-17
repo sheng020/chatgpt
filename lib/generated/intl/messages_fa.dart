@@ -47,6 +47,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "mode_completions": MessageLookupByLibrary.simpleMessage("تکمیل چت"),
         "mode_image_generation":
             MessageLookupByLibrary.simpleMessage("تولید تصویر"),
+        "mode_image_variation":
+            MessageLookupByLibrary.simpleMessage("تنوع تصویر"),
         "new_chat": MessageLookupByLibrary.simpleMessage("+ چت جدید"),
         "new_conversation": MessageLookupByLibrary.simpleMessage("گفتگوی جدید"),
         "no_back_history":
@@ -65,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("یک عکس را انتخاب کنید"),
         "settings": MessageLookupByLibrary.simpleMessage("تنظیمات"),
+        "share": MessageLookupByLibrary.simpleMessage("اشتراک گذاری"),
         "skip": MessageLookupByLibrary.simpleMessage("پرش کنید"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("پیشنهادهای ویژه"),
@@ -81,6 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ابزار ترجمه"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("ترجمه سریع نامحدود"),
+        "update": MessageLookupByLibrary.simpleMessage("به روز رسانی"),
         "usage": MessageLookupByLibrary.simpleMessage("استفاده کنید"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "یک تبلیغ را تماشا کنید تا فرصتی برای استفاده از آن داشته باشید"),

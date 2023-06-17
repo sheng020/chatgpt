@@ -20,6 +20,7 @@
   "mode_completions": "चैट पूर्णता",
   "mode_image_generation": "छवि पीढ़ी",
   "mode_image_variation": "छवि भिन्नता",
+  "real_time_translate": "वास्तविक समय अनुवाद",
   "usage": "प्रयोग करना",
   "opportunitie_remaining": "{count} निशान के अवसर शेष",
   "special_offers": "खास पेशकश",
@@ -36,5 +37,7 @@
   "no_back_history": "कोई बैक हिस्ट्री आइटम नहीं",
   "no_forward_history": "कोई फॉरवर्ड हिस्ट्री आइटम नहीं",
   "settings": "समायोजन",
-  "skip": "छोड़ें"
+  "skip": "छोड़ें",
+  "share": "शेयर करना",
+  "update": "अपडेट करना"
 }

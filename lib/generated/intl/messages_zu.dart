@@ -55,6 +55,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_chat": MessageLookupByLibrary.simpleMessage("+ Ingxoxo Entsha"),
         "new_conversation":
             MessageLookupByLibrary.simpleMessage("Ingxoxo entsha"),
+        "no_back_history": MessageLookupByLibrary.simpleMessage(
+            "Ayikho into yomlando wangemuva"),
         "no_chance_left": MessageLookupByLibrary.simpleMessage(
             "Alikho ithuba elisele, bukela ividiyo noma hamba uyobhalisa"),
         "no_forward_history": MessageLookupByLibrary.simpleMessage(
@@ -69,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Khetha isithombe"),
         "settings": MessageLookupByLibrary.simpleMessage("Izilungiselelo"),
+        "share": MessageLookupByLibrary.simpleMessage("Yabelana"),
         "skip": MessageLookupByLibrary.simpleMessage("Yeqa"),
         "special_offers": MessageLookupByLibrary.simpleMessage("Izipesheli"),
         "start_free_trial":
@@ -84,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Ithuluzi lokuhumusha"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Ukuhumusha okusheshayo okungenamkhawulo"),
+        "update": MessageLookupByLibrary.simpleMessage("Buyekeza"),
         "usage": MessageLookupByLibrary.simpleMessage("Sebenzisa"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Buka isikhangiso ukuze uthole ithuba lokusisebenzisa"),

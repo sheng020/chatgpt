@@ -69,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("একটি ছবি নির্বাচন করুন"),
         "settings": MessageLookupByLibrary.simpleMessage("সেটিংস"),
+        "share": MessageLookupByLibrary.simpleMessage("শেয়ার করুন"),
         "skip": MessageLookupByLibrary.simpleMessage("এড়িয়ে যান"),
         "special_offers": MessageLookupByLibrary.simpleMessage("বিশেষ অফার"),
         "start_free_trial": MessageLookupByLibrary.simpleMessage(
@@ -84,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("অনুবাদ টুল"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("সীমাহীন দ্রুত অনুবাদ"),
+        "update": MessageLookupByLibrary.simpleMessage("হালনাগাদ"),
         "usage": MessageLookupByLibrary.simpleMessage("ব্যবহার করুন"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "এটি ব্যবহার করার সুযোগের জন্য একটি বিজ্ঞাপন দেখুন"),

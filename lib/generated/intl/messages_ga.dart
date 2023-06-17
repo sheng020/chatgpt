@@ -64,13 +64,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "opportunitie_remaining": m1,
         "privacy_policy":
             MessageLookupByLibrary.simpleMessage("Beartas Príobháideachais"),
+        "real_time_translate":
+            MessageLookupByLibrary.simpleMessage("Aistrigh fíor-ama"),
         "remove_ads": MessageLookupByLibrary.simpleMessage("Bain Fógraí"),
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Roghnaigh pictiúr"),
         "settings": MessageLookupByLibrary.simpleMessage("Socruithe"),
+        "share": MessageLookupByLibrary.simpleMessage("A roinnt"),
         "skip": MessageLookupByLibrary.simpleMessage("Scipeáil"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Tairiscintí speisialta"),
+        "start_free_trial": MessageLookupByLibrary.simpleMessage(
+            "Tosaigh triail saor in aisce"),
         "stop_generating":
             MessageLookupByLibrary.simpleMessage("Stop a ghiniúint."),
         "subscription": MessageLookupByLibrary.simpleMessage("Síntiúis"),
@@ -82,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Uirlis aistrithe"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Aistriúchán tapa gan teorainn"),
+        "update":
+            MessageLookupByLibrary.simpleMessage("Thabhairt cothrom le dáta"),
         "usage": MessageLookupByLibrary.simpleMessage("Úsáid"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Féach ar fhógra chun seans é a úsáid"),

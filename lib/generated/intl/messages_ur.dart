@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("ایک تصویر منتخب کریں۔"),
         "settings": MessageLookupByLibrary.simpleMessage("ترتیبات"),
+        "share": MessageLookupByLibrary.simpleMessage("بانٹیں"),
         "skip": MessageLookupByLibrary.simpleMessage("چھوڑ دو"),
         "special_offers": MessageLookupByLibrary.simpleMessage("خصوصی پیشکش"),
         "start_free_trial":
@@ -77,12 +78,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "stop_generating":
             MessageLookupByLibrary.simpleMessage("پیدا کرنا بند کریں۔"),
         "subscription": MessageLookupByLibrary.simpleMessage("رکنیت"),
+        "support_multilingual_gpt": MessageLookupByLibrary.simpleMessage(
+            "کثیر لسانی جی پی ٹی کے لئے معاونت۔"),
         "translate_tool_tips": MessageLookupByLibrary.simpleMessage(
             "چینی اور جنپانی میں \"آپ کیسے ہیں\" کا ترجمہ کیسے کریں۔"),
         "translate_tool_title":
             MessageLookupByLibrary.simpleMessage("ترجمہ کا آلہ۔"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("لامحدود فوری ترجمہ۔"),
+        "update": MessageLookupByLibrary.simpleMessage("اپ ڈیٹ"),
         "usage": MessageLookupByLibrary.simpleMessage("استعمال کریں۔"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "اسے استعمال کرنے کے موقع کے لیے اشتہار دیکھیں"),

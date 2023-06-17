@@ -22,10 +22,12 @@
   "mode_image_variation": "Tofauti ya picha",
   "real_time_translate": "Wakati halisi kutafsiri",
   "usage": "Tumia",
+  "opportunitie_remaining": "Fursa {count} ya alama iliyobaki",
   "special_offers": "Ofa maalum",
   "remove_ads": "Ondoa Matangazo",
   "gpt_4_models": "Mifano za haraka za GPT-4",
   "unlimited_quick_translation": "Tafsiri isiyo na kikomo ya haraka",
+  "support_multilingual_gpt": "Msaada kwa lugha nyingi GPT",
   "yearly": "Kila mwaka",
   "as_low_as": "Chini kama",
   "daily": "kila siku",
@@ -35,5 +37,7 @@
   "no_back_history": "Hakuna kipengee cha historia ya nyuma",
   "no_forward_history": "Hakuna kipengee cha historia mbele",
   "settings": "Mipangilio",
-  "skip": "Ruka"
+  "skip": "Ruka",
+  "share": "Shiriki",
+  "update": "Sasisha"
 }

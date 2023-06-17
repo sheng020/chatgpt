@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("bir resim seçin"),
         "settings": MessageLookupByLibrary.simpleMessage("Ayarlar"),
+        "share": MessageLookupByLibrary.simpleMessage("Paylaşmak"),
         "skip": MessageLookupByLibrary.simpleMessage("Atlamak"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Özel teklifler"),
@@ -86,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Çeviri aracı"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("Sınırsız hızlı çeviri"),
+        "update": MessageLookupByLibrary.simpleMessage("Güncelleme"),
         "usage": MessageLookupByLibrary.simpleMessage("Kullanmak"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Kullanma şansı için bir reklam izleyin"),

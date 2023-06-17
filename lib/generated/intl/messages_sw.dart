@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(count) =>
       "${count} nafasi imesalia. Nenda usajili kwa zaidi";
 
+  static String m1(count) => "Fursa ${count} ya alama iliyobaki";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "answer_question_tips": MessageLookupByLibrary.simpleMessage(
@@ -59,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_forward_history": MessageLookupByLibrary.simpleMessage(
             "Hakuna kipengee cha historia mbele"),
         "ok": MessageLookupByLibrary.simpleMessage("sawa"),
+        "opportunitie_remaining": m1,
         "privacy_policy":
             MessageLookupByLibrary.simpleMessage("Sera ya faragha"),
         "real_time_translate":
@@ -66,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_ads": MessageLookupByLibrary.simpleMessage("Ondoa Matangazo"),
         "select_picture": MessageLookupByLibrary.simpleMessage("Chagua picha"),
         "settings": MessageLookupByLibrary.simpleMessage("Mipangilio"),
+        "share": MessageLookupByLibrary.simpleMessage("Shiriki"),
         "skip": MessageLookupByLibrary.simpleMessage("Ruka"),
         "special_offers": MessageLookupByLibrary.simpleMessage("Ofa maalum"),
         "start_free_trial":
@@ -73,12 +77,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "stop_generating":
             MessageLookupByLibrary.simpleMessage("Acha kuzalisha."),
         "subscription": MessageLookupByLibrary.simpleMessage("Usajili"),
+        "support_multilingual_gpt":
+            MessageLookupByLibrary.simpleMessage("Msaada kwa lugha nyingi GPT"),
         "translate_tool_tips": MessageLookupByLibrary.simpleMessage(
             "Jinsi ya kutafsiri \"Habari yako\" kwa Kichina na Janpanese"),
         "translate_tool_title":
             MessageLookupByLibrary.simpleMessage("Tafsiri chombo"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Tafsiri isiyo na kikomo ya haraka"),
+        "update": MessageLookupByLibrary.simpleMessage("Sasisha"),
         "usage": MessageLookupByLibrary.simpleMessage("Tumia"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Tazama tangazo ili upate nafasi ya kulitumia"),

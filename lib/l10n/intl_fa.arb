@@ -19,6 +19,7 @@
   "translate_tool_title": "ابزار ترجمه",
   "mode_completions": "تکمیل چت",
   "mode_image_generation": "تولید تصویر",
+  "mode_image_variation": "تنوع تصویر",
   "real_time_translate": "ترجمه زمان واقعی",
   "usage": "استفاده کنید",
   "opportunitie_remaining": "{count} فرصت مسیر باقی مانده است",
@@ -36,5 +37,7 @@
   "no_back_history": "هیچ آیتم تاریخچه پشتی",
   "no_forward_history": "هیچ آیتم تاریخ رو به جلو",
   "settings": "تنظیمات",
-  "skip": "پرش کنید"
+  "skip": "پرش کنید",
+  "share": "اشتراک گذاری",
+  "update": "به روز رسانی"
 }

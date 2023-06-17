@@ -22,6 +22,7 @@
   "mode_image_variation": "Deebii fakkii",
   "real_time_translate": "Yeroo dhugaa",
   "usage": "Fayyadami",
+  "opportunitie_remaining": "{count} tajaajila hafee",
   "special_offers": "Qophii addaa",
   "remove_ads": "Beeksisa irraa haquu",
   "gpt_4_models": "Modeliwwan 4-PT tti",
@@ -36,5 +37,7 @@
   "no_back_history": "Seenaan homtuu hin jiruu",
   "no_forward_history": "Seenaan dabarsaa hin jiru",
   "settings": "Sajoo",
-  "skip": "Irra darbuu"
+  "skip": "Irra darbuu",
+  "share": "Qooduu",
+  "update": "Odeeffannoo dhiyeenyaa"
 }

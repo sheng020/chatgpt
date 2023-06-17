@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Kies \'n prent"),
         "settings": MessageLookupByLibrary.simpleMessage("Instellings"),
+        "share": MessageLookupByLibrary.simpleMessage("Deel"),
         "skip": MessageLookupByLibrary.simpleMessage("Huppel"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Spesiale aanbiedings"),
@@ -87,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Vertaal hulpmiddel"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Onbeperkte vinnige vertaling"),
+        "update": MessageLookupByLibrary.simpleMessage("Opdateer"),
         "usage": MessageLookupByLibrary.simpleMessage("Gebruik"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Kyk na \'n advertensie vir \'n kans om dit te gebruik"),

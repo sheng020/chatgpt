@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Eligere picturae"),
         "settings": MessageLookupByLibrary.simpleMessage("Occasus"),
+        "share": MessageLookupByLibrary.simpleMessage("Share"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "special_offers": MessageLookupByLibrary.simpleMessage("Speciali"),
         "start_free_trial":
@@ -85,6 +86,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Instrumentum transferendum"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Infinitus velox translatione"),
+        "update": MessageLookupByLibrary.simpleMessage("Renovatio"),
         "usage": MessageLookupByLibrary.simpleMessage("Usus"),
         "watch_video":
             MessageLookupByLibrary.simpleMessage("Vide an ad fors uti it"),

@@ -16,6 +16,7 @@
   "translate_tool_tips": "Cách dịch \"How are you\" thành tiếng Trung và tiếng Janpanese",
   "answer_question_title": "Trả lời câu hỏi",
   "code_assistant_title": "Trợ lý mã",
+  "translate_tool_title": "Dịch công cụ",
   "mode_completions": "Chat completions",
   "mode_image_generation": "Thế hệ hình ảnh",
   "mode_image_variation": "Biến thể hình ảnh",
@@ -36,5 +37,7 @@
   "no_back_history": "Không có mặt hàng lịch sử",
   "no_forward_history": "Không có mục lịch sử phía trước",
   "settings": "Cài đặt",
-  "skip": "Nhảy"
+  "skip": "Nhảy",
+  "share": "Đăng lại",
+  "update": "Cập nhật"
 }

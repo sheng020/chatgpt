@@ -34,7 +34,10 @@
   "cancel_any_time": "Khansela noma nini",
   "start_free_trial": "Qala isivivinyo samahhala",
   "privacy_policy": "Inqubomgomo yobumfihlo",
+  "no_back_history": "Ayikho into yomlando wangemuva",
   "no_forward_history": "Ayikho into yomlando wokudlulisela phambili",
   "settings": "Izilungiselelo",
-  "skip": "Yeqa"
+  "skip": "Yeqa",
+  "share": "Yabelana",
+  "update": "Buyekeza"
 }

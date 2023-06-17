@@ -27,6 +27,7 @@
   "remove_ads": "اشتہارات کو ہٹا دیں۔",
   "gpt_4_models": "تیز جی پی ٹی 4 ماڈل۔",
   "unlimited_quick_translation": "لامحدود فوری ترجمہ۔",
+  "support_multilingual_gpt": "کثیر لسانی جی پی ٹی کے لئے معاونت۔",
   "yearly": "سالانہ",
   "as_low_as": "جتنا کم ہے۔",
   "daily": "روزانہ",
@@ -36,5 +37,7 @@
   "no_back_history": "واپس تاریخ کی کوئی شے نہیں۔",
   "no_forward_history": "کوئی فارورڈ ہسٹری آئٹم نہیں ہے۔",
   "settings": "ترتیبات",
-  "skip": "چھوڑ دو"
+  "skip": "چھوڑ دو",
+  "share": "بانٹیں",
+  "update": "اپ ڈیٹ"
 }

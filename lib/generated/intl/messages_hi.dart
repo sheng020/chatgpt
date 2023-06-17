@@ -60,10 +60,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "ok": MessageLookupByLibrary.simpleMessage("ठीक है"),
         "opportunitie_remaining": m1,
         "privacy_policy": MessageLookupByLibrary.simpleMessage("गोपनीयता नीति"),
+        "real_time_translate":
+            MessageLookupByLibrary.simpleMessage("वास्तविक समय अनुवाद"),
         "remove_ads": MessageLookupByLibrary.simpleMessage("विज्ञापन हटाएँ"),
         "select_picture":
             MessageLookupByLibrary.simpleMessage("एक तस्वीर का चयन करें"),
         "settings": MessageLookupByLibrary.simpleMessage("समायोजन"),
+        "share": MessageLookupByLibrary.simpleMessage("शेयर करना"),
         "skip": MessageLookupByLibrary.simpleMessage("छोड़ें"),
         "special_offers": MessageLookupByLibrary.simpleMessage("खास पेशकश"),
         "start_free_trial":
@@ -79,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("अनुवाद उपकरण"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("असीमित त्वरित अनुवाद"),
+        "update": MessageLookupByLibrary.simpleMessage("अपडेट करना"),
         "usage": MessageLookupByLibrary.simpleMessage("प्रयोग करना"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "इसका उपयोग करने के अवसर के लिए एक विज्ञापन देखें"),

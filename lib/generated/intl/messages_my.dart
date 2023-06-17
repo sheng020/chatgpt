@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("ပုံတစ်ပုံကို ရွေးပါ။"),
         "settings": MessageLookupByLibrary.simpleMessage("ဆက်တင်များ"),
+        "share": MessageLookupByLibrary.simpleMessage("မျှဝေပါ။"),
         "skip": MessageLookupByLibrary.simpleMessage("ကျော်သွားပါ။"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("အထူးကမ်းလှမ်းချက်များ"),
@@ -89,6 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ဘာသာပြန်ကိရိယာ"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "အကန့်အသတ်မရှိ အမြန်ဘာသာပြန်ခြင်း။"),
+        "update": MessageLookupByLibrary.simpleMessage("အပ်ဒိတ်"),
         "usage": MessageLookupByLibrary.simpleMessage("သုံးပါ။"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "အသုံးပြုခွင့်အတွက် ကြော်ငြာတစ်ခုကို ကြည့်ပါ။"),

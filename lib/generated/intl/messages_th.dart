@@ -68,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_ads": MessageLookupByLibrary.simpleMessage("ลบโฆษณา"),
         "select_picture": MessageLookupByLibrary.simpleMessage("เลือกรูปภาพ"),
         "settings": MessageLookupByLibrary.simpleMessage("การตั้งค่า"),
+        "share": MessageLookupByLibrary.simpleMessage("แบ่งปัน"),
         "skip": MessageLookupByLibrary.simpleMessage("ข้าม"),
         "special_offers": MessageLookupByLibrary.simpleMessage("ข้อเสนอพิเศษ"),
         "start_free_trial":
@@ -82,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("เครื่องมือแปลภาษา"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("การแปลอย่างรวดเร็วไม่ จำกัด"),
+        "update": MessageLookupByLibrary.simpleMessage("อัปเดต"),
         "usage": MessageLookupByLibrary.simpleMessage("ใช้"),
         "watch_video":
             MessageLookupByLibrary.simpleMessage("ดูโฆษณาเพื่อโอกาสในการใช้"),

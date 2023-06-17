@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Pumili ng larawan"),
         "settings": MessageLookupByLibrary.simpleMessage("Mga setting"),
+        "share": MessageLookupByLibrary.simpleMessage("Ibahagi"),
         "skip": MessageLookupByLibrary.simpleMessage("Laktawan"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Mga espesyal na alok"),
@@ -88,6 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tool sa pagsasalin"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Walang limitasyong mabilis na pagsasalin"),
+        "update": MessageLookupByLibrary.simpleMessage("Update"),
         "usage": MessageLookupByLibrary.simpleMessage("Gamitin"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Manood ng ad para sa pagkakataong gamitin ito"),

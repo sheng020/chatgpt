@@ -6,7 +6,7 @@
   "new_conversation": "新会话",
   "input_message": "输入消息",
   "stop_generating": "停止生成。",
-  "left_chance": "{count}次数剩余。订阅可不限制使用",
+  "left_chance": "剩余{count}次试用。订阅可不限制使用",
   "subscription": "订阅",
   "watch_video": "观看广告就有机会使用它",
   "select_picture": "选择一个图片",
@@ -22,7 +22,7 @@
   "mode_image_variation": "图像变化",
   "real_time_translate": "实时翻译",
   "usage": "使用",
-  "opportunitie_remaining": "{count}剩余的试用机会",
+  "opportunitie_remaining": "剩余{count}次试用机会",
   "special_offers": "特别优惠",
   "remove_ads": "移除广告",
   "gpt_4_models": "更快的GPT-4模型",
@@ -37,5 +37,7 @@
   "no_back_history": "没有后台历史项目",
   "no_forward_history": "没有前向历史项目",
   "settings": "设置",
-  "skip": "跳过"
+  "skip": "跳过",
+  "share": "分享",
+  "update": "更新"
 }

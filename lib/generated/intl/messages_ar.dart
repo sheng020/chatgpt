@@ -67,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_ads": MessageLookupByLibrary.simpleMessage("ازالة الاعلانات"),
         "select_picture": MessageLookupByLibrary.simpleMessage("حدد صورة"),
         "settings": MessageLookupByLibrary.simpleMessage("إعدادات"),
+        "share": MessageLookupByLibrary.simpleMessage("يشارك"),
         "skip": MessageLookupByLibrary.simpleMessage("يتخطى"),
         "special_offers": MessageLookupByLibrary.simpleMessage("عروض خاصة"),
         "start_free_trial": MessageLookupByLibrary.simpleMessage(
@@ -82,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("أداة الترجمة"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("ترجمة سريعة غير محدودة"),
+        "update": MessageLookupByLibrary.simpleMessage("تحديث"),
         "usage": MessageLookupByLibrary.simpleMessage("يستخدم"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "مشاهدة إعلان للحصول على فرصة لاستخدامه"),

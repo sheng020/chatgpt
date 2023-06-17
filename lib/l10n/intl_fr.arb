@@ -37,5 +37,7 @@
   "no_back_history": "Aucun article d'historique arrière",
   "no_forward_history": "Aucun article d'historique avant",
   "settings": "Réglages",
-  "skip": "Sauter"
+  "skip": "Sauter",
+  "share": "Partager",
+  "update": "Mise à jour"
 }

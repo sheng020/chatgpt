@@ -68,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_ads": MessageLookupByLibrary.simpleMessage("Cire Talla"),
         "select_picture": MessageLookupByLibrary.simpleMessage("Zaɓi hoto"),
         "settings": MessageLookupByLibrary.simpleMessage("Saituna"),
+        "share": MessageLookupByLibrary.simpleMessage("Raba"),
         "skip": MessageLookupByLibrary.simpleMessage("Tsallake"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("tayi na musamman"),
@@ -84,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Fassara kayan aiki"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("Fassarar sauri mara iyaka"),
+        "update": MessageLookupByLibrary.simpleMessage("Sabuntawa"),
         "usage": MessageLookupByLibrary.simpleMessage("Amfani"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Duba talla don samun damar amfani da shi"),

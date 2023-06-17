@@ -20,9 +20,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh';
 
-  static String m0(count) => "${count}次数剩余。订阅可不限制使用";
+  static String m0(count) => "剩余${count}次试用。订阅可不限制使用";
 
-  static String m1(count) => "${count}剩余的试用机会";
+  static String m1(count) => "剩余${count}次试用机会";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_ads": MessageLookupByLibrary.simpleMessage("移除广告"),
         "select_picture": MessageLookupByLibrary.simpleMessage("选择一个图片"),
         "settings": MessageLookupByLibrary.simpleMessage("设置"),
+        "share": MessageLookupByLibrary.simpleMessage("分享"),
         "skip": MessageLookupByLibrary.simpleMessage("跳过"),
         "special_offers": MessageLookupByLibrary.simpleMessage("特别优惠"),
         "start_free_trial": MessageLookupByLibrary.simpleMessage("开始免费试用"),
@@ -68,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "translate_tool_title": MessageLookupByLibrary.simpleMessage("翻译工具"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("无限快速翻译"),
+        "update": MessageLookupByLibrary.simpleMessage("更新"),
         "usage": MessageLookupByLibrary.simpleMessage("使用"),
         "watch_video": MessageLookupByLibrary.simpleMessage("观看广告就有机会使用它"),
         "yearly": MessageLookupByLibrary.simpleMessage("每年")

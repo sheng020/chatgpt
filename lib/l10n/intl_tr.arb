@@ -37,5 +37,7 @@
   "no_back_history": "Geçmiş öğesi yok",
   "no_forward_history": "İleri Geçmiş Öğesi Yok",
   "settings": "Ayarlar",
-  "skip": "Atlamak"
+  "skip": "Atlamak",
+  "share": "Paylaşmak",
+  "update": "Güncelleme"
 }

@@ -20,6 +20,7 @@
   "mode_completions": "Críochnaithe comhrá",
   "mode_image_generation": "Giniúint íomhá",
   "mode_image_variation": "Athrú íomhá",
+  "real_time_translate": "Aistrigh fíor-ama",
   "usage": "Úsáid",
   "opportunitie_remaining": "{count} deiseanna rian fágtha",
   "special_offers": "Tairiscintí speisialta",
@@ -31,9 +32,12 @@
   "as_low_as": "Chomh híseal le",
   "daily": "laethúil",
   "cancel_any_time": "Cealaigh am ar bith",
+  "start_free_trial": "Tosaigh triail saor in aisce",
   "privacy_policy": "Beartas Príobháideachais",
   "no_back_history": "Níl mír ar ais ar ais",
   "no_forward_history": "Gan Mír Stair ar aghaidh",
   "settings": "Socruithe",
-  "skip": "Scipeáil"
+  "skip": "Scipeáil",
+  "share": "A roinnt",
+  "update": "Thabhairt cothrom le dáta"
 }

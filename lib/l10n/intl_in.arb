@@ -37,5 +37,7 @@
   "no_back_history": "Tidak ada item sejarah belakang",
   "no_forward_history": "Tidak ada item riwayat maju",
   "settings": "Pengaturan",
-  "skip": "Melewati"
+  "skip": "Melewati",
+  "share": "Membagikan",
+  "update": "Memperbarui"
 }

@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(count) => "${count} hafe Dabalataan maamilaa";
 
+  static String m1(count) => "${count} tajaajila hafee";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "answer_question_tips": MessageLookupByLibrary.simpleMessage(
@@ -59,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_forward_history":
             MessageLookupByLibrary.simpleMessage("Seenaan dabarsaa hin jiru"),
         "ok": MessageLookupByLibrary.simpleMessage("TOLE"),
+        "opportunitie_remaining": m1,
         "privacy_policy":
             MessageLookupByLibrary.simpleMessage("Imaammata dhuunfaa"),
         "real_time_translate":
@@ -68,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Fakkii filadhu"),
         "settings": MessageLookupByLibrary.simpleMessage("Sajoo"),
+        "share": MessageLookupByLibrary.simpleMessage("Qooduu"),
         "skip": MessageLookupByLibrary.simpleMessage("Irra darbuu"),
         "special_offers": MessageLookupByLibrary.simpleMessage("Qophii addaa"),
         "start_free_trial":
@@ -83,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Meeshaan jijjiirii"),
         "unlimited_quick_translation": MessageLookupByLibrary.simpleMessage(
             "Kan hin dangeffamne yaadatti qabachuudhaan ture"),
+        "update":
+            MessageLookupByLibrary.simpleMessage("Odeeffannoo dhiyeenyaa"),
         "usage": MessageLookupByLibrary.simpleMessage("Fayyadami"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Carraa itti fayyadamuu argachuuf beeksisa tokko ilaalaa"),

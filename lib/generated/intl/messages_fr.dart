@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Sélectionnez une image"),
         "settings": MessageLookupByLibrary.simpleMessage("Réglages"),
+        "share": MessageLookupByLibrary.simpleMessage("Partager"),
         "skip": MessageLookupByLibrary.simpleMessage("Sauter"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Offres spéciales"),
@@ -87,6 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Outil de traduction"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("Traduction rapide illimitée"),
+        "update": MessageLookupByLibrary.simpleMessage("Mise à jour"),
         "usage": MessageLookupByLibrary.simpleMessage("Utiliser"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Regardez une annonce pour avoir une chance de l\'utiliser"),

@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_picture":
             MessageLookupByLibrary.simpleMessage("Chọn một hình ảnh"),
         "settings": MessageLookupByLibrary.simpleMessage("Cài đặt"),
+        "share": MessageLookupByLibrary.simpleMessage("Đăng lại"),
         "skip": MessageLookupByLibrary.simpleMessage("Nhảy"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Ưu đãi đặc biệt"),
@@ -82,8 +83,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Hỗ trợ GPT đa ngôn ngữ"),
         "translate_tool_tips": MessageLookupByLibrary.simpleMessage(
             "Cách dịch \"How are you\" thành tiếng Trung và tiếng Janpanese"),
+        "translate_tool_title":
+            MessageLookupByLibrary.simpleMessage("Dịch công cụ"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("Không giới hạn dịch nhanh"),
+        "update": MessageLookupByLibrary.simpleMessage("Cập nhật"),
         "usage": MessageLookupByLibrary.simpleMessage("Sử dụng"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Xem quảng cáo để có cơ hội sử dụng"),

@@ -68,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_ads": MessageLookupByLibrary.simpleMessage("Keluarkan iklan"),
         "select_picture": MessageLookupByLibrary.simpleMessage("Pilih gambar"),
         "settings": MessageLookupByLibrary.simpleMessage("tetapan"),
+        "share": MessageLookupByLibrary.simpleMessage("Kongsi"),
         "skip": MessageLookupByLibrary.simpleMessage("Langkau"),
         "special_offers":
             MessageLookupByLibrary.simpleMessage("Tawaran istimewa"),
@@ -84,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Alat terjemah"),
         "unlimited_quick_translation":
             MessageLookupByLibrary.simpleMessage("Terjemahan pantas tanpa had"),
+        "update": MessageLookupByLibrary.simpleMessage("Kemas kini"),
         "usage": MessageLookupByLibrary.simpleMessage("Penggunaan"),
         "watch_video": MessageLookupByLibrary.simpleMessage(
             "Tonton iklan untuk peluang menggunakannya"),
