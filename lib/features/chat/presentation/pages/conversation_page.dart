@@ -7,7 +7,6 @@ import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conv
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_messages_list_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/stop_generate_widget.dart';
 import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
@@ -162,20 +161,14 @@ class _ConversationPageState extends State<ConversationPage> {
             child: BlocBuilder<ChatConversationCubit, ChatConversationState>(
                 buildWhen: (previous, current) =>
                     current is ChatConversationLoaded ||
-                    current is ChatConversationInitial ||
-                    current is ChatConversationLoading,
+                    current is ChatConversationInitial,
                 builder: (context, chatConversationState) {
                   if (chatConversationState is ChatConversationLoaded) {
                     final chatMessages =
                         chatConversationState.getShowMessageList();
 
                     if (chatMessages == null || chatMessages.isEmpty) {
-                      return ExampleWidget(
-                        onMessageController: (message) {
-                          BlocProvider.of<ChatConversationCubit>(context)
-                              .sendChatMessage(message);
-                        },
-                      );
+                      return SizedBox.shrink();
                     } else {
                       return Stack(
                         children: [
@@ -192,17 +185,9 @@ class _ConversationPageState extends State<ConversationPage> {
                         ],
                       );
                     }
+                  } else {
+                    return SizedBox.shrink();
                   }
-                  return ExampleWidget(
-                    onMessageController: (message) {
-                      BlocProvider.of<ChatConversationCubit>(context)
-                          .sendChatMessage(message);
-                      /* setState(() {
-                                    _messageController.value =
-                                        TextEditingValue(text: message);
-                                  }); */
-                    },
-                  );
                 }),
           ),
           BlocBuilder<PurchaseCubit, PurchaseState>(

@@ -90,7 +90,6 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
   Future<void> initMessageList() async {
     var database = DatabaseManager.getInstance();
-    emit(ChatConversationLoading());
     if (isNewUser()) {
       await database.insertMessage(ChatMessageEntity(
           messageId: ChatGptConst.TIPS_ANSWER_QUESTIONS,

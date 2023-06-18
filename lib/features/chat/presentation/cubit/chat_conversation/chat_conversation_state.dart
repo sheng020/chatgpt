@@ -9,11 +9,6 @@ class ChatConversationInitial extends ChatConversationState {
   List<Object> get props => [];
 }
 
-class ChatConversationLoading extends ChatConversationState {
-  @override
-  List<Object> get props => [];
-}
-
 class ChatConversationLoaded extends ChatConversationState {
   final List<ChatMessageEntity> chatMessages;
   final DateTime dateTime = DateTime.now();
