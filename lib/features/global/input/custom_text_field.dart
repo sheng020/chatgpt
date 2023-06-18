@@ -2,14 +2,15 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_loading_widget.dart';
 import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'crop_page.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 typedef PromptTrigger = void Function(int type, {String? path});
 
@@ -127,13 +128,38 @@ class CustomTextField extends StatelessWidget {
                 if (result != null) {
                   //File file = File(result.files.single.path!);
                   //print("result:${result.files.single.path}");
-                  var image = await Navigator.of(context).push(
+                  /* var image = await Navigator.of(context).push(
                     MaterialPageRoute<String?>(
                       builder: (BuildContext context) =>
                           CropPage(filePath: result.files.single.path!),
                     ),
+                  ); */
+                  CroppedFile? croppedFile = await ImageCropper().cropImage(
+                    sourcePath: result.files.single.path!,
+                    aspectRatioPresets: [
+                      CropAspectRatioPreset.square,
+                      /* CropAspectRatioPreset.ratio3x2,
+                      CropAspectRatioPreset.original,
+                      CropAspectRatioPreset.ratio4x3,
+                      CropAspectRatioPreset.ratio16x9 */
+                    ],
+                    compressFormat: ImageCompressFormat.png,
+                    uiSettings: [
+                      AndroidUiSettings(
+                          toolbarTitle: 'Cropper',
+                          toolbarColor: Theme.of(context).primaryColor,
+                          toolbarWidgetColor: Colors.white,
+                          initAspectRatio: CropAspectRatioPreset.original,
+                          lockAspectRatio: true),
+                      IOSUiSettings(
+                        title: 'Cropper',
+                      ),
+                      WebUiSettings(
+                        context: context,
+                      ),
+                    ],
                   );
-                  onTap?.call(TYPE_IMAGE_VARIATION, path: image);
+                  onTap?.call(TYPE_IMAGE_VARIATION, path: croppedFile?.path);
                 }
               },
               child: Padding(
@@ -200,7 +226,8 @@ class CustomTextField extends StatelessWidget {
                   onSelected: (value) async {
                     var isPurchase = await NativeChannel.isPurchased();
                     if (!isPurchase) {
-                      isPurchase = await NativeChannel.openSubscriptionPage();
+                      isPurchase = await BlocProvider.of<PurchaseCubit>(context)
+                          .openSubscriptionPage();
                       if (isPurchase) {
                         inputMode.value = value;
                       }

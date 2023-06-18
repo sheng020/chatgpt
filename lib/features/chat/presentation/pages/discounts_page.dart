@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/constants.dart';
 import 'package:flutter_chatgpt_clone/generated/l10n.dart';
@@ -21,8 +23,6 @@ class DiscountsPage extends StatelessWidget {
             child: Material(
               type: MaterialType.transparency,
               child: Ink(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
                   decoration: BoxDecoration(
                       border:
                           Border.all(color: Color(0xFF298DFF), width: 0.5.r),
@@ -32,12 +32,16 @@ class DiscountsPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text(
-                      S.of(context).skip,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                      child: Text(
+                        S.of(context).skip,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
                   )),
             ),
@@ -216,7 +220,8 @@ class DiscountsPage extends StatelessWidget {
                 backgroundColor: Color(0xFF298DFF),
                 minimumSize: Size(312.w, 54.h)),
             onPressed: () async {
-              var isPurchase = await NativeChannel.openSubscriptionPage();
+              var isPurchase = await BlocProvider.of<PurchaseCubit>(context)
+                  .openSubscriptionPage();
               if (isPurchase) {
                 Navigator.of(context).pop();
               }

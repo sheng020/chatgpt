@@ -28,7 +28,7 @@ class SettingsPage extends StatelessWidget {
           Material(
             type: MaterialType.transparency,
             child: Ink(
-              color: Colors.white,
+              color: Color(0xFF4556C1),
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed("/webview", arguments: {
@@ -41,11 +41,18 @@ class SettingsPage extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(width: 16.w),
-                      SvgPicture.asset("assets/images/ic_privacy.svg"),
+                      SvgPicture.asset(
+                        "assets/images/ic_privacy.svg",
+                        colorFilter:
+                            ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                      ),
                       SizedBox(
                         width: 24.w,
                       ),
-                      Text(S.of(context).privacy_policy)
+                      Text(
+                        S.of(context).privacy_policy,
+                        style: TextStyle(color: Colors.white),
+                      )
                     ],
                   ),
                 ),
@@ -55,7 +62,7 @@ class SettingsPage extends StatelessWidget {
           Material(
             type: MaterialType.transparency,
             child: Ink(
-              color: Colors.white,
+              color: Color(0xFF4556C1),
               child: InkWell(
                 onTap: () {
                   Share.share(
@@ -69,12 +76,15 @@ class SettingsPage extends StatelessWidget {
                       SvgPicture.asset(
                         "assets/images/ic_share.svg",
                         colorFilter:
-                            ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                            ColorFilter.mode(Colors.white, BlendMode.srcIn),
                       ),
                       SizedBox(
                         width: 24.w,
                       ),
-                      Text(S.of(context).share)
+                      Text(
+                        S.of(context).share,
+                        style: TextStyle(color: Colors.white),
+                      )
                     ],
                   ),
                 ),
@@ -84,7 +94,7 @@ class SettingsPage extends StatelessWidget {
           Material(
             type: MaterialType.transparency,
             child: Ink(
-              color: Colors.white,
+              color: Color(0xFF4556C1),
               child: InkWell(
                 onTap: () {
                   NativeChannel.navigateAppStore();
@@ -94,11 +104,18 @@ class SettingsPage extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(width: 16.w),
-                      SvgPicture.asset("assets/images/ic_update.svg"),
+                      SvgPicture.asset(
+                        "assets/images/ic_update.svg",
+                        colorFilter:
+                            ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                      ),
                       SizedBox(
                         width: 24.w,
                       ),
-                      Text(S.of(context).update)
+                      Text(
+                        S.of(context).update,
+                        style: TextStyle(color: Colors.white),
+                      )
                     ],
                   ),
                 ),

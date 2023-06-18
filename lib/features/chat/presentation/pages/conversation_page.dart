@@ -380,9 +380,15 @@ class _ConversationPageState extends State<ConversationPage> {
                                                 minimumSize: Size(312.w, 54.h),
                                                 backgroundColor:
                                                     Color(0xFF298DFF)),
-                                            onPressed: () {
-                                              NativeChannel
-                                                  .openSubscriptionPage();
+                                            onPressed: () async {
+                                              var isPurchase =
+                                                  await BlocProvider.of<
+                                                              PurchaseCubit>(
+                                                          context)
+                                                      .openSubscriptionPage();
+                                              if (isPurchase) {
+                                                Navigator.of(context).pop();
+                                              }
                                             },
                                             child: Text(
                                               S.of(context).start_free_trial,

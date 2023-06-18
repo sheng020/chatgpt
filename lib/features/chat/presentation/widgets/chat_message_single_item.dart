@@ -63,7 +63,6 @@ class ChatMessageSingleItem extends StatelessWidget {
           OpenAIImageModel.fromJson(json.decode(chatMessage.promptResponse!));
       var children = imageModel.data.map(
         (e) {
-          print("image generation:${e.url}");
           return Padding(
             padding: EdgeInsets.all(8.r),
             child: CachedNetworkImage(
@@ -377,7 +376,21 @@ class ChatMessageSingleItem extends StatelessWidget {
                 ),
                 InkWell(
                     onTap: () {
-                      Share.share(chatMessage.promptResponse!);
+                      if (chatMessage.type == TYPE_IMAGE_VARIATION) {
+                        var variation = OpenAIImageVariationModel.fromJson(
+                            json.decode(chatMessage.promptResponse!));
+                        if (variation.data.firstOrNull != null) {
+                          Share.share(variation.data.firstOrNull!.url);
+                        }
+                      } else if (chatMessage.type == TYPE_IMAGE_GENERATION) {
+                        var generation = OpenAIImageModel.fromJson(
+                            json.decode(chatMessage.promptResponse!));
+                        if (generation.data.firstOrNull != null) {
+                          Share.share(generation.data.first.url);
+                        }
+                      } else if (chatMessage.type == TYPE_CHAT) {
+                        Share.share(chatMessage.promptResponse!);
+                      }
                     },
                     child: SvgPicture.asset("assets/images/ic_share.svg")),
                 SizedBox(

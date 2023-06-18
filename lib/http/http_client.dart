@@ -10,19 +10,27 @@ import 'package:random_string/random_string.dart';
 
 import 'dictionary_request_response.dart';
 
+/* {'com.atom.android.chatgpt': {'secret': "05ba1e0b-18a9-431b-b2a6-49c0dfdb73da",
+                                       'appkey': 'ce16cb3b7a24',
+                                       'apikey': '20ad367860c144ebb4cbc3afe8ad5d61',
+                                       },
+          'com.atom.android.chatgpt.pro': {'secret': "0338b39c-372f-4eae-923b-bc71e8b5d7d9",
+                                           'appkey': '4e6f3640e9e3',
+                                           'apikey': '47801fab303b41e3be846c3177d01bb8',
+                                           }
+          } */
 const APP_KEY_NORMAL = "ce16cb3b7a24";
 const PACKAGE_NAME_NORMAL = "com.atom.android.chatgpt";
 const String TOKEN_CHARACTER =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const String serverApiKeyNormal = "9644b3f644474eada3d75657cd690e57";
+const String serverApiKeyNormal = "20ad367860c144ebb4cbc3afe8ad5d61";
 const String serverSecretNormal = "05ba1e0b-18a9-431b-b2a6-49c0dfdb73da";
 const String languageTag = "zh";
 
-const APP_KEY_VIP = "ce16cb3b7a24";
-const PACKAGE_NAME_VIP = "com.atom.android.chatgpt.sub";
-const serverApiKeyVip =
-    "9644b3f644474eada3d75657cd690e579644b3f644474eada3d75657cd690e57";
-const String serverSecretVip = "05ba1e0b-18a9-431b-b2a6-49c0dfdb73da";
+const APP_KEY_VIP = "4e6f3640e9e3";
+const PACKAGE_NAME_VIP = "com.atom.android.chatgpt.pro";
+const serverApiKeyVip = "47801fab303b41e3be846c3177d01bb8";
+const String serverSecretVip = "0338b39c-372f-4eae-923b-bc71e8b5d7d9";
 
 class HttpClient {
   static HttpClient? _instance;
@@ -38,7 +46,7 @@ class HttpClient {
   HttpClient._internal()
       : client = RestClient(Dio(
           BaseOptions(
-              baseUrl: "http://18.157.84.26:8081",
+              baseUrl: "https://atominfo.services",
               headers: HeadersBuilder.build()),
         ));
 

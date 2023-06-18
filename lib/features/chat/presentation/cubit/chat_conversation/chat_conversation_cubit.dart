@@ -177,7 +177,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           //print(content);
           if (content != null) {
             if (lastMessage != null) {
-              chatMessages?.remove(lastMessage);
+              chatMessages.remove(lastMessage);
             } else {
               consumeOneTime().then((leftCount) {
                 emit(ConversationLeftCount(leftCount: leftCount));
@@ -191,7 +191,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
                 messageId: ChatGptConst.AIBot,
                 date: DateTime.now().millisecondsSinceEpoch,
                 promptResponse: sb.toString());
-            chatMessages?.insert(0, chatMessageNewResponse);
+            chatMessages.insert(0, chatMessageNewResponse);
             lastMessage = chatMessageNewResponse;
             emit(ChatConversationLoaded(
                 chatMessages: _conversations, isRequestProcessing: true));
@@ -207,7 +207,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               type: type,
               promptResponse: error.message);
 
-          chatMessages?.insert(0, chatMessageErrorResponse);
+          chatMessages.insert(0, chatMessageErrorResponse);
 
           emit(ChatConversationLoaded(
               chatMessages: _conversations, isRequestProcessing: false));
@@ -222,7 +222,13 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               chatMessages: _conversations, isRequestProcessing: false));
           ChatMessageEntity? chatLastMessage = lastMessage;
           if (chatLastMessage != null) {
-            database.insertMessage(chatLastMessage);
+            database.insertMessage(chatLastMessage).then((value) {
+              _conversations[0].id = value;
+              emit(
+                ChatConversationLoaded(
+                    chatMessages: _conversations, isRequestProcessing: true),
+              );
+            });
           }
         },
       );
@@ -288,7 +294,6 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
   Future<void> startShowRewardAd() {
     return NativeChannel.showRewardAd().then((value) {
-      print("get rewarded:${value}");
       if (value == true) {
         var leftCount = getLeftCount();
         leftCount += 3;
