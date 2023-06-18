@@ -225,7 +225,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
               _conversations[0].id = value;
               emit(
                 ChatConversationLoaded(
-                    chatMessages: _conversations, isRequestProcessing: true),
+                    chatMessages: _conversations, isRequestProcessing: false),
               );
             });
           }
