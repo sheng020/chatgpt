@@ -19,8 +19,9 @@ class PurchaseCubit extends Cubit<PurchaseState> {
     }
   }
 
-  Future<bool> openSubscriptionPage() async {
-    bool isPurchase = await NativeChannel.openSubscriptionPage();
+  Future<bool> openSubscriptionPage({String? openToken}) async {
+    bool isPurchase =
+        await NativeChannel.openSubscriptionPage(openToken: openToken);
     emit(PurchaseState(isPurchased: isPurchase, leftCount: getLeftCount()));
     return isPurchase;
   }

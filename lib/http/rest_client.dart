@@ -21,7 +21,7 @@ abstract class RestClient {
       @Field("nonce") String nonce,
       @Field("sig") String sig);
 
-  @POST("/v1/t2t/translate")
+  @POST("/v1/api/translate")
   Future<TranslateResponse> translate(
       @Field("to") String to, @Field("texts") List<String> texts);
 }

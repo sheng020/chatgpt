@@ -56,7 +56,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
             }
 
             "open_subscription_page" -> {
-                mSubscriptionService.openSubscriptionActivity(this, REQUEST_SUBSCRIBE_ACTIVITY)
+                val openToken = (call.arguments as? Map<String, Any?>)?.get("openToken") as? String
+                mSubscriptionService.openSubscriptionActivity(this, REQUEST_SUBSCRIBE_ACTIVITY, openToken)
                 //result.success(null)
                 sparseArray.put(REQUEST_SUBSCRIBE_ACTIVITY, result)
             }

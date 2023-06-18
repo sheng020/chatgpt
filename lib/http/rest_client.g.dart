@@ -77,7 +77,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/v1/t2t/translate',
+              '/v1/api/translate',
               queryParameters: queryParameters,
               data: _data,
             )

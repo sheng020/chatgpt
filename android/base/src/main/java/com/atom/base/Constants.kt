@@ -45,5 +45,7 @@ class Constants {
 
         const val OPEN_AD_IMPRESSION = "open_ad_impression"
         const val INTERSTITIAL_AD_IMPRESSION = "interstitial_ad_impression"
+
+        const val OPEN_TOKEN = "open_token"
     }
 }

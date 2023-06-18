@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.android.billingclient.api.*
 import com.atom.base.Constants
+import com.atom.base.Constants.Companion.OPEN_TOKEN
 import com.atom.base.Constants.Companion.PREMIUM_SUB
 import com.atom.base.KeyValue
 import com.atom.mediator.billing.SubscriptionService
@@ -224,8 +225,11 @@ class SubscriptionImpl(private val context: Context) : SubscriptionService {
         return null
     }
 
-    override fun openSubscriptionActivity(activity: Activity, requestCode: Int) {
+    override fun openSubscriptionActivity(activity: Activity, requestCode: Int, openToken: String?) {
         val intent = Intent(activity, SubscriptionActivity::class.java)
+        openToken?.let {
+            intent.putExtra(OPEN_TOKEN, openToken)
+        }
         activity.startActivityForResult(intent, requestCode)
     }
 }

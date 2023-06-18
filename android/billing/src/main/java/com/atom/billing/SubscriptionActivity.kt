@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import com.android.billingclient.api.Purchase
 import com.atom.base.Constants
+import com.atom.base.Constants.Companion.OPEN_TOKEN
 import com.atom.base.KeyValue
 import com.atom.base.showToast
 import com.atom.mediator.MediatorService
@@ -32,6 +33,8 @@ class SubscriptionActivity : ComponentActivity(), SubscriptionService.PurchaseLi
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, true)
+
+        var openToken = intent.getStringExtra(OPEN_TOKEN)
 
         setContent {
 
@@ -56,6 +59,22 @@ class SubscriptionActivity : ComponentActivity(), SubscriptionService.PurchaseLi
                 billingViewModel.getProductsAndPurchase()
                 subscriptionService.setPurchaseListener(this@SubscriptionActivity)
             })
+
+            LaunchedEffect(key1 = billingState, block = {
+                if (openToken != null) {
+                    val localBillingState = billingState
+                    if (localBillingState is BillingStateSuccess) {
+                        val detail = localBillingState.billingDetails.productDetails.findSubscriptionOfferByTag(openToken)
+                        billingViewModel.buy(
+                            localBillingState.billingDetails.productDetails,
+                            detail?.offerToken ?: return@LaunchedEffect,
+                            this@SubscriptionActivity
+                        )
+                    }
+
+                }
+            })
+
             SubscriptionScreen(
                 billingState = billingState,
                 onCloseClick = {

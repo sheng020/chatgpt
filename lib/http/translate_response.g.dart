@@ -11,7 +11,7 @@ TranslateResponse _$TranslateResponseFromJson(Map<String, dynamic> json) =>
       code: json['code'] as int,
       message: json['message'] as String?,
       engine: json['engine'] as String,
-      result: TranslateResult.fromJson(json['result'] as Map<String, dynamic>),
+      data: TranslateResult.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TranslateResponseToJson(TranslateResponse instance) =>
@@ -19,7 +19,7 @@ Map<String, dynamic> _$TranslateResponseToJson(TranslateResponse instance) =>
       'code': instance.code,
       'message': instance.message,
       'engine': instance.engine,
-      'result': instance.result,
+      'data': instance.data,
     };
 
 TranslateResult _$TranslateResultFromJson(Map<String, dynamic> json) =>

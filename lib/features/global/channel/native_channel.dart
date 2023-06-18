@@ -35,8 +35,9 @@ class NativeChannel {
     }
   }
 
-  static Future<bool> openSubscriptionPage() {
-    return _channel.invokeMethod("open_subscription_page").then((value) {
+  static Future<bool> openSubscriptionPage({String? openToken}) {
+    return _channel.invokeMethod(
+        "open_subscription_page", {"openToken": openToken}).then((value) {
       bool isPurchase = value ?? true;
       setEnv(isPurchase);
       return isPurchase;

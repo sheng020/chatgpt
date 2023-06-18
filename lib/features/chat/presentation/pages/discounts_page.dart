@@ -221,7 +221,7 @@ class DiscountsPage extends StatelessWidget {
                 minimumSize: Size(312.w, 54.h)),
             onPressed: () async {
               var isPurchase = await BlocProvider.of<PurchaseCubit>(context)
-                  .openSubscriptionPage();
+                  .openSubscriptionPage(openToken: "yearly");
               if (isPurchase) {
                 Navigator.of(context).pop();
               }

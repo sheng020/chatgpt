@@ -18,7 +18,7 @@ interface SubscriptionService : IService {
 
     suspend fun getPurchase(): List<Purchase>
 
-    fun openSubscriptionActivity(activity: Activity, requestCode: Int)
+    fun openSubscriptionActivity(activity: Activity, requestCode: Int, openToken: String? = null)
 
     fun launchBillingFlow(activity: Activity, params: BillingFlowParams)
 

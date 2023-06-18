@@ -7,13 +7,13 @@ class TranslateResponse {
 
   final String? message;
   final String engine;
-  final TranslateResult result;
+  final TranslateResult data;
 
   TranslateResponse(
       {required this.code,
       this.message,
       required this.engine,
-      required this.result});
+      required this.data});
 
   factory TranslateResponse.fromJson(Map<String, dynamic> json) =>
       _$TranslateResponseFromJson(json);

@@ -46,7 +46,7 @@ class HttpClient {
   HttpClient._internal()
       : client = RestClient(Dio(
           BaseOptions(
-              baseUrl: "https://atominfo.services",
+              baseUrl: "https://t2t.atominfo.services",
               headers: HeadersBuilder.build()),
         ));
 

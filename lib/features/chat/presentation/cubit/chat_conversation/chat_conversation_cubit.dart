@@ -71,11 +71,11 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
         emit(NotifyTextFieldState(
             message: text,
             isRequestProcessing: false,
-            translation: value.result.texts.firstOrNull));
+            translation: value.data.texts.firstOrNull));
       } else {
         emit(TranslateStatus(id: id, requesting: false));
         var message = _conversations.firstWhere((element) => element.id == id);
-        message.promptResponse = value.result.texts.firstOrNull;
+        message.promptResponse = value.data.texts.firstOrNull;
         emit(ChatConversationLoaded(
             chatMessages: _conversations, isRequestProcessing: false));
       }
