@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_chatgpt_clone/injection_container.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
+import '../../../main.dart';
 import '../builder/headers.dart';
 import '../exceptions/request_failure.dart';
 import '../utils/logger.dart';
@@ -53,6 +56,7 @@ class OpenAINetworkingClient {
     required T Function(Map<String, dynamic>) onSuccess,
   }) {
     final controller = StreamController<T>();
+
     final http.Client client = http.Client();
 
     final request = http.Request("GET", Uri.parse(from));
@@ -174,7 +178,23 @@ class OpenAINetworkingClient {
   }) {
     StreamController<T> controller = StreamController<T>();
 
-    final http.Client client = http.Client();
+    HttpClient httpClient = HttpClient();
+
+    String? proxy = box.read(PROXY_ADDRESS);
+
+    if (proxy?.isNotEmpty == true) {
+      httpClient.findProxy = (uri) {
+        return "PROXY $proxy;";
+      };
+    }
+
+
+    httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) {
+      return true;
+    };
+
+
+    final http.Client client = IOClient(httpClient);
     http.Request request = http.Request(
       "POST",
       Uri.parse(to),
@@ -240,7 +260,6 @@ class OpenAINetworkingClient {
             close();
           },
           onError: (error, stackTrace) {
-            print("post error");
             if (!controller.isClosed) {
               controller.addError(error, stackTrace);
             }

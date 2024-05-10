@@ -22,6 +22,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     final queryPrompt = prompt;
 
     // Creates A Stream Of Chat Completions.
+    print("model name:${OpenAI.chatModel.name}");
     final chatStream = OpenAI.instance.chat.createStream(
       model: OpenAI.chatModel.name,
       messages: [

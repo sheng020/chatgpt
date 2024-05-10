@@ -63,13 +63,15 @@ class _$AppDatabase extends AppDatabase {
 
   MessageDao? _messageDaoInstance;
 
+  ConversationDao? _conversationDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -85,7 +87,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `message` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `messageId` TEXT, `queryPrompt` TEXT, `promptResponse` TEXT, `date` INTEGER, `type` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `message` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `messageId` TEXT, `queryPrompt` TEXT, `promptResponse` TEXT, `date` INTEGER, `conversationId` INTEGER, `type` INTEGER NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `conversation` (`conversationId` INTEGER PRIMARY KEY AUTOINCREMENT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -96,6 +100,12 @@ class _$AppDatabase extends AppDatabase {
   @override
   MessageDao get messageDao {
     return _messageDaoInstance ??= _$MessageDao(database, changeListener);
+  }
+
+  @override
+  ConversationDao get conversationDao {
+    return _conversationDaoInstance ??=
+        _$ConversationDao(database, changeListener);
   }
 }
 
@@ -113,6 +123,7 @@ class _$MessageDao extends MessageDao {
                   'queryPrompt': item.queryPrompt,
                   'promptResponse': item.promptResponse,
                   'date': item.date,
+                  'conversationId': item.conversationId,
                   'type': item.type
                 }),
         _chatMessageEntityUpdateAdapter = UpdateAdapter(
@@ -125,6 +136,7 @@ class _$MessageDao extends MessageDao {
                   'queryPrompt': item.queryPrompt,
                   'promptResponse': item.promptResponse,
                   'date': item.date,
+                  'conversationId': item.conversationId,
                   'type': item.type
                 });
 
@@ -146,6 +158,7 @@ class _$MessageDao extends MessageDao {
             messageId: row['messageId'] as String?,
             queryPrompt: row['queryPrompt'] as String?,
             promptResponse: row['promptResponse'] as String?,
+            conversationId: row['conversationId'] as int?,
             date: row['date'] as int?,
             type: row['type'] as int));
   }
@@ -167,5 +180,47 @@ class _$MessageDao extends MessageDao {
   Future<int> updateMessage(ChatMessageEntity messageEntity) {
     return _chatMessageEntityUpdateAdapter.updateAndReturnChangedRows(
         messageEntity, OnConflictStrategy.abort);
+  }
+}
+
+class _$ConversationDao extends ConversationDao {
+  _$ConversationDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _conversationEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'conversation',
+            (ConversationEntity item) =>
+                <String, Object?>{'conversationId': item.conversationId});
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<ConversationEntity>
+      _conversationEntityInsertionAdapter;
+
+  @override
+  Future<List<ConversationEntity>?> queryConversations() async {
+    return _queryAdapter.queryList('SELECT * FROM conversation',
+        mapper: (Map<String, Object?> row) =>
+            ConversationEntity(conversationId: row['conversationId'] as int?));
+  }
+
+  @override
+  Future<int?> deleteConversation(int conversationId) async {
+    return _queryAdapter.query(
+        'DELETE FROM conversation WHERE conversationId = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [conversationId]);
+  }
+
+  @override
+  Future<int> insertConversation(ConversationEntity conversationEntity) {
+    return _conversationEntityInsertionAdapter.insertAndReturnId(
+        conversationEntity, OnConflictStrategy.abort);
   }
 }

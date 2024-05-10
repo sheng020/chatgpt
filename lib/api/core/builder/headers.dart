@@ -1,4 +1,3 @@
-import 'package:flutter_chatgpt_clone/http/http_client.dart';
 import 'package:meta/meta.dart';
 
 import '../utils/logger.dart';
@@ -50,16 +49,6 @@ abstract class HeadersBuilder {
 
     headers["Authorization"] = "Bearer $apiKey";
 
-    headers["package"] = HttpClient.PACKAGE_NAME;
-
-    int time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    headers['timestamp'] = time.toString();
-    headers['to'] = languageTag;
-    var token = generateToken();
-    headers['nonce'] = token;
-    headers['sig'] = generateSignature(time, token);
-
-    headers['appKey'] = HttpClient.APP_KEY;
     return headers;
   }
 

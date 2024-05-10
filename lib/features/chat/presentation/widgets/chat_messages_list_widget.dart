@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_loading_widget.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -51,25 +48,34 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
   }
 
   Widget _responsePreparingWidget(bool isRequestProcessing) {
-    if (Platform.isAndroid) {
-      return SizedBox.shrink();
+    if (isRequestProcessing) {
+      return Container(
+        height: 60,
+        child: Image.asset("assets/loading_response.gif"),
+      );
     } else {
-      if (isRequestProcessing) {
-        return Container(
-          height: 60,
-          child: ConversationLoadingWidget(),
-        );
-      } else {
-        return SizedBox.shrink();
-      }
+      return SizedBox.shrink();
     }
+  }
+
+  @override
+  void initState() {
+    /* if (widget.isScrollViewFirstLoad) {
+      print("first scroll");
+      widget.isScrollViewFirstLoad = false;
+      Future.delayed(Duration(milliseconds: 50), () {
+        widget.scrollController.scrollToIndex(widget.chatMessages.length - 1,
+            duration: Duration(milliseconds: 500));
+      });
+    } */
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      cacheExtent: 1000,
       reverse: true,
-      shrinkWrap: true,
       itemCount: widget.chatMessages.length + 1,
       controller: widget.scrollController,
       itemBuilder: (context, index) {
@@ -95,7 +101,8 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
                 var visiblePercentage = visibilityInfo.visibleFraction * 100;
 
                 var key = visibilityInfo.key as ValueKey;
-
+                //print(
+                //    "visible:${visiblePercentage}  ${key.value} ${widget.chatMessages.length}");
                 if (widget.isRequestProcessing && key.value == "index_0") {
                   var widgetKey =
                       getCachedKey("index_${chatMessage.messageId}_0");
@@ -108,15 +115,15 @@ class ChatMessagesListState extends State<ChatMessagesListWidget> {
                         duration: Duration(milliseconds: 300),
                         curve: Curves.ease,
                         alignmentPolicy:
-                            ScrollPositionAlignmentPolicy.keepVisibleAtStart);
+                            ScrollPositionAlignmentPolicy.keepVisibleAtEnd);
                     lastItemSize = currentSize;
                   }
                 }
               },
               child: ChatMessageSingleItem(
-                editingController: widget.editingController,
                 key: getCachedKey("index_${chatMessage.messageId}_$realIndex"),
                 chatMessage: chatMessage,
+                editingController: widget.editingController,
               ),
             ),
           );

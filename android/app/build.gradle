@@ -24,7 +24,6 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion flutter.compileSdkVersion
@@ -45,61 +44,20 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.atom.android.chatgpt"
+        applicationId "com.example.flutter_chatgpt_clone"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 7
-        versionName "1.0.3"
-    }
-
-    signingConfigs {
-        def keystorePropertiesFile = rootProject.file("key.properties")
-        def keystoreProperties = new Properties()
-
-        if (keystorePropertiesFile.exists()) {
-            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-        } else {
-            def storePassword = System.getenv('KEY_STORE_PASSWORD')
-            def keyPassword = System.getenv('KEY_PASSWORD')
-            def keyAlias = System.getenv('KEY_ALIAS')
-            def storeFile = System.getenv('KEY_PATH')
-            if (storePassword != null) {
-                keystoreProperties.setProperty('storePassword', storePassword)
-            } else {
-                keystoreProperties.setProperty('storePassword', "android")
-            }
-            if (keyPassword != null) {
-                keystoreProperties.setProperty('keyPassword', keyPassword)
-            } else {
-                keystoreProperties.setProperty('keyPassword', "android")
-            }
-            if (keyAlias != null) {
-                keystoreProperties.setProperty('keyAlias', keyAlias)
-            } else {
-                keystoreProperties.setProperty('keyAlias', "androiddebugkey")
-            }
-            if (storeFile != null) {
-                keystoreProperties.setProperty('storeFile', storeFile)
-            } else {
-                keystoreProperties.setProperty('storeFile', "debug.keystore")
-            }
-
-        }
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
     }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 }
@@ -110,11 +68,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(path: ':mediator')
-    implementation project(path: ':billing')
-    implementation project(path: ':base')
-    implementation 'com.google.android.gms:play-services-ads:22.1.0'
-
-    implementation platform('com.google.firebase:firebase-bom:31.0.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

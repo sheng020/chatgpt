@@ -3,6 +3,6 @@
 /.dart_tool/
 /.flutter-plugins
 /.flutter-plugins-dependencies
-#.env
-#/lib/env.g.dart
+.env
+/lib/env.g.dart
 /android/.idea

@@ -2,20 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chatgpt_clone/api/instance/chat/chat_models.dart';
 import 'package:flutter_chatgpt_clone/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/chat_conversation/chat_conversation_cubit.dart';
-import 'package:flutter_chatgpt_clone/features/chat/presentation/cubit/purchase_cubit.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/chat_messages_list_widget.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/conversation_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/custom_standard_fab_location.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/example_widget.dart';
+import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/left_nav_button_widget.dart';
 import 'package:flutter_chatgpt_clone/features/chat/presentation/widgets/stop_generate_widget.dart';
-import 'package:flutter_chatgpt_clone/features/global/channel/native_channel.dart';
+import 'package:flutter_chatgpt_clone/features/global/common/common.dart';
 import 'package:flutter_chatgpt_clone/features/global/const/app_const.dart';
-import 'package:flutter_chatgpt_clone/features/global/const/constants.dart';
-import 'package:flutter_chatgpt_clone/features/global/input/custom_text_field.dart';
-import 'package:flutter_chatgpt_clone/generated/l10n.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_chatgpt_clone/features/global/custom_text_field/custom_text_field.dart';
+import 'package:flutter_chatgpt_clone/injection_container.dart';
+import 'package:flutter_chatgpt_clone/main.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+
+import '../../../../api/instance/openai.dart';
+import '../../../../generated/l10n.dart';
+import '../cubit/chat_conversation/chat_conversation_user_cubit.dart';
 
 class ConversationPage extends StatefulWidget {
   const ConversationPage({Key? key}) : super(key: key);
@@ -30,7 +35,6 @@ class _ConversationPageState extends State<ConversationPage> {
 
   late AutoScrollController _scrollController;
   final ValueNotifier<int> inputMode = ValueNotifier(TYPE_CHAT);
-  final ValueNotifier<String> textInputNotifier = ValueNotifier("");
 
   @override
   void initState() {
@@ -39,16 +43,11 @@ class _ConversationPageState extends State<ConversationPage> {
             Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
         axis: Axis.vertical);
     Future.microtask(() async {
-      if (isNewUser()) {
-        await Navigator.of(context).pushNamed("/discounts");
-      }
       await BlocProvider.of<ChatConversationCubit>(context).initMessageList();
       /* Future.delayed(Duration(milliseconds: 500), () {
         _scrollController.position
             .jumpTo(_scrollController.position.maxScrollExtent);
       }); */
-      BlocProvider.of<PurchaseCubit>(context).loadRewardAdIfAvaliable();
-      BlocProvider.of<PurchaseCubit>(context).checkIsPurchase();
     });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels > 200) {
@@ -60,25 +59,8 @@ class _ConversationPageState extends State<ConversationPage> {
       }
     });
 
-    _messageController.addListener(() {
-      textInputNotifier.value = _messageController.text;
-      if (inputMode.value == TYPE_REAL_TIME_TRANSLATE) {
-        startRealTimeTranslate(_messageController.text);
-      }
-    });
-
     super.initState();
   }
-
-  void startRealTimeTranslate(String text) {
-    timer?.cancel();
-    timer = Timer(Duration(milliseconds: 500), () {
-      BlocProvider.of<ChatConversationCubit>(context)
-          .startRealTimeTranslate(text);
-    });
-  }
-
-  Timer? timer;
 
   //var _isVisible = false;
 
@@ -86,347 +68,228 @@ class _ConversationPageState extends State<ConversationPage> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
-    timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-          child: Column(
+      body: Column(
         children: [
-          SizedBox(
-            height: 8.h,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 24.w,
-              ),
-              SvgPicture.asset("assets/images/ic_logo.svg"),
-              SizedBox(
-                width: 4.w,
-              ),
-              BlocBuilder<PurchaseCubit, PurchaseState>(
-                  builder: (context, purchaseState) {
-                if (purchaseState.isPurchased) {
-                  return Row(
-                    children: [
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      SvgPicture.asset("assets/images/ic_vip_logo.svg")
-                    ],
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              }),
-              Spacer(),
-              BlocBuilder<PurchaseCubit, PurchaseState>(
-                  builder: (context, purchaseState) {
-                if (purchaseState.isPurchased) {
-                  return SizedBox.shrink();
-                } else {
-                  return InkWell(
-                    onTap: () {
-                      BlocProvider.of<PurchaseCubit>(context)
-                          .openSubscriptionPage();
-                    },
-                    child: Image.asset(
-                      "assets/images/ic_vip_entrance.png",
-                      width: 54.w,
-                      height: 24.h,
-                    ),
-                  );
-                }
-              }),
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed("/settings");
-                  },
-                  icon: Icon(
-                    Icons.settings,
-                    color: Colors.white,
-                  ))
-            ],
-          ),
-          SizedBox(
-            height: 12.h,
-          ),
           Expanded(
-            child: BlocBuilder<ChatConversationCubit, ChatConversationState>(
-                buildWhen: (previous, current) =>
-                    current is ChatConversationLoaded ||
-                    current is ChatConversationInitial,
-                builder: (context, chatConversationState) {
-                  if (chatConversationState is ChatConversationLoaded) {
-                    final chatMessages =
-                        chatConversationState.getShowMessageList();
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  width: 300,
+                  decoration: BoxDecoration(
+                      boxShadow: glowBoxShadow, color: Colors.black87),
+                  child: Column(
+                    children: [
+                      Expanded(child: ConversationWidget(
+                          onConversationTap: (conversationId) {
+                        BlocProvider.of<ChatConversationCubit>(context)
+                            .selectConversation(conversationId);
+                      })),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 0.50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(color: Colors.white70),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: () {
+                            BlocProvider.of<ChatConversationCubit>(context)
+                                .deleteAllConversation();
+                          },
+                          child: LeftNavButtonWidget(
+                              iconData: Icons.delete_outline_outlined,
+                              textData: "Clear Conversation"),
+                        ),
+                      ),
+                      /* SizedBox(
+                        height: 10,
+                      ),
+                      LeftNavButtonWidget(
+                          iconData: Icons.nightlight_outlined,
+                          textData: "Dark Mode"), */
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: () async {
+                            var settingsParams =
+                                await _showSettingsDialog(context);
+                            if (settingsParams != null) {
+                              var serverAdress = settingsParams[0];
+                              if (serverAdress.isNotEmpty) {
+                                box.write(SERVER_ADDRESS, serverAdress);
+                                OpenAI.baseUrl = serverAdress;
+                              }
 
-                    if (chatMessages == null || chatMessages.isEmpty) {
-                      return SizedBox.shrink();
-                    } else {
-                      return Stack(
-                        children: [
-                          ChatMessagesListWidget(
-                              editingController: _messageController,
-                              chatMessages: chatMessages,
+                              var apiKey = settingsParams[1];
+                              if (apiKey.isNotEmpty) {
+                                box.write(API_KEY, apiKey);
+                                OpenAI.apiKey = apiKey;
+                              }
+                              var proxyAddress = settingsParams[2];
+                              box.write(PROXY_ADDRESS, proxyAddress);
+                            }
+                          },
+                          child: LeftNavButtonWidget(
+                              iconData: Icons.ios_share_sharp,
+                              textData: "Settings"),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Material(
+                        type: MaterialType.transparency,
+                        child: InkWell(
+                          onTap: () async {
+                            var name = await _showTextInputDialog(context,
+                                S.of(context).change_name, "input your name");
+                            if (name == null) {
+                              return;
+                            }
+                            if (name.isEmpty) {
+                              name = DEFAULT_NAME;
+                            } else {
+                              BlocProvider.of<ChatUserNameCubit>(context)
+                                  .changeUserName(name);
+                            }
+                          },
+                          child: LeftNavButtonWidget(
+                              iconData: Icons.exit_to_app,
+                              textData: S.of(context).change_name),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                    child: Container(
+                  decoration:
+                      BoxDecoration(color: Color.fromRGBO(52, 53, 64, 1)),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: BlocBuilder<ChatConversationCubit,
+                                ChatConversationState>(
+                            buildWhen: (previous, current) =>
+                                current is ChatConversationLoaded ||
+                                current is ChatConversationInitial ||
+                                current is ChatConversationLoading,
+                            builder: (context, chatConversationState) {
+                              if (chatConversationState
+                                  is ChatConversationLoaded) {
+                                final chatMessages =
+                                    chatConversationState.getShowMessageList();
+
+                                if (chatMessages == null ||
+                                    chatMessages.isEmpty) {
+                                  return ExampleWidget(
+                                    onMessageController: (message) {
+                                      BlocProvider.of<ChatConversationCubit>(
+                                              context)
+                                          .sendChatMessage(message);
+                                    },
+                                  );
+                                } else {
+                                  /* var chatMessagesReversed =
+                                      chatMessages.reversed.toList(); */
+                                  return Stack(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 16),
+                                        child: ChatMessagesListWidget(
+                                            chatMessages: chatMessages,
+                                            isRequestProcessing:
+                                                chatConversationState
+                                                    .isRequestProcessing,
+                                            scrollController:
+                                                _scrollController,
+                                            editingController: _messageController),
+                                      ),
+                                      StopGenerateWidget(
+                                          type: inputMode.value,
+                                          isRequestProcessing:
+                                              chatConversationState
+                                                  .isRequestProcessing)
+                                    ],
+                                  );
+                                }
+                              }
+                              return ExampleWidget(
+                                onMessageController: (message) {
+                                  BlocProvider.of<ChatConversationCubit>(
+                                          context)
+                                      .sendChatMessage(message);
+                                  /* setState(() {
+                                    _messageController.value =
+                                        TextEditingValue(text: message);
+                                  }); */
+                                },
+                              );
+                            }),
+                      ),
+                      BlocBuilder<ChatConversationCubit, ChatConversationState>(
+                        buildWhen: (previous, current) =>
+                            current is NotifyTextFieldState,
+                        builder: (context, chatConversationState) {
+                          if (chatConversationState is NotifyTextFieldState) {
+                            _messageController.value = TextEditingValue(
+                                text: chatConversationState.message);
+                            return CustomTextField(
                               isRequestProcessing:
                                   chatConversationState.isRequestProcessing,
-                              scrollController: _scrollController),
-                          StopGenerateWidget(
-                              type: inputMode.value,
-                              isRequestProcessing:
-                                  chatConversationState.isRequestProcessing)
-                        ],
-                      );
-                    }
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                }),
-          ),
-          BlocBuilder<PurchaseCubit, PurchaseState>(
-              builder: (context, purchaseState) {
-            if (purchaseState.isPurchased) {
-              return SizedBox.shrink();
-            } else {
-              return BlocBuilder<ChatConversationCubit, ChatConversationState>(
-                builder: (context, leftCountState) {
-                  if (leftCountState is ConversationLeftCount) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      child: Text(
-                        S
-                            .of(context)
-                            .opportunitie_remaining(leftCountState.leftCount),
-                        style: TextStyle(
-                            color: Color(0xFF21D8E8),
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    );
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-                buildWhen: (previous, current) {
-                  return current is ConversationLeftCount;
-                },
-              );
-            }
-          }),
-          BlocBuilder<ChatConversationCubit, ChatConversationState>(
-            buildWhen: (previous, current) => current is NotifyTextFieldState,
-            builder: (context, chatConversationState) {
-              if (chatConversationState is NotifyTextFieldState) {
-                /* if (chatConversationState.isRequestProcessing) {
-                  _messageController.text = "";
-                } else {
-                  _messageController.value =
-                      TextEditingValue(text: chatConversationState.message);
-                } */
-
-                return Column(
-                  children: [
-                    ValueListenableBuilder(
-                        valueListenable: inputMode,
-                        builder:
-                            (BuildContext context, int value, Widget? child) {
-                          if (value == TYPE_REAL_TIME_TRANSLATE) {
-                            if (chatConversationState.translation != null) {
-                              return Container(
-                                height: 48.h,
-                                color: Color(0xFF3A4154),
-                                child: Row(children: [
-                                  SizedBox(
-                                    width: 12.w,
-                                  ),
-                                  SvgPicture.asset(
-                                      "assets/images/ic_translate_logo.svg"),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  Expanded(
-                                      child: Text(
-                                    chatConversationState.translation!,
-                                    style: TextStyle(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white),
-                                  )),
-                                  Material(
-                                    type: MaterialType.transparency,
-                                    child: InkWell(
-                                      onTap: () {
-                                        if (chatConversationState.translation !=
-                                            null) {
-                                          _messageController.text =
-                                              chatConversationState
-                                                  .translation!;
-                                          _messageController.selection =
-                                              TextSelection.collapsed(
-                                                  offset: _messageController
-                                                      .text.length);
-                                        }
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            S.of(context).usage,
-                                            style: TextStyle(
-                                                fontSize: 14.sp,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF298DFF)),
-                                          ),
-                                          SizedBox(
-                                            width: 4.w,
-                                          ),
-                                          SvgPicture.asset(
-                                              "assets/images/ic_down_arrow.svg"),
-                                          SizedBox(
-                                            width: 12.w,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ]),
-                              );
-                            } else {
-                              return SizedBox.shrink();
-                            }
+                              inputMode: inputMode,
+                              textEditingController: _messageController,
+                              onTap: (int type, {String? path}) async {
+                                _promptTrigger(
+                                    conversationId: chatConversationState
+                                        .selectedConversationId,
+                                    type: type,
+                                    path: path);
+                              },
+                            );
                           } else {
-                            return SizedBox.shrink();
+                            return Container();
                           }
-                        }),
-                    CustomTextField(
-                      isRequestProcessing:
-                          chatConversationState.isRequestProcessing,
-                      inputMode: inputMode,
-                      textEditingController: _messageController,
-                      textInputNotifier: textInputNotifier,
-                      onTap: (int type, {String? path}) async {
-                        var leftCount = getLeftCount();
-                        var isPurchased = await NativeChannel.isPurchased();
-                        if (leftCount <= 0 && !isPurchased) {
-                          /* ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(S.of(context).no_chance_left),
-                            duration: Duration(seconds: 2),
-                          )); */
-                          showModalBottomSheet(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(24.r),
-                                  topRight: Radius.circular(24.r)),
-                            ),
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return Wrap(children: <Widget>[
-                                Container(
-                                  child: Container(
-                                    decoration: new BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: new BorderRadius.only(
-                                            topLeft: Radius.circular(24.r),
-                                            topRight: Radius.circular(24.r))),
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                            "assets/images/ic_vip_dialog_header.png"),
-                                        getVipFeature(S.of(context).remove_ads),
-                                        SizedBox(
-                                          height: 8.h,
-                                        ),
-                                        getVipFeature(
-                                            S.of(context).gpt_4_models),
-                                        SizedBox(
-                                          height: 8.h,
-                                        ),
-                                        getVipFeature(S
-                                            .of(context)
-                                            .unlimited_quick_translation),
-                                        SizedBox(
-                                          height: 8.h,
-                                        ),
-                                        getVipFeature(S
-                                            .of(context)
-                                            .support_multilingual_gpt),
-                                        SizedBox(
-                                          height: 24.h,
-                                        ),
-                                        TextButton(
-                                            style: TextButton.styleFrom(
-                                                minimumSize: Size(312.w, 54.h),
-                                                backgroundColor:
-                                                    Color(0xFF298DFF)),
-                                            onPressed: () async {
-                                              var isPurchase =
-                                                  await BlocProvider.of<
-                                                              PurchaseCubit>(
-                                                          context)
-                                                      .openSubscriptionPage();
-                                              if (isPurchase) {
-                                                Navigator.of(context).pop();
-                                              }
-                                            },
-                                            child: Text(
-                                              S.of(context).start_free_trial,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 16.sp),
-                                            )),
-                                        SizedBox(
-                                          height: 12.h,
-                                        ),
-                                        TextButton(
-                                            style: TextButton.styleFrom(
-                                                minimumSize: Size(312.w, 54.h),
-                                                backgroundColor:
-                                                    Color(0xFFF5FAFF)),
-                                            onPressed: () {
-                                              BlocProvider.of<
-                                                          ChatConversationCubit>(
-                                                      context)
-                                                  .startShowRewardAd();
-                                            },
-                                            child: Text(
-                                              S.of(context).watch_video,
-                                              style: TextStyle(
-                                                  color: Color(0xFF3259B4),
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 16.sp),
-                                            )),
-                                        SizedBox(
-                                          height: 24.h,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ]);
-                            },
-                          );
-                        } else {
-                          _promptTrigger(type: type, path: path);
-                        }
-                      },
-                    )
-                  ],
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
+                        },
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 90),
+                        child: Text(
+                          "ChatGPT Jan 30 Version. Free Research Preview. Our goal is to make AI systems more natural and safe to interact with. Your feedback will help us improve.",
+                          style: TextStyle(color: Colors.grey, fontSize: 13),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ))
+              ],
+            ),
+          )
         ],
-      )),
+      ),
       floatingActionButton:
           BlocBuilder<ChatConversationCubit, ChatConversationState>(
         buildWhen: (previous, current) => current is FloatingActionState,
@@ -457,39 +320,146 @@ class _ConversationPageState extends State<ConversationPage> {
       ),
       floatingActionButtonLocation: CustomStandardFabLocation(
           location: FloatingActionButtonLocation.endDocked,
-          offsetX: -16,
-          offsetY: -120),
+          offsetX: -32,
+          offsetY: -128),
     );
   }
 
-  Widget getVipFeature(String title) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 40.w),
-      child: Row(
-        children: [
-          ClipOval(
-            child: Container(
-              height: 6.r,
-              width: 6.r,
-              color: Color(0xFF0077FF),
+  final _textFieldController = TextEditingController();
+
+  Widget _getTips(BuildContext context, bool showToast) {
+    if (showToast) {
+      return Text(
+        "Delete last slash in the url",
+        style: TextStyle(color: Colors.red),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+
+  Future<List<String>?> _showSettingsDialog(BuildContext context) {
+    var serverTextController = TextEditingController();
+    var apiKeyTextController = TextEditingController();
+    var proxyTextController = TextEditingController();
+    proxyTextController.text = box.read(PROXY_ADDRESS) ?? "";
+    serverTextController.text = box.read(SERVER_ADDRESS) ?? "";
+    apiKeyTextController.text = box.read(API_KEY) ?? DEFAULT_KEY;
+    //print("api key:${apiKeyTextController.text}  ${box.read(API_KEY)}");
+    var showToast = false;
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, stateSetter) {
+            return AlertDialog(
+              title: Text("Settings"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _getTips(context, showToast),
+                  TextField(
+                    controller: serverTextController,
+                    decoration: InputDecoration(hintText: "input your server"),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextField(
+                    controller: apiKeyTextController,
+                    decoration: InputDecoration(hintText: "input your key"),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Text("Model"),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      DropdownButton(
+                          value: OpenAI.chatModel,
+                          items: ChatModel.values
+                              .map((e) => DropdownMenuItem(
+                                  value: e, child: Text(e.name)))
+                              .toList(),
+                          onChanged: (value) {
+                            stateSetter(() {
+                              OpenAI.chatModel = value!;
+                            });
+                            box.write(CHAT_MODEL, value!.name);
+                          })
+                    ],
+                  ),
+                  TextField(
+                    controller: proxyTextController,
+                    decoration: InputDecoration(hintText: "proxy, ex: host:port"),
+                  )
+                ],
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: Text(S.of(context).cancel),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                ElevatedButton(
+                  child: Text(S.of(context).ok),
+                  onPressed: () {
+                    var serverAddress = serverTextController.text;
+                    if (serverAddress.endsWith("/")) {
+                      stateSetter.call(() {
+                        showToast = true;
+                      });
+                    } else {
+                      Navigator.pop(
+                          context,
+                          List.generate(3, (index) {
+                            if (index == 0) {
+                              return serverTextController.text;
+                            } else if (index == 1){
+                              return apiKeyTextController.text;
+                            } else {
+                              return proxyTextController.text;
+                            }
+                          }));
+                    }
+                  },
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  Future<String?> _showTextInputDialog(
+      BuildContext context, String title, String hint) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: TextField(
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: hint),
             ),
-          ),
-          SizedBox(
-            width: 8.w,
-          ),
-          Text(
-            title,
-            style: TextStyle(
-                fontSize: 14.sp,
-                color: Colors.black,
-                fontWeight: FontWeight.w600),
-          )
-        ],
-      ),
-    );
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text(S.of(context).cancel),
+                onPressed: () => Navigator.pop(context),
+              ),
+              ElevatedButton(
+                child: Text(S.of(context).ok),
+                onPressed: () =>
+                    Navigator.pop(context, _textFieldController.text),
+              ),
+            ],
+          );
+        });
   }
 
-  void _promptTrigger({required int type, String? path}) {
+  void _promptTrigger(
+      {required int conversationId, required int type, String? path}) {
     if (_messageController.text.isEmpty) {
       if (type != TYPE_IMAGE_VARIATION) {
         return;
@@ -500,12 +470,14 @@ class _ConversationPageState extends State<ConversationPage> {
 
     if (type != TYPE_IMAGE_VARIATION) {
       humanChatMessage = ChatMessageEntity(
+          conversationId: conversationId,
           messageId: ChatGptConst.Human,
           type: TYPE_CHAT,
           queryPrompt: _messageController.text,
           date: DateTime.now().millisecondsSinceEpoch);
     } else {
       humanChatMessage = ChatMessageEntity(
+          conversationId: conversationId,
           messageId: ChatGptConst.Human,
           type: type,
           queryPrompt: path,
@@ -514,7 +486,10 @@ class _ConversationPageState extends State<ConversationPage> {
 
     var chatConversationCubit = BlocProvider.of<ChatConversationCubit>(context);
     chatConversationCubit
-        .chatConversation(type: type, chatMessage: humanChatMessage)
+        .chatConversation(
+            type: type,
+            conversationId: conversationId,
+            chatMessage: humanChatMessage)
         .then((value) {
       //BlocProvider.of<ChatConversationCubit>(context).sendChatMessage("");
       /* setState(() {
@@ -534,6 +509,5 @@ class _ConversationPageState extends State<ConversationPage> {
         }
       }
     });
-    _messageController.clear();
   }
 }

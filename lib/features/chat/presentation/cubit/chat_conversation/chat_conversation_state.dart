@@ -9,18 +9,26 @@ class ChatConversationInitial extends ChatConversationState {
   List<Object> get props => [];
 }
 
+class ChatConversationLoading extends ChatConversationState {
+  @override
+  List<Object> get props => [];
+}
+
 class ChatConversationLoaded extends ChatConversationState {
-  final List<ChatMessageEntity> chatMessages;
+  final Map<int, List<ChatMessageEntity>> chatMessages;
+  final int showConversationId;
   final DateTime dateTime = DateTime.now();
   final bool isRequestProcessing;
 
   ChatConversationLoaded(
-      {required this.chatMessages, required this.isRequestProcessing});
+      {required this.chatMessages,
+      required this.showConversationId,
+      required this.isRequestProcessing});
   @override
-  List<Object> get props => [chatMessages, dateTime];
+  List<Object> get props => [chatMessages, showConversationId, dateTime];
 
   List<ChatMessageEntity>? getShowMessageList() {
-    return chatMessages;
+    return chatMessages[showConversationId];
   }
 }
 
@@ -44,32 +52,14 @@ class FloatingActionState extends ChatConversationState {
 
 class NotifyTextFieldState extends ChatConversationState {
   final String message;
+  final int selectedConversationId;
   final bool isRequestProcessing;
-  String? translation;
 
   NotifyTextFieldState(
-      {required this.message,
-      required this.isRequestProcessing,
-      this.translation});
+      {required this.selectedConversationId,
+      required this.message,
+      required this.isRequestProcessing});
 
   @override
-  List<Object?> get props => [message, isRequestProcessing, translation];
-}
-
-class ConversationLeftCount extends ChatConversationState {
-  final int leftCount;
-  ConversationLeftCount({required this.leftCount});
-
-  @override
-  List<Object?> get props => [leftCount];
-}
-
-class TranslateStatus extends ChatConversationState {
-  final bool requesting;
-  final int id;
-
-  TranslateStatus({required this.requesting, required this.id});
-
-  @override
-  List<Object?> get props => [requesting, id];
+  List<Object?> get props => [selectedConversationId, message];
 }
